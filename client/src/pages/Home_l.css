@@ -150,3 +150,57 @@
     width: 100%;
   }
 }
+.btn-view {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+}
+
+/* Edit */
+.btn-edit {
+    background: #0d6efd;
+}
+
+.btn-edit:hover {
+    transform: scale(1.05);
+}
+
+/* Delete */
+.btn-delete {
+    background: #dc3545;
+}
+
+.btn-delete:hover {
+    transform: scale(1.05);
+}
+
+/* View */
+.btn-view {
+    background: #ce4589;
+}
+
+.btn-view:hover {
+    transform: scale(1.05);
+}
+
+.btn-phone {
+    background: linear-gradient(135deg, #ce4589, #e965a2);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(206, 69, 137, 0.3);
+}
+
+.btn-phone:hover {
+    transform: translateY(-2px);
+}

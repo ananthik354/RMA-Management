@@ -95,7 +95,7 @@ const updateStatus = async () => {
       {/* Header Details */}
       <div className="card p-3 mb-3">
         <p>
-          <strong>Customer :</strong>{" "}
+          <strong>Service Center:</strong>{" "}
           {data[0].center_name}
         </p>
 
@@ -115,7 +115,18 @@ const updateStatus = async () => {
 
       {/* Serial Details */}
       <table className="table table-bordered">
+ <thead>
+          <tr>
 
+            <th>S.No</th>
+            <th>product Name</th>
+            <th>model Number</th>
+           
+            <th>Serial No</th>
+            <th>Accessory</th>
+            <th>Issues</th>
+          </tr>
+        </thead>
         <tbody>
   {data.map((item, index) => (
     <tr key={item.id}>

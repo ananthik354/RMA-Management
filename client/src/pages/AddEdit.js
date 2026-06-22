@@ -72,6 +72,13 @@ const AddEdit = () => {
             toast.error("Phone number must contain exactly 10 digits");
             return;
         }
+        const emailRegex =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(state.email)) {
+            toast.error("Invalid Email Address");
+            return;
+        }
         else {
             if (!id) {
 
@@ -197,6 +204,7 @@ const AddEdit = () => {
                             name="email"
                             value={state.email || ""}
                             onChange={handleInputChange}
+                            required
                         />
                     </div>
                 </div>

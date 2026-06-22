@@ -4,7 +4,7 @@ import { useParams,Link } from "react-router-dom";
 
 
 function RMADetails() {
-
+  
   const { rma_no } = useParams();
 
   console.log("rma_no =", rma_no);
@@ -95,15 +95,22 @@ const updateStatus = async () => {
             <th>Serial No</th>
             <th>Accessory</th>
             <th>Issues</th>
-            <th>status</th>
+            <th>statusHistory</th>
+            <th>status update</th>
           </tr>
         </thead>
 
         <tbody>
           {data.map((item, index) => (
-            <tr key={item.serial_no || index}>
+            <tr key={item.serial_no || index}
+            >
               <td>{index + 1}</td>
-              <td>{item.product_name}</td>
+              <td style={{
+        backgroundColor:
+            item.status?.trim().toLowerCase() === "completed"
+                ? "#99970f"
+                : "white"
+    }}>{item.product_name}</td>
               <td>{item.model_number}</td>
               <td>
   {index === 0 ||
@@ -116,10 +123,20 @@ const updateStatus = async () => {
               <td>{item.issues}</td>
               <td> <Link
 
-                to={`/status-history_lsr/${item.item_id}`}
+                to={`/serial-history/${item.serial_no}`}
               >
                 View
-              </Link></td>
+              </Link>
+              
+              </td>
+              <td>
+                <Link
+
+                to={`/statuspage/${item.item_id}`}
+              >
+                status
+              </Link>
+              </td>
             </tr>
           ))}
         </tbody>

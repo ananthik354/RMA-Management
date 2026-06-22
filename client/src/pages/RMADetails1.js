@@ -6,6 +6,7 @@ import { useParams,Link } from "react-router-dom";
 function RMADetails1() {
 
   const { rma_no } = useParams();
+  const { serial_no } = useParams();
 
   console.log("rma_no =", rma_no);
 
@@ -64,7 +65,7 @@ const updateStatus = async () => {
       {/* Header Details */}
       <div className="card p-3 mb-3">
         <p>
-          <strong>Customer :</strong>{" "}
+          <strong>Customer Name :</strong>{" "}
           {data[0].center_name}
         </p>
 
@@ -101,9 +102,18 @@ const updateStatus = async () => {
 
         <tbody>
           {data.map((item, index) => (
-            <tr key={item.serial_no || index}>
+            <tr key={item.serial_no || index}
+            >
               <td>{index + 1}</td>
-              <td>{item.product_name}</td>
+              <td
+              
+    style={{
+        backgroundColor:
+            item.status?.trim().toLowerCase() === "completed"
+                ? "#99970f"
+                : "white"
+    }}
+>{item.product_name}</td>
               <td>{item.model_number}</td>
               <td>
   {index === 0 ||
@@ -116,10 +126,19 @@ const updateStatus = async () => {
               <td>{item.issues}</td>
               <td> <Link
 
-                to={`/status-history_ls/${item.item_id}`}
+                to={`/serial-history/${item.serial_no}`}
               >
                 View
               </Link></td>
+            <td>
+                            <Link
+            
+                            to={`/statuspage1/${item.item_id}`}
+                          >
+                            status
+                          </Link>
+                          </td>
+
             </tr>
           ))}
         </tbody>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate,useParams ,Link} from "react-router-dom";
 
 function History() {
+    const role = localStorage.getItem("role");
     const navigate = useNavigate();
     const { item_id } = useParams();
 
@@ -31,7 +32,9 @@ function History() {
 
                 <thead>
                     <tr>
-                        <th>Status</th>
+                        <th>Staff</th>
+                        <th>updated</th>
+                        <th>status</th>
                         <th>Status Text</th>
                         <th>Updated At</th>
                     </tr>
@@ -44,9 +47,10 @@ function History() {
                         history.map((row, index) => (
 
                             <tr key={index}>
-
-                                <td>{row.status}</td>
-
+                                {/* <td>{row.created_by_name}</td> */}
+                                 <td>{row.source}</td>
+                                <td>{row.updated_by}</td>
+                                 <td>{row.status}</td>
                                 <td>{row.status_text}</td>
 
                                 <td>

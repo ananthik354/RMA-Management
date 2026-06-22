@@ -52,6 +52,7 @@ function Login() {
                         "role",
                         res.data.role
                     );
+                    localStorage.setItem("username", res.data.username);
 
                     localStorage.setItem(
                         "id",

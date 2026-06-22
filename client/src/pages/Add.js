@@ -7,11 +7,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Add= () => {
     const today = new Date().toISOString().split("T")[0];
+const userId = localStorage.getItem("user_id");
 
-
+console.log("Logged User:", userId);
 
     const [customerId, setCustomerId] = useState("");
-    //   const [customerDcNo, setCustomerDcNo] = useState("");
+    const [customerDcNo, setCustomerDcNo] = useState("");
     const [entryDate, setEntryDate] = useState("");
     //   const [servicesId, setServicesId] = useState("");
     const [services, setServices] = useState([]);
@@ -122,13 +123,16 @@ const Add= () => {
 
         try {
 
+const userId = localStorage.getItem("id");
 
+console.log("USER ID FROM STORAGE:", userId);
 
             const payload = {
                 customer_id: customerId,
-
-                entry_date: entryDate,
-                products
+                customer_dc_no:customerDcNo,
+                entry_date: today,
+                products,
+                created_by:userId
             };
 
 
@@ -154,8 +158,13 @@ const Add= () => {
 
     return (
         <div className="container mt-4">
+            
+<div className="row-md-4">
+     <h2>RMA Entry</h2>
 
-            <h2>RMA Entry</h2>
+<div className="button-row">
+           
+         <div className="col-md-4">
 
             <label>Customer Name</label>
 
@@ -179,9 +188,22 @@ const Add= () => {
                     </option>
                 ))}
             </select>
-            <div className="mb-3">
+         </div><div className="col-md-4">    
+                            <label>Customer DC No</label>
 
-                <label>Entry Date</label>
+                            <input
+                                className="form-control"
+                                value={customerDcNo}
+                                onChange={(e) =>
+                                    setCustomerDcNo(
+                                        e.target.value
+                                    )
+                                }
+                            />
+                        </div>
+           
+<div className="col-md-4">
+                {/* <label>Entry Date</label>
             <input
                 type="date"
                 className="form-control"
@@ -189,9 +211,9 @@ const Add= () => {
                 onChange={(e) =>
                     setEntryDate(e.target.value)
                 }
-            />
+            /> */}
             
-            {/* <div className="mb-3">
+             {/* <div className="mb-3"> */}
 
                 <label>Entry Date</label>
 
@@ -200,12 +222,12 @@ const Add= () => {
                     className="form-control"
                     value={today}
                     readOnly
-                /> */}
+                /> 
 
-    </div>
-
-            {
-        products.map((product, pIndex) => (
+    </div></div>
+    
+            
+        {products.map((product, pIndex) => (
 
             <div
                 key={pIndex}
@@ -384,29 +406,30 @@ const Add= () => {
         ))
     }
 
-            <button
-                className="btn btn-primary me-2"
-                onClick={addProduct}
-            >
-                + Add Product
-            </button>
+           <div className="button-row">
+    <button
+        className="btn btn-primary"
+        onClick={addProduct}
+    >
+        + Add Product
+    </button>
 
-            <button
-                className="btn btn-success"
-                onClick={saveData}
-            >
-                Save
-            </button>
+    <button
+        className="btn btn-success"
+        onClick={saveData}
+    >
+        Save
+    </button>
 
-
-            <Link to="/home/home_l">
-                                      <button className="back-btn">
-                                          Go Back
-                                      </button>
-                                  </Link>
-            
-
-        </div >
+    <Link to="/home/home_l">
+        <button className="back-btn">
+            Back
+        </button>
+    </Link>
+   </div> 
+</div>
+</div>
+        
     );
 }
 

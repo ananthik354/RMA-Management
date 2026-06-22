@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const cors = require("cors");
-
+const path = require("path");
 
 // middleware FIRST
 app.use(cors({
@@ -513,66 +513,160 @@ app.get("/api/getservice/:id", (req, res) => {
 });
 
 // Customer Count API
-app.get(
-    "/api/customerCount",
-    (req, res) => {
-
+app.get("/api/customerCount",(req, res) => {
         const sql =
-            `SELECT COUNT(*) AS total
-             FROM customer_details`;
-
+            `SELECT COUNT(*) AS total FROM customer_details`;
         db.query(
             sql,
             (error, result) => {
-
                 if (error) {
                     console.log(
-                        error
-                    );
-
+                        error);
                     return res
                         .status(500)
                         .send(error);
                 }
+                res.send( result);
+            });
+    });
 
-                res.send(
-                    result
-                );
-            }
-        );
-    }
-);
-
-app.get(
-    "/api/InwardCount",
-    (req, res) => {
-
+app.get("/api/InwardCount",(req, res) => {
         const sql =
-            `SELECT COUNT(*) AS total
-FROM rma_items
-WHERE TRIM(LOWER(status)) = 'pending'`;
-
+            `SELECT COUNT(*) AS total FROM rma_items WHERE TRIM(LOWER(status)) = 'pending'`;
         db.query(
             sql,
             (error, result) => {
-
                 if (error) {
-                    console.log(
-                        error
-                    );
-
+                    console.log(error );
                     return res
                         .status(500)
                         .send(error);
                 }
+                res.send(result);
+            });
+    });
 
-                res.send(
-                    result
+app.get("/api/CompleteCount",(req, res) => {
+        const sql =
+            `SELECT COUNT(*) AS total FROM rma_items WHERE TRIM(LOWER(status)) = 'completed'`;
+        db.query(
+            sql,
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return res
+                        .status(500)
+                        .send(error);
+                }
+                res.send(result);
+            });
+    });
+
+app.get("/api/OutwardCount",(req, res) => {
+        const sql =
+            `SELECT COUNT(*) AS total FROM rma_items1 WHERE TRIM(LOWER(status)) = 'pending'`;
+        db.query(
+            sql,
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return res
+                        .status(500)
+                        .send(error);
+                }
+                res.send(result
                 );
-            }
-        );
-    }
-);
+            });
+    });
+
+app.get("/api/CompleteCount_o",(req, res) => {
+        const sql =
+            `SELECT COUNT(*) AS total FROM rma_items1 WHERE TRIM(LOWER(status)) = 'completed'`;
+        db.query(
+            sql,
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return res
+                        .status(500)
+                        .send(error);
+                }
+                res.send(result);
+            });
+    });
+
+    app.get("/api/pendingCount_irma",(req, res) => {
+        const sql = `
+        SELECT COUNT(DISTINCT r.rma_no) AS total
+FROM rma_entry1 r
+WHERE LOWER(TRIM(r.status)) = 'pending'`;
+        db.query(
+            sql,
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return res
+                        .status(500)
+                        .send(error);
+                }
+                res.send(result);
+            });
+    });
+
+app.get("/api/completeCount_irma",(req, res) => {
+        const sql = `
+        SELECT COUNT(DISTINCT r.rma_no) AS total
+FROM rma_entry1 r
+WHERE LOWER(TRIM(r.status)) = 'completed'`;
+        db.query(
+            sql,
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return res
+                        .status(500)
+                        .send(error);
+                }
+                res.send(result);
+            });
+    });
+
+app.get("/api/pendingCount_orma",(req, res) => {
+        const sql = `
+        SELECT COUNT(DISTINCT r.rma_no) AS total
+FROM rma_out r
+WHERE LOWER(TRIM(r.status)) = 'pending'`;
+        db.query(
+            sql,
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return res
+                        .status(500)
+                        .send(error);
+                }
+                res.send(result);
+            });
+    });
+
+app.get("/api/completeCount_orma",(req, res) => {
+        const sql = `
+        SELECT COUNT(DISTINCT r.rma_no) AS total
+FROM rma_out r
+WHERE LOWER(TRIM(r.status)) = 'completed'`;
+        db.query(
+            sql,
+            (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return res
+                        .status(500)
+                        .send(error);
+                }
+                res.send(result);
+            });
+    });
+
 
 app.put("/api/update/:id", (req, res) => {
     const { id } = req.params;
@@ -814,41 +908,57 @@ app.get("/api/customers", (req, res) => {
 });
 
 
-app.get("/api/pdf/:id", (req, res) => {
-    const { id } = req.params;
+app.get("/api/pdf/:rmaNo", (req, res) => {
+
+    const rmaNo = req.params.rmaNo;
 
     const sql = `
-    SELECT 
+    SELECT
         r.id,
+        r.rma_no,
         r.product_name,
         r.model_number,
         r.quantity_no,
-        r.serial_no,
-        r.accessory,
-        r.customer_dc_no,
-        r.issues,
+        
         r.reminder_date,
-        r.entry_date,
+        DATE_FORMAT(r.entry_date,'%d-%m-%Y') AS entry_date,
+        r.created_by,
+        l.username AS created_by_name,
         c.customer_name,
         c.phone_no,
         c.email,
-        c.address
+        c.address,
+
+        i.serial_no,
+        i.accessory,
+        i.issues,
+        i.status
 
     FROM rma_entry1 r
-    JOIN customer_details c
-    ON r.customer_id = c.id
 
-    WHERE r.id = ?
+    JOIN customer_details c
+        ON r.customer_id = c.id
+
+    JOIN rma_items i
+        ON r.id = i.rma_id
+LEFT JOIN login_user l
+    ON r.created_by = l.id
+    WHERE r.rma_no = ?
     `;
 
-    db.query(sql, [id], (err, result) => {
+    db.query(sql, [rmaNo], (err, result) => {
+
         if (err) {
             console.log(err);
             return res.status(500).json(err);
         }
 
-        res.send(result[0]);
+        console.log("PDF DATA:", result);
+
+        res.json(result);
+
     });
+
 });
 
 app.put(
@@ -1159,15 +1269,24 @@ app.get("/api/get_o", (req, res) => {
     MIN(r.id) AS id,
     r.rma_no,
     MAX(c.center_name) AS center_name,
-    MIN(r.product_name) AS product_name,
-    MIN(r.model_number) AS model_number,
-    MIN(r.quantity_no) AS quantity_no,
-    MIN(r.status) AS status,
-    MIN(r.entry_date) AS entry_date
+
+    MIN(i.product_name) AS product_name,
+    MIN(i.model_number) AS model_number,
+
+    MAX(r.quantity_no) AS quantity_no,
+    MAX(r.entry_date) AS entry_date,
+    MAX(r.status) AS status
+
 FROM rma_out r
+
 JOIN services_details c
     ON r.services_id = c.id
+
+JOIN rma_items1 i
+    ON r.id = i.rma_id
+
 GROUP BY r.rma_no
+
 ORDER BY r.rma_no ASC`;
 
     db.query(sql, (err, result) => {
@@ -1752,153 +1871,142 @@ app.get("/get-customers", (req, res) => {
 
 
 app.post("/api/entry_out", (req, res) => {
-     
+
     const {
         services_id,
-        
         entry_date,
-        products
+        items,
+        created_by
     } = req.body;
 
+    console.log("services_id:", services_id);
+    console.log("entry_date:", entry_date);
+    console.log("items:", items);
+if (!items || items.length === 0) {
+    return res.status(400).json({
+        message: "No serial numbers added"
+    });
+}
+    const serials = items.map(item => item.serial_no);
+    const uniqueSerials = [...new Set(serials)];
+
+if (serials.length !== uniqueSerials.length) {
+    return res.status(400).json({
+        message: "Duplicate serial numbers in current entry"
+    });
+}
+
+const checkSql = `
+    SELECT serial_no
+    FROM rma_items1
+    WHERE serial_no IN (?)
+    AND status <> 'Completed'
+`;
+
+db.query(checkSql, [serials], (err, rows) => {
+
+    if (err) {
+        console.log("CHECK SERIAL ERROR:", err);
+        return res.status(500).json(err);
+    }
+
+    if (rows.length > 0) {
+        return res.status(400).json({
+            success: false,
+            message: `Serial No already exists: ${
+                rows.map(r => r.serial_no).join(", ")
+            }`
+        });
+    }
+
+    // ONLY IF NO DUPLICATES
+    saveRma();
+
+});
+function saveRma() {
+
+    
     const getRmaNo =
         "SELECT IFNULL(MAX(rma_no),1000)+1 AS rmaNo FROM rma_out";
 
     db.query(getRmaNo, (err, result) => {
-
-        if (err) {
-            return res.status(500).json(err);
-        }
+       if (err) {
+    console.log("GET RMA ERROR:", err);
+    return res.status(500).json(err);
+}
 
         const rmaNo = result[0].rmaNo;
-        const getDcNo =
-    "SELECT IFNULL(MAX(customer_dc_no),5000)+1 AS dcNo FROM rma_out";
 
-db.query(getDcNo, (err, dcResult) => {
+        const reminderDate = new Date(entry_date);
+        reminderDate.setDate(reminderDate.getDate() + 3);
 
-    if (err) {
-        return res.status(500).json(err);
-    }
-
-    const dcNo = dcResult[0].dcNo;
-
-
-        products.forEach(product => {
-
-            const reminderDate = new Date(entry_date);
-
-            reminderDate.setDate(
-                reminderDate.getDate() + 3
-            );
-
-            const productSql = `
+        // 1. Insert into rma_out (MASTER)
+        const sql = `
             INSERT INTO rma_out
-            (
-                rma_no,
-                services_id,
-                product_name,
-                model_number,
-                quantity_no,
-                customer_dc_no,
-                reminder_date,
-                entry_date
-            )
-            VALUES (?,?,?,?,?,?,?,?)
-            `;
+            (rma_no, services_id,quantity_no,reminder_date, entry_date,status,created_by)
+            VALUES (?,?,?,?,?,?,?)
+        `;
 
-            db.query(
-                productSql,
-                [
-                    rmaNo,
-                    services_id,
-                    product.product_name,
-                    product.model_number,
-                    product.quantity_no,
-                    dcNo,
-                    reminderDate,
-                    entry_date
-                ],
-                (err, productResult) => {
+        db.query(sql, [
+            rmaNo,
+            services_id,
+            
+            items.length,
+            
+            reminderDate,
+            entry_date,
+            "pending",
+            created_by
+        ], (err, result) => {
 
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-
-                    const productId =
-                        productResult.insertId;
-
-                        console.log("Product ID:", productId);
-        console.log("Product:", product);
-        console.log("Items:", product.items);
-        console.log("Items Count:", product.items.length);
-
-
-                    product.items.forEach(item => {
-
-                        const itemSql = `
-                        INSERT INTO rma_items1
-                        (
-                            rma_id,
-                            serial_no,
-                            accessory,
-                            issues,
-                            status
+            if (err){ 
+                console.log("RMA_OUT INSERT ERROR:", err);
+                return res.status(500).json(err);
+            }
+            const rmaId = result.insertId;
+            
+            // 2. Insert multiple serials (CHILD TABLE)
+            const insertItems = items.map(item => {
+                return new Promise((resolve, reject) => {
+                    db.query(
+                        `INSERT INTO rma_items1 
+                        (rma_id, serial_no, accessory, issues, product_name,model_number,status)
+                        VALUES (?,?,?,?,?,?,?)`,
+                        [
+                            rmaId,
+                            item.serial_no,
+                           
+                            item.accessory,
+                            item.issues,
+                            item. product_name,
+                            item.model_number,
                             
-                            
-                    )
-                        VALUES (?,?,?,?,?)
-                        `;
+                            "pending"
+                        ],
+                        (err, result) => {
+                            if (err) return reject(err);
+                            resolve(result);
+                        }
+                    );
+                });
+            });
 
-                        db.query(
-                            itemSql,
-                            [
-                                productId,
-                                item.serial_no,
-                                item.accessory,
-                                item.issues,
-                                "pending"
-                            ],
-
-                            (err,result) => {
-        if (err) {
-            console.log("Item Insert Error:", err);
-        }
-        else {
-            console.log("Item Saved");
-
-            const item_id = result.insertId;
-
-        generateReminders(item_id);
-        }
-    }
-   
-
-    // MUST BE HERE
-   
-                        );
-
+            Promise.all(insertItems)
+                .then(() => {
+                    res.json({
+                        success: true,
+                        rma_no: rmaNo
                     });
-                    
-
-                }
-            );
-        
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json(err);
+                });
 
         });
-    
-
-        res.json({
-            success: true,
-            rma_no: rmaNo,
-            customer_dc_no: dcNo
-        });
-
     });
-
-});
-});
-
-      // INSERT INTO REMINDER TABLE
+}
+});      // INSERT INTO REMINDER TABLE
     //   db.query(
     //     `
     //     INSERT INTO rma_reminders
@@ -2312,41 +2420,61 @@ app.get("/get-services", (req, res) => {
 
 });
 
-app.get("/api/pdf1/:rma_no", (req, res) => {
+app.get("/api/pdf1/:rmaNo", (req, res) => {
 
-    const { rma_no } = req.params;
+    const rmaNo = req.params.rmaNo;
+    
 
     const sql = `
     SELECT
+        r.id,
         r.rma_no,
-        r.customer_dc_no,
-        s.center_name,
-        s.phone_no,
-        s.email,
-        r.product_name,
-        r.model_number,
+        i.product_name,
+        i.model_number,
         r.quantity_no,
-        r.entry_date,
+        
+        r.reminder_date,
+        DATE_FORMAT(r.entry_date,'%d-%m-%Y') AS entry_date,
+        r.created_by,
+        l.username AS created_by_name,
+        c.center_name,
+        c.phone_no,
+        c.email,
+        c.address,
+
         i.serial_no,
         i.accessory,
-        i.issues
+        i.issues,
+        i.status
+
     FROM rma_out r
-    JOIN services_details s
-        ON r.services_id = s.id
+
+    JOIN services_details c
+        ON r.services_id = c.id
+
     JOIN rma_items1 i
         ON r.id = i.rma_id
+        LEFT JOIN login_user l
+    ON r.created_by = l.id
+
     WHERE r.rma_no = ?
     `;
+    
 
-    db.query(sql, [rma_no], (err, result) => {
+    db.query(sql, [rmaNo], (err, result) => {
 
         if (err) {
             console.log(err);
             return res.status(500).json(err);
         }
 
+        console.log("PDF DATA:", result);
+         console.log("FIRST ROW:", result[0]);
+
         res.json(result);
+
     });
+
 });
 
 
@@ -2426,10 +2554,10 @@ const { rma_no } = req.params;
     r.id,
     r.rma_no,
     c.center_name,
-    r.product_name,
-    r.model_number,
+    i.product_name,
+    i.model_number,
     r.quantity_no,
-    r.customer_dc_no,
+    
     r.entry_date,
 
     i.id AS item_id,
@@ -2556,6 +2684,60 @@ app.put("/update-rma/:rma_no", (req, res) => {
 
 });
 
+app.put("/update-rma_in/:rma_no", (req, res) => {
+
+    const rows = req.body;
+
+    rows.forEach((item) => {
+
+        // Update rma_out
+        const sql1 = `
+            UPDATE rma_entry1
+            SET
+                product_name = ?,
+                model_number = ?,
+                quantity_no = ?,
+                customer_dc_no = ?
+            WHERE id = ?
+        `;
+
+        db.query(sql1, [
+            item.product_name,
+            item.model_number,
+            item.quantity_no,
+            item.customer_dc_no,
+            item.id
+        ]);
+
+        // Update rma_items1
+        const sql2 = `
+            UPDATE rma_items
+            SET
+                serial_no = ?,
+                accessory = ?,
+                issues = ?
+            WHERE id = ?
+        `;
+
+        db.query(sql2, [
+            item.serial_no,
+            item.accessory,
+            item.issues,
+            item.item_id
+        ]);
+         (err, result) => {
+    console.log(err);
+    console.log(result);
+}
+
+    });
+
+    res.json({
+        message: "RMA Updated Successfully"
+    });
+
+});
+
 app.put("/update-rma-status/:rma_no", (req, res) => {
 
     const { status } = req.body;
@@ -2589,45 +2771,87 @@ app.put("/update-rma-status/:rma_no", (req, res) => {
 });
 
 app.delete("/delete-rma/:rma_no", (req, res) => {
-
-    const { rma_no } = req.params;
-
-    const deleteItemsSql = `
-        DELETE i
+    // console.log("DELETE CALLED", req.params.rma_no);
+    // res.json({ success: true });
+       const { rma_no } = req.params;
+        console.log("RMA NO:", rma_no);
+    const getItemIdsSql = `
+        SELECT i.id
         FROM rma_items1 i
         JOIN rma_out r
             ON i.rma_id = r.id
         WHERE r.rma_no = ?
     `;
 
-    db.query(deleteItemsSql, [rma_no], (err) => {
+    db.query(getItemIdsSql, [rma_no], (err, items) => {
 
         if (err) {
+            console.log(err);
             return res.status(500).json(err);
         }
 
-        const deleteRmaSql = `
-            DELETE FROM rma_out
-            WHERE rma_no = ?
-        `;
+        const itemIds = items.map(item => item.id);
 
-        db.query(deleteRmaSql, [rma_no], (err, result) => {
-
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            res.json({
-                message: "RMA Deleted Successfully",
-                affectedRows: result.affectedRows
+        if (itemIds.length === 0) {
+            return res.status(404).json({
+                message: "RMA not found"
             });
+        }
 
-        });
+        db.query(
+            "DELETE FROM rma_status_history WHERE rma_item_id IN (?)",
+            [itemIds],
+            (err) => {
 
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json(err);
+                }
+
+                db.query(
+                    "DELETE FROM rma_reminders1 WHERE rma_item_id IN (?)",
+                    [itemIds],
+                    (err) => {
+
+                        if (err) {
+                            console.log(err);
+                            return res.status(500).json(err);
+                        }
+
+                        db.query(
+                            `DELETE i
+                             FROM rma_items1 i
+                             JOIN rma_out r
+                                ON i.rma_id = r.id
+                             WHERE r.rma_no = ?`,
+                            [rma_no],
+                            (err) => {
+
+                                if (err) {
+                                    console.log(err);
+                                    return res.status(500).json(err);
+                                }
+
+                                db.query(
+                                    "DELETE FROM rma_out WHERE rma_no = ?",
+                                    [rma_no],
+                                    (err, result) => {
+
+                                        if (err) {
+                                            console.log(err);
+                                            return res.status(500).json(err);
+                                        }
+
+                                        res.json({
+                                            message: "RMA Deleted Successfully",
+                                            affectedRows: result.affectedRows
+                                        });
+                                    });
+                            });
+                    });
+            });
     });
-
 });
-
 // function generateReminders(rma_item_id, cycles = 20) {
 
 //     const values = [];
@@ -2660,9 +2884,6 @@ app.get("/reminders_ls", (req, res) => {
     const sql = `
     SELECT
         r.rma_no,
-        r.customer_dc_no,
-        r.product_name,
-        r.model_number,
         r.entry_date,
 
         i.id AS item_id,
@@ -2670,12 +2891,10 @@ app.get("/reminders_ls", (req, res) => {
         i.status,
 
         rm.id AS reminder_id,
-        rm.reminder_day,
-        rm.is_read,
-
-        DATEDIFF(CURDATE(), r.entry_date) AS days_passed
+        rm.reminder_day
 
     FROM rma_out r
+
     JOIN rma_items1 i
         ON r.id = i.rma_id
 
@@ -2683,60 +2902,141 @@ app.get("/reminders_ls", (req, res) => {
         ON rm.rma_item_id = i.id
 
     WHERE
-        LOWER(i.status) != 'completed'
+        LOWER(i.status) <> 'completed'
         AND rm.is_read = 0
-        AND DATEDIFF(CURDATE(), r.entry_date) >= rm.reminder_day
 
-    ORDER BY r.entry_date ASC,
-             rm.reminder_day ASC
+        AND rm.reminder_day = (
+            SELECT MAX(rm2.reminder_day)
+            FROM rma_reminders1 rm2
+            WHERE rm2.rma_item_id = i.id
+            AND DATEDIFF(CURDATE(), r.entry_date)
+                >= rm2.reminder_day
+        )
+
+    ORDER BY r.rma_no ASC
     `;
 
-    db.query(sql, (err, rows) => {
+    db.query(sql, (err, result) => {
 
         if (err) {
             console.log(err);
             return res.status(500).json(err);
         }
 
-        res.json(rows);
-
+        res.json(result);
     });
 
 });
-
 app.post("/update-status_ls/:item_id", (req, res) => {
 
     const item_id = req.params.item_id;
-
+console.log("PARAMS:", req.params);
+    console.log("BODY:", req.body);
     const {
         status,
         status_text,
-        reminder_id
+        reminder_id,
+        updated_by
     } = req.body;
 
     console.log("item_id:", item_id);
     console.log("reminder_id:", reminder_id);
     console.log("body:", req.body);
+//check before the status already completed or not
+const checkStatusSql = `
+    SELECT status
+    FROM rma_items1
+    WHERE id = ?
+`;
 
+db.query(checkStatusSql, [item_id], (err, rows) => {
+
+    if (err) {
+        return res.status(500).json(err);
+    }
+
+    if (rows.length === 0) {
+        return res.status(404).json({
+            message: "Item not found"
+        });
+    }
+
+    if (
+        rows[0].status &&
+        rows[0].status.toLowerCase() === "completed"
+    ) {
+        return res.status(400).json({
+            message: "Status already completed. Cannot update again."
+        });
+    }
     // 1. update item
     const updateSql = `
         UPDATE rma_items1
-        SET status = ?
+        SET status = COALESCE(NULLIF(?, ''), status)
         WHERE id = ?
     `;
+    if (!status || status.trim() === "") {
+    return res.status(400).json({
+        message: "Please select a status"
+    });
+}
 
     db.query(updateSql, [status, item_id], (err) => {
         if (err) return res.status(500).json(err);
+        // Check whether all serials under this RMA are completed
+            const checkSql = `
+        SELECT rma_id
+        FROM rma_items1
+        WHERE id = ?
+    `;
+
+    db.query(checkSql, [item_id], (err, rows) => {
+
+        if (err) return res.status(500).json(err);
+
+        const rmaId = rows[0].rma_id;
+
+        const pendingSql = `
+            SELECT COUNT(*) AS pendingCount
+            FROM rma_items1
+            WHERE rma_id = ?
+            AND status <> 'Completed'
+        `;
+
+        db.query(pendingSql, [rmaId], (err, result) => {
+
+            if (err) return res.status(500).json(err);
+
+            if (result[0].pendingCount === 0) {
+
+                const completeSql = `
+                    UPDATE rma_out
+                    SET status = 'Completed'
+                    WHERE id = ?
+                `;
+
+                db.query(completeSql, [rmaId]);
+            }
+
+            // res.json({
+            //     success: true
+            // });
+
+        });
+
+    });
+
+
 
 
         // 2. history
         const historySql = `
             INSERT INTO rma_status_history
-            (rma_item_id, status, status_text)
-            VALUES (?,?,?)
+            (rma_item_id, status, status_text,updated_by)
+            VALUES (?,?,?,?)
         `;
 
-        db.query(historySql, [item_id, status, status_text]);
+        db.query(historySql, [item_id, status, status_text,updated_by]);
 
         // 3. STOP ONLY THIS SERIAL IF COMPLETE
         // Mark ONLY the clicked reminder as handled
@@ -2764,6 +3064,7 @@ if (status.toLowerCase() === "completed") {
         res.json({ success: true });
     });
 });
+});
 
 app.post("/reminder-click/:id", (req, res) => {
 
@@ -2787,17 +3088,30 @@ app.get(
     "/status-history_ls/:item_id",
     (req, res) => {
 
-        const { item_id } = req.params;
+         const { item_id } = req.params;
 
         const sql = `
-        SELECT
-            status,
-            status_text,
-            updated_at
-        FROM rma_status_history
-        WHERE rma_item_id = ?
-        ORDER BY updated_at DESC
-        `;
+       SELECT
+    h.status,
+    h.status_text,
+    h.updated_at,
+    h.updated_by,
+    e.created_by,
+    l.username AS created_by_name
+FROM rma_status_history h
+
+JOIN rma_items1 i
+    ON h.rma_item_id = i.id
+
+JOIN rma_out e
+    ON i.rma_id = e.id
+
+LEFT JOIN login_user l
+    ON e.created_by = l.id
+
+WHERE h.rma_item_id = ?
+
+ORDER BY h.updated_at ASC`;
 
         db.query(
             sql,
@@ -2823,9 +3137,10 @@ app.post("/api/entry_in", (req, res) => {
      
     const {
         customer_id,
-        
+        customer_dc_no,
         entry_date,
-        products
+        products,
+        created_by
     } = req.body;
 
     const getRmaNo =
@@ -2838,16 +3153,16 @@ app.post("/api/entry_in", (req, res) => {
         }
 
         const rmaNo = result[0].rmaNo;
-        const getDcNo =
-    "SELECT IFNULL(MAX(customer_dc_no),5000)+1 AS dcNo FROM rma_entry1";
+//         const getDcNo =
+//     "SELECT IFNULL(MAX(customer_dc_no),5000)+1 AS dcNo FROM rma_entry1";
 
-db.query(getDcNo, (err, dcResult) => {
+// db.query(getDcNo, (err, dcResult) => {
 
-    if (err) {
-        return res.status(500).json(err);
-    }
+//     if (err) {
+//         return res.status(500).json(err);
+//     }
 
-    const dcNo = dcResult[0].dcNo;
+//     const dcNo = dcResult[0].dcNo;
 
 
         products.forEach(product => {
@@ -2868,9 +3183,10 @@ db.query(getDcNo, (err, dcResult) => {
                 quantity_no,
                 customer_dc_no,
                 reminder_date,
-                entry_date
+                entry_date,
+                created_by
             )
-            VALUES (?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?)
             `;
 
             db.query(
@@ -2881,9 +3197,10 @@ db.query(getDcNo, (err, dcResult) => {
                     product.product_name,
                     product.model_number,
                     product.quantity_no,
-                    dcNo,
+                    customer_dc_no,
                     reminderDate,
-                    entry_date
+                    entry_date,
+                    created_by
                 ],
                 (err, productResult) => {
 
@@ -2957,14 +3274,14 @@ db.query(getDcNo, (err, dcResult) => {
 
         res.json({
             success: true,
-            rma_no: rmaNo,
-            customer_dc_no: dcNo
+            rma_no: rmaNo
+            
         });
 
     });
 
 });
-});
+
 
 
 app.put("/update-rma_r/:rma_no", (req, res) => {
@@ -3054,43 +3371,86 @@ app.put("/update-rma-status_r/:rma_no", (req, res) => {
 });
 
 app.delete("/delete-rma_r/:rma_no", (req, res) => {
-
-    const { rma_no } = req.params;
-
-    const deleteItemsSql = `
-        DELETE i
+    // console.log("DELETE CALLED", req.params.rma_no);
+    // res.json({ success: true });
+       const { rma_no } = req.params;
+        console.log("RMA NO:", rma_no);
+    const getItemIdsSql = `
+        SELECT i.id
         FROM rma_items i
         JOIN rma_entry1 r
             ON i.rma_id = r.id
         WHERE r.rma_no = ?
     `;
 
-    db.query(deleteItemsSql, [rma_no], (err) => {
+    db.query(getItemIdsSql, [rma_no], (err, items) => {
 
         if (err) {
+            console.log(err);
             return res.status(500).json(err);
         }
 
-        const deleteRmaSql = `
-            DELETE FROM rma_entry1
-            WHERE rma_no = ?
-        `;
+        const itemIds = items.map(item => item.id);
 
-        db.query(deleteRmaSql, [rma_no], (err, result) => {
-
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            res.json({
-                message: "RMA Deleted Successfully",
-                affectedRows: result.affectedRows
+        if (itemIds.length === 0) {
+            return res.status(404).json({
+                message: "RMA not found"
             });
+        }
 
-        });
+        db.query(
+            "DELETE FROM rma_status_history1 WHERE rma_item_id IN (?)",
+            [itemIds],
+            (err) => {
 
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json(err);
+                }
+
+                db.query(
+                    "DELETE FROM rma_reminders WHERE rma_item_id IN (?)",
+                    [itemIds],
+                    (err) => {
+
+                        if (err) {
+                            console.log(err);
+                            return res.status(500).json(err);
+                        }
+
+                        db.query(
+                            `DELETE i
+                             FROM rma_items i
+                             JOIN rma_entry1 r
+                                ON i.rma_id = r.id
+                             WHERE r.rma_no = ?`,
+                            [rma_no],
+                            (err) => {
+
+                                if (err) {
+                                    console.log(err);
+                                    return res.status(500).json(err);
+                                }
+
+                                db.query(
+                                    "DELETE FROM rma_entry1 WHERE rma_no = ?",
+                                    [rma_no],
+                                    (err, result) => {
+
+                                        if (err) {
+                                            console.log(err);
+                                            return res.status(500).json(err);
+                                        }
+
+                                        res.json({
+                                            message: "RMA Deleted Successfully",
+                                            affectedRows: result.affectedRows
+                                        });
+                                    });
+                            });
+                    });
+            });
     });
-
 });
 
 // function generateReminders(rma_item_id, cycles = 20) {
@@ -3143,11 +3503,18 @@ app.get("/reminders_lsr", (req, res) => {
         ON rm.rma_item_id = i.id
 
     WHERE
-        LOWER(i.status) != 'completed'
+        LOWER(i.status) <> 'completed'
         AND rm.is_read = 0
-        AND DATEDIFF(CURDATE(), r.entry_date) >= rm.reminder_day
 
-    ORDER BY rm.reminder_day ASC
+        AND rm.reminder_day = (
+            SELECT MAX(rm2.reminder_day)
+            FROM rma_reminders rm2
+            WHERE rm2.rma_item_id = i.id
+            AND DATEDIFF(CURDATE(), r.entry_date)
+                >= rm2.reminder_day
+        )
+
+    ORDER BY r.rma_no ASC
     `;
 
     db.query(sql, (err, result) => {
@@ -3159,7 +3526,117 @@ app.get("/reminders_lsr", (req, res) => {
 
         res.json(result);
     });
+
 });
+
+function continueUpdate(
+    db,
+    item_id,
+    status,
+    status_text,
+    updated_by,
+    reminder_id,
+    res
+) {
+
+    const updateSql = `
+        UPDATE rma_items
+        SET status = COALESCE(NULLIF(?, ''), status)
+        WHERE id = ?
+    `;
+
+    db.query(updateSql, [status, item_id], (err) => {
+
+        if (err) {
+            return res.status(500).json(err);
+        }
+
+        // Save history
+        const historySql = `
+            INSERT INTO rma_status_history1
+            (rma_item_id, status, status_text, updated_by)
+            VALUES (?,?,?,?)
+        `;
+
+        db.query(
+            historySql,
+            [item_id, status, status_text, updated_by]
+        );
+
+        // Mark clicked reminder read
+        if (reminder_id) {
+
+            db.query(
+                `UPDATE rma_reminders
+                 SET is_read = 1
+                 WHERE id = ?`,
+                [reminder_id]
+            );
+
+        }
+
+        // If completed, stop all reminders
+        if (status.toLowerCase() === "completed") {
+
+            db.query(
+                `UPDATE rma_reminders
+                 SET is_read = 1
+                 WHERE rma_item_id = ?`,
+                [item_id]
+            );
+
+        }
+
+        // Check whether all serials under same RMA completed
+        const checkSql = `
+            SELECT rma_id
+            FROM rma_items
+            WHERE id = ?
+        `;
+
+        db.query(checkSql, [item_id], (err, rows) => {
+
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            const rmaId = rows[0].rma_id;
+
+            const pendingSql = `
+                SELECT COUNT(*) AS pendingCount
+                FROM rma_items
+                WHERE rma_id = ?
+                AND LOWER(status) <> 'completed'
+            `;
+
+            db.query(pendingSql, [rmaId], (err, result) => {
+
+                if (err) {
+                    return res.status(500).json(err);
+                }
+
+                if (result[0].pendingCount === 0) {
+
+                    db.query(
+                        `UPDATE rma_entry1
+                         SET status = 'Completed'
+                         WHERE id = ?`,
+                        [rmaId]
+                    );
+
+                }
+
+                return res.json({
+                    success: true
+                });
+
+            });
+
+        });
+
+    });
+
+}
 
 app.post("/update-status_lsr/:item_id", (req, res) => {
 
@@ -3170,59 +3647,121 @@ app.post("/update-status_lsr/:item_id", (req, res) => {
     const {
         status,
         status_text,
-        reminder_id
+        reminder_id,
+        updated_by
     } = req.body;
 
     console.log("item_id:", item_id);
     console.log("reminder_id:", reminder_id);
     console.log("body:", req.body);
-
-    // 1. update item
-    const updateSql = `
-        UPDATE rma_items
-        SET status = ?
-        WHERE id = ?
-    `;
-
-    db.query(updateSql, [status, item_id], (err) => {
-        if (err) return res.status(500).json(err);
-
-
-        // 2. history
-        const historySql = `
-            INSERT INTO rma_status_history1
-            (rma_item_id, status, status_text)
-            VALUES (?,?,?)
-        `;
-
-        db.query(historySql, [item_id, status, status_text]);
-
-        // 3. STOP ONLY THIS SERIAL IF COMPLETE
-        // Mark ONLY the clicked reminder as handled
-const reminderSql = `
-    UPDATE rma_reminders
-    SET is_read = 1
+    
+    //check before the status already completed or not
+const checkStatusSql = `
+    SELECT status
+    FROM rma_items
     WHERE id = ?
 `;
 
-db.query(reminderSql, [reminder_id]);
+db.query(checkStatusSql, [item_id], (err, rows) => {
 
-// If status = complete, stop all reminders for this serial number
-if (status.toLowerCase() === "completed") {
+    if (err) {
+        return res.status(500).json(err);
+    }
 
-    const clearSql = `
-        UPDATE rma_reminders
-        SET is_read = 1
-        WHERE rma_item_id = ?
+    if (rows.length === 0) {
+        return res.status(404).json({
+            message: "Item not found"
+        });
+    }
+
+    if (
+        rows[0].status &&
+        rows[0].status.toLowerCase() === "completed"
+    ) {
+        return res.status(400).json({
+            message: "Status already completed. Cannot update again."
+        });
+    }
+if (!status || status.trim() === "") {
+    return res.status(400).json({
+        message: "Please select a status"
+    });
+}
+   if (status.toLowerCase() === "completed") {
+
+    const serialSql = `
+        SELECT serial_no
+        FROM rma_items
+        WHERE id = ?
     `;
 
-    db.query(clearSql, [item_id]);
-}
-        
+    db.query(serialSql, [item_id], (err, serialRows) => {
 
-        res.json({ success: true });
+        if (err) {
+            return res.status(500).json(err);
+        }
+
+        const serialNo = serialRows[0].serial_no;
+
+        const outwardSql = `
+            SELECT status
+            FROM rma_items1
+            WHERE serial_no = ?
+        `;
+
+        db.query(outwardSql, [serialNo], (err, outwardRows) => {
+
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            // Serial exists in rma_items1
+            if (outwardRows.length > 0) {
+
+                if (
+                    outwardRows[0].status.toLowerCase() !==
+                    "completed"
+                ) {
+                    return res.status(400).json({
+                        message:
+                            "Complete this serial in OUTWARD first."
+                    });
+                }
+
+            }
+
+            continueUpdate(
+                db,
+                item_id,
+                status,
+                status_text,
+                updated_by,
+                reminder_id,
+                res
+            );
+
+        });
+
+    });
+
+} else {
+
+    continueUpdate(
+        db,
+        item_id,
+        status,
+        status_text,
+        updated_by,
+        reminder_id,
+        res
+    );
+
+}     
+
+       
     });
 });
+
 
 app.post("/reminder-click_r/:id", (req, res) => {
 
@@ -3249,14 +3788,27 @@ app.get(
         const { item_id } = req.params;
 
         const sql = `
-        SELECT
-            status,
-            status_text,
-            updated_at
-        FROM rma_status_history1
-        WHERE rma_item_id = ?
-        ORDER BY updated_at DESC
-        `;
+       SELECT
+    h.status,
+    h.status_text,
+    h.updated_at,
+    h.updated_by,
+    e.created_by,
+    l.username AS created_by_name
+FROM rma_status_history1 h
+
+JOIN rma_items i
+    ON h.rma_item_id = i.id
+
+JOIN rma_entry1 e
+    ON i.rma_id = e.id
+
+LEFT JOIN login_user l
+    ON e.created_by = l.id
+
+WHERE h.rma_item_id = ?
+
+ORDER BY h.updated_at ASC`;
 
         db.query(
             sql,
@@ -3336,7 +3888,8 @@ app.get("/pending-serials", (req, res) => {
     const sql = `
         SELECT
     r.rma_no,
-    r.customer_dc_no,
+    c.customer_name,
+    
     r.product_name,
     r.model_number,
     r.entry_date,
@@ -3348,6 +3901,8 @@ app.get("/pending-serials", (req, res) => {
 FROM rma_entry1 r
 JOIN rma_items i
     ON r.id = i.rma_id
+    LEFT JOIN customer_details c
+    ON r.customer_id = c.id
 WHERE LOWER(TRIM(i.status)) = 'pending'
 ORDER BY r.entry_date DESC
     `;
@@ -3368,7 +3923,7 @@ app.get("/complete-serials", (req, res) => {
     const sql = `
         SELECT
     r.rma_no,
-    r.customer_dc_no,
+    c.customer_name,
     r.product_name,
     r.model_number,
     r.entry_date,
@@ -3380,7 +3935,9 @@ app.get("/complete-serials", (req, res) => {
 FROM rma_entry1 r
 JOIN rma_items i
     ON r.id = i.rma_id
-WHERE LOWER(TRIM(i.status)) = 'Completed'
+    LEFT JOIN customer_details c
+    ON r.customer_id = c.id
+WHERE LOWER(TRIM(i.status)) = 'completed'
 ORDER BY r.entry_date DESC
     `;
 
@@ -3393,6 +3950,408 @@ ORDER BY r.entry_date DESC
         res.json(result);
     });
 
+});
+
+app.get("/pending-serials_o", (req, res) => {
+
+    const sql = `
+        SELECT
+    r.rma_no,
+    
+    i.product_name,
+    i.model_number,
+    r.entry_date,
+    i.id AS item_id,
+    i.serial_no,
+    i.accessory,
+    i.issues,
+    i.status
+FROM rma_out r
+JOIN rma_items1 i
+    ON r.id = i.rma_id
+WHERE LOWER(TRIM(i.status)) = 'pending'
+ORDER BY r.entry_date DESC
+    `;
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json(err);
+        }
+
+        res.json(result);
+    });
+
+});
+
+app.get("/complete-serials_o", (req, res) => {
+
+    const sql = `
+        SELECT
+    r.rma_no,
+    
+    i.product_name,
+    i.model_number,
+    r.entry_date,
+    i.id AS item_id,
+    i.serial_no,
+    i.accessory,
+    i.issues,
+    i.status
+FROM rma_out r
+JOIN rma_items1 i
+    ON r.id = i.rma_id
+WHERE LOWER(TRIM(i.status)) = 'completed'
+ORDER BY r.entry_date DESC
+    `;
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json(err);
+        }
+
+        res.json(result);
+    });
+
+});
+
+app.get("/all-irma-data_pending", (req, res) => {
+
+    const sql = `
+        SELECT
+    r.rma_no,
+    MAX(c.customer_name) AS customer_name,
+    MAX(r.customer_dc_no) AS customer_dc_no,
+    MAX(r.product_name) AS product_name,
+    MAX(r.model_number) AS model_number,
+    MAX(r.entry_date) AS entry_date
+FROM rma_entry1 r
+JOIN customer_details c
+    ON r.customer_id = c.id
+WHERE LOWER(TRIM(r.status)) = 'pending'
+GROUP BY r.rma_no
+ORDER BY r.rma_no ASC
+    `;
+
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json(err);
+        res.json(result);
+    });
+
+});
+app.get("/all-irma-data_complete", (req, res) => {
+
+    const sql = `
+        SELECT
+    r.rma_no,
+    MAX(c.customer_name) AS customer_name,
+    MAX(r.customer_dc_no) AS customer_dc_no,
+    MAX(r.product_name) AS product_name,
+    MAX(r.model_number) AS model_number,
+    MAX(r.entry_date) AS entry_date
+FROM rma_entry1 r
+JOIN customer_details c
+    ON r.customer_id = c.id
+WHERE LOWER(TRIM(r.status)) = 'completed'
+GROUP BY r.rma_no
+ORDER BY r.rma_no ASC
+    `;
+
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json(err);
+        res.json(result);
+    });
+
+});
+
+app.get("/all-orma-data_pending", (req, res) => {
+
+    const sql = `
+       SELECT
+    r.rma_no,
+    MAX(c.center_name) AS center_name,
+
+    MAX(i.product_name) AS product_name,
+    MAX(i.model_number) AS model_number,
+    MAX(r.quantity_no)AS quantity_no,
+    MAX(r.entry_date) AS entry_date
+FROM rma_out r
+JOIN services_details c
+    ON r.services_id = c.id
+JOIN rma_items1 i
+    ON r.id = i.rma_id
+WHERE LOWER(TRIM(r.status)) = 'pending'
+GROUP BY r.rma_no
+ORDER BY r.rma_no ASC
+    `;
+
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json(err);
+        res.json(result);
+    });
+
+});
+app.get("/all-orma-data_complete", (req, res) => {
+
+    const sql = `
+       SELECT
+    r.rma_no,
+    MAX(c.center_name) AS center_name,
+    
+    MAX(i.product_name) AS product_name,
+    MAX(i.model_number) AS model_number,
+    MAX(r.quantity_no)AS quantity_no,
+    MAX(r.entry_date) AS entry_date
+FROM rma_out r
+JOIN services_details c
+    ON r.services_id = c.id
+JOIN rma_items1 i
+    ON r.id = i.rma_id
+WHERE LOWER(TRIM(r.status)) = 'completed'
+GROUP BY r.rma_no
+ORDER BY r.rma_no ASC;
+    `;
+
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json(err);
+        res.json(result);
+    });
+
+});
+
+
+
+cron.schedule("* * * * *", () => {
+
+    const sql = `
+    INSERT INTO rma_status_history1
+    (
+        rma_item_id,
+        status_text,
+        status
+    )
+    SELECT
+        rm.rma_item_id,
+        CONCAT(
+            'You missed ',
+            rm.reminder_day,
+            ' day reminder'
+        ),
+        'Missed'
+
+    FROM rma_reminders rm
+
+    JOIN rma_items i
+        ON rm.rma_item_id = i.id
+
+    JOIN rma_entry1 r
+        ON i.rma_id = r.id
+
+    WHERE
+        LOWER(i.status) <> 'completed'
+        AND rm.is_read = 0
+        AND DATEDIFF(CURDATE(), r.entry_date) > rm.reminder_day
+
+        AND NOT EXISTS (
+            SELECT 1
+            FROM rma_status_history1 h
+            WHERE h.rma_item_id = rm.rma_item_id
+            AND h.status_text = CONCAT(
+                'You missed ',
+                rm.reminder_day,
+                ' day reminder'
+            )
+        )
+    `;
+
+    db.query(sql, (err) => {
+
+        if (err) {
+            console.log("Reminder History Error:", err);
+        } else {
+            console.log("Missed Reminder History Updated");
+        }
+
+    });
+
+});
+
+cron.schedule("* * * * *", () => {
+
+    const sql = `
+    INSERT INTO rma_status_history
+    (
+        rma_item_id,
+        status_text,
+        status
+    )
+    SELECT
+        rm.rma_item_id,
+        CONCAT(
+            'You missed ',
+            rm.reminder_day,
+            ' day reminder'
+        ),
+        'Missed'
+
+    FROM rma_reminders1 rm
+
+    JOIN rma_items1 i
+        ON rm.rma_item_id = i.id
+
+    JOIN rma_out r
+        ON i.rma_id = r.id
+
+    WHERE
+        LOWER(i.status) <> 'completed'
+        AND rm.is_read = 0
+        AND DATEDIFF(CURDATE(), r.entry_date) > rm.reminder_day
+
+        AND NOT EXISTS (
+            SELECT 1
+            FROM rma_status_history h
+            WHERE h.rma_item_id = rm.rma_item_id
+            AND h.status_text = CONCAT(
+                'You missed ',
+                rm.reminder_day,
+                ' day reminder'
+            )
+        )
+    `;
+
+    db.query(sql, (err) => {
+
+        if (err) {
+            console.log("Reminder History Error:", err);
+        } else {
+            console.log("Missed Reminder History Updated");
+        }
+
+    });
+
+});
+
+
+app.get("/search-serial/:serialNo", (req, res) => {
+
+    const { serialNo } = req.params;
+    const checkSql = `
+        SELECT serial_no
+        FROM rma_items1
+        WHERE serial_no = ?
+        AND status <> 'Completed'
+    `;
+
+    db.query(checkSql, [serialNo], (err, rows) => {
+
+        if (err) return res.status(500).json(err);
+
+        if (rows.length > 0) {
+            return res.json({
+                exists: true,
+                message: "Serial Number Already Exists"
+            });
+        }
+const sql = `
+SELECT
+    e.product_name,
+    e.model_number,
+    e.customer_dc_no,
+    i.serial_no,
+    i.accessory,
+    i.issues,
+    i.status
+FROM rma_entry1 e
+JOIN rma_items i
+    ON e.id = i.rma_id
+WHERE i.serial_no = ?
+`;
+
+db.query(sql, [serialNo], (err, result) => {
+
+    if (err) {
+        return res.status(500).json(err);
+    }
+
+    if (result.length === 0) {
+        return res.json({
+            success: false,
+            message: "Serial Number Not Found"
+        });
+    }
+
+    if (
+        result[0].status &&
+        result[0].status.toLowerCase() !== "pending"
+    ) {
+        return res.json({
+            success: false,
+            message: `Serial Number status is ${result[0].status}`
+        });
+    }
+
+    res.json({
+        success: true,
+        data: result[0]
+    });
+});
+
+    });
+});
+
+app.get("/serial-history/:serial_no", (req, res) => {
+
+    const { serial_no } = req.params;
+    console.log("SERIAL:", serial_no);
+
+    const sql = `
+        SELECT
+            i.serial_no,
+            h.status,
+            h.status_text,
+            h.updated_by,
+            h.updated_at,
+            'INWARD' AS source
+        FROM rma_items i
+        JOIN rma_status_history1 h
+            ON i.id = h.rma_item_id
+        WHERE i.serial_no = ?
+
+        UNION ALL
+
+        SELECT
+            i1.serial_no,
+            h1.status,
+            h1.status_text,
+            h1.updated_by,
+            h1.updated_at,
+            'OUTWARD' AS source
+        FROM rma_items1 i1
+        JOIN rma_status_history h1
+            ON i1.id = h1.rma_item_id
+        WHERE i1.serial_no = ?
+
+        ORDER BY updated_at ASC
+    `;
+
+    db.query(sql, [serial_no, serial_no], (err, result) => {
+
+        if (err) {
+            console.log(err);
+            return res.status(500).json(err);
+        }
+        console.log("RESULT:", result);
+        res.json(result);
+    });
+
+});
+
+
+app.use(express.static(path.join(__dirname, "build")));
+
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(5000, () => {

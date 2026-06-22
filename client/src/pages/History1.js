@@ -4,22 +4,27 @@ import { useNavigate,useParams ,Link} from "react-router-dom";
 
 function History1() {
     const navigate = useNavigate();
-    const { item_id } = useParams();
+    // const { item_id } = useParams();
+     const { serial_no } = useParams();
 
     const [history, setHistory] = useState([]);
 
-    useEffect(() => {
+   useEffect(() => {
 
-        axios
-            .get(`http://localhost:5000/status-history_ls/${item_id}`)
-            .then((res) => {
-                setHistory(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    axios
+        .get(`http://localhost:5000/serial-history/${serial_no}`)
+        .then(res => {
 
-    }, [item_id]);
+            console.log("HISTORY RESPONSE:", res.data);
+
+            setHistory(res.data);
+
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+}, [serial_no]);
 
     return (
 
@@ -31,9 +36,13 @@ function History1() {
 
                 <thead>
                     <tr>
+                        <th>table</th>
+                        {/* <th>created_by</th> */}
+                        <th>Updated_by</th>
                         <th>Status</th>
                         <th>Status Text</th>
                         <th>Updated At</th>
+                        
                     </tr>
                 </thead>
 
@@ -44,7 +53,9 @@ function History1() {
                         history.map((row, index) => (
 
                             <tr key={index}>
-
+                                <td>{row.source}</td>
+                                {/* <td>{row.created_by_name}</td> */}
+                                <td>{row.updated_by}</td>
                                 <td>{row.status}</td>
 
                                 <td>{row.status_text}</td>

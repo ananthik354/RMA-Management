@@ -31,7 +31,11 @@ import RMASummary from "./pages/RMADetails1";
 import RMADetails1 from "./pages/RMADetails1";
 import RMADetails from "./pages/RMADetails";
 import RmaOut_Update from "./pages/RmaOut_Update";
+import RmaIn_Update from "./pages/RmaIn_Update";
 import DashPending from "./pages/DashPending";
+import DashPending_o from "./pages/DashPending_o";
+import DashIrma from "./pages/DashIrma";
+import DashOrma from "./pages/DashOrma";
 
 function App() {
   return (
@@ -41,6 +45,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Login />} />
+
           <Route path="/home" element={<Home />} />
           <Route path="/home/home_l" element={<Home_l />} />
           <Route path="/home/home_z" element={<Home_z />} />
@@ -56,6 +61,7 @@ function App() {
           <Route path="/home/Add" element={<Add />} />
           <Route path="/home/update_P/:id" element={<Add />} />
           <Route path="/home/pdf/:id" element={<Add />} />
+          <Route path="/home/pdf1/:id" element={<Out />} />
           <Route path="/home/Out" element={<Out />} />
           <Route path="/home/update_o/:id" element={<Out />} />
           
@@ -74,13 +80,17 @@ function App() {
           path="/status-history_ls/:item_id"
           element={<History1 />}
         />
-
+        <Route
+          path="/serial-history/:serial_no"
+          element={<History1 />}
+        />
           <Route
             path="/dashboard"
             element={<Dashboard />}
           />
           <Route path="/staff/password/:id" element={<Password />} />
-
+          <Route path="/statuspage/:item_id" element={<StatusPage />} />
+          <Route path="/statuspage1/:item_id" element={<StatusPage1 />} />
            <Route path="/statuspage/:item_id/:reminder_id" element={<StatusPage />} />
            <Route path="/update-status_ls/:item_id" element={<StatusPage1 />} />
            <Route
@@ -109,7 +119,16 @@ function App() {
 <Route path="/rma-details/:rma_no" element={<RMADetails1/>}/>
 <Route path="/update-rma-status_l/:rma_no" element={<RMADetails/>}/>
 <Route path="/update-rma/:rma_no" element={<RmaOut_Update/>}/>
+<Route path="/update-rma_in/:rma_no" element={<RmaIn_Update/>}/>
 <Route path="/pending-serials" element={<DashPending/>}/>
+<Route path="/complete-serials" element={<DashPending/>}/>
+
+<Route path="/pending-serials_o" element={<DashPending_o/>}/>
+<Route path="/complete-serials_o" element={<DashPending_o/>}/>
+<Route path="/all-irma-data_pending" element={<DashIrma/>}/>
+<Route path="/all-irma-data_complete" element={<DashIrma/>}/>
+<Route path="/all-orma-data_pending" element={<DashOrma/>}/>
+<Route path="/all-orma-data_complete" element={<DashOrma/>}/>
         </Routes>
 
       </div>

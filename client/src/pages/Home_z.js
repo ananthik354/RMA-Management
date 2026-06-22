@@ -8,7 +8,7 @@ import autoTable from "jspdf-autotable";
 const Home_z = () => {
 
     const [data, setData] = useState([]); // MUST BE []
-
+const role=localStorage.getItem("role")
     useEffect(() => {
         loadData();
     }, []);
@@ -70,9 +70,6 @@ const Home_z = () => {
 
     };
     const generatePDF = async (item) => {
-    //     console.log("ITEM =", item);
-     console.log("RMA NO =", item.rma_no);
-    // console.log("RMA NO:", rma_no);
 
         try {
 
@@ -80,133 +77,185 @@ const Home_z = () => {
                 `http://localhost:5000/api/pdf1/${item.rma_no}`
             );
 
-
             const pdfData = resp.data;
-            console.log("PDF DATA:", pdfData);
 
-if (!pdfData || pdfData.length === 0) {
-    alert("No data found");
-    return;
-}
-            const header = pdfData[0];
-            const entryDate = header.entry_date
-                ? header.entry_date.substring(0, 10)
-                : "";
+            console.log("RESP DATA:", pdfData);
+
+            if (!pdfData || pdfData.length === 0) {
+                alert("No Data Found");
+                return;
+            }
+
+            const headerData = pdfData[0];
+
+          const entryDate = headerData.entry_date || "";
+
+
 
             const doc = new jsPDF({
                 orientation: "landscape",
                 unit: "mm",
-                format: "a4"
+                format: "a5"
             });
-            doc.rect(5, 5, 287, 200);
+            doc.rect(5, 5, 200, 138);
 
             // Company Header
-            doc.setFontSize(22);
+            doc.setFontSize(16);
             doc.setFont(undefined, "bold");
 
-            doc.text(
-                "M K ELECTRONICS",
-                105,
-                15,
-                { align: "center" }
-            );
-
-            doc.setFontSize(10);
+            doc.text("M K Electronics", 105, 15, {
+                align: "center"
+            });
+            doc.setFontSize(8);
             doc.setFont(undefined, "normal");
-
-            doc.text(
-                "36B, Chakra Complex, Nalli Hospital Road, Near Erode Bus Stand, Erode - 638011",
-                148,
-                23,
-                { align: "center" }
-            );
-
             doc.text(
                 "GSTIN: 33DSEPK8530C1Z1",
-                148,
-                29,
+                195,
+                15,
+                { align: "right" }
+            );
+
+            doc.setFontSize(9);
+            doc.setFont(undefined, "bold");
+            
+            doc.text(
+                "36B, Chakra Complex, Nalli Hospital Road, Near Erode Bus Stand, Erode - 638011,  Email: mkelectronicservices@gmail.com",
+                105,
+                22,
                 { align: "center" }
             );
+
+            // doc.text(
+            //     "GSTIN: 33DSEPK8530C1Z1",
+            //     105,
+            //     27,
+            //     { align: "center" }
+            // );
 
             doc.text(
-                "Contact: 9003838352, 9500508118, 9003866653, 9566672229",
-                148,
-                35,
+                "Contact: 9003838352, 9500508118, 9003866653",
+                105,
+                27,
                 { align: "center" }
             );
-            doc.text(
-                "E-Mail:mkelectronicsservices@gmail.com",
-                148,
-                40,
-                { align: "center" }
 
-            );
-
+            
             // RMA
 
-            doc.rect(210, 50, 75, 40);
-
-            doc.setFont(undefined, "bold");
-            // doc.text("RMA DETAILS", 215, 58);
-
+            // doc.rect(10, 45, 120, 35);
+            doc.rect(138, 35, 60, 35);
+            doc.setFontSize(8);
             doc.setFont(undefined, "normal");
 
-            doc.text(`RMA No : ${header.id}`, 215, 55);
-
             doc.text(
-                ` Cus DC No : ${header.customer_dc_no}`,
-                215,
-                65
+                `RMA No : ${headerData.rma_no}`,
+                142,
+                45
             );
 
             doc.text(
                 `Entry Date : ${entryDate}`,
-                215,
-                75
+                142,
+                55
             );
 
             doc.text(
-                `Staff Name : ${header.staff_name || ""}`,
-                215,
-                85
+                `Staff Name : ${headerData.created_by_name || ""}`,
+                142,
+                65
             );
+
+
+            const drawMiniHeader = () => {
+
+                
+
+                  doc.setLineWidth(0.2);
+    // doc.rect(5, 5, 200, 25);
+    doc.setFontSize(12);
+                doc.setFont(undefined, "bold");
+
+                doc.text(
+                    "MK Electronics",
+                    100,
+                    9,
+                    { align: "center" }
+                );
+
+                doc.setFontSize(8);
+                doc.setFont(undefined, "normal");
+
+                // Single Line
+                doc.text( `Service Center Name : ${headerData.center_name || ""}`,11,16);
+
+                doc.text(`Phone : ${headerData.phone_no || ""}`, 60, 16);
+
+                doc.text( `RMA No : ${headerData.rma_no || ""}`,110, 16);
+
+                doc.text(`Entry Date : ${entryDate}`, 155, 16);
+                // doc.line(10, 13, 200, 13);
+            };
+
+            autoTable(doc, {
+                startY: 65,
+                margin: {
+                    top: 45
+                },
+
+                didDrawPage: function (data) {
+                    if (data.pageNumber > 1) {
+                        drawMiniHeader();
+                        
+                    }
+                },
+
+                
+
+            });
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(10, 50, 190, 40);
-            doc.setFontSize(11);
+            doc.rect(13, 35, 120, 35);
+            doc.setFontSize(10);
             doc.setFont(undefined, "bold");
 
-            doc.text("Center Details", 15, 58);
+            doc.text(
+                "Service Center Details",
+                17,
+                43
+            );
 
             doc.setFont(undefined, "normal");
+            doc.setFontSize(9);
 
             doc.text(
-                `Center Name : ${header.center_name || ""}`,
-                15,
-                68
+                `Service Center Name: ${headerData.center_name || ""}`,
+                17,
+                52
             );
-            doc.text(
-                `phone : ${header.phone_no || ""}`,
-                110,
-                68
-            );
-            doc.text(
-                ` Email : ${header.email}`,
-                15,
-                78
-            );
-            doc.text(
 
-                `Address: ${header.address}`,
-                110,
-                78
+            doc.text(
+                `Phone : ${headerData.phone_no || ""}`,
+                75,
+                52
+            );
+
+            doc.text(
+                `Email : ${headerData.email || ""}`,
+                17,
+                62
+            );
+
+            doc.text(
+                `Address : ${headerData.address || ""}`,
+                75,
+                62
             );
 
 
             // RMA Details Table
             autoTable(doc, {
-                startY: 95,
+                startY: 78,
 
                 theme: "grid",
 
@@ -219,19 +268,51 @@ if (!pdfData || pdfData.length === 0) {
                     "Issue"
                 ]],
 
-                body: pdfData.map(item => [[
-                    item.product_name || "",
-                    item.model_number || "",
-                    item.quantity_no || "",
-                    item.serial_no || "",
-                    item.accessory || "",
-                    item.issues || ""
-                ]]),
+                body: pdfData.map((row, index) => {
+                    const prevRow = pdfData[index - 1];
+
+                    const showQty =
+                        index === 0 ||
+                        !prevRow ||
+                        prevRow.product_name !== row.product_name ||
+                        prevRow.model_number !== row.model_number;
+
+                    return [
+                        row.product_name || "",
+                        row.model_number || "",
+                        index === 0 ? row.quantity_no : "",
+                        row.serial_no || "",
+                        row.accessory || "",
+                        row.issues || ""
+                    ];
+                }),
+
+                // didDrawPage: function (data) {
+
+                //     if (data.pageNumber > 1) {
+                //         drawMiniHeader();
+                //     }
+                // },
+                margin: {
+        top: 25   // space reserved for header on every page
+    },
+
+    willDrawPage: function (data) {
+
+        if (data.pageNumber > 1) {
+
+            drawMiniHeader();
+
+            // move table below header
+            data.settings.margin.top = 25;
+        }
+    },
+
 
                 styles: {
+                    fontSize: 9,
                     halign: "center",
-                    valign: "middle",
-                    fontSize: 10
+                    valign: "middle"
                 },
 
                 headStyles: {
@@ -239,25 +320,30 @@ if (!pdfData || pdfData.length === 0) {
                     textColor: [0, 0, 0]
                 }
             });
-
-
             // Signature
-            const finalY =
-                doc.lastAutoTable
-                    ? doc.lastAutoTable.finalY + 35
-                    : 160;
+            // const finalY =
+            //     doc.lastAutoTable
+            //         ? doc.lastAutoTable.finalY + 15
+            //         : 100;
+            const pageHeight = doc.internal.pageSize.height;
+
+            doc.setFontSize(8);
 
             doc.text(
                 "Customer Signature",
-                20,
-                finalY
+                15,
+                 pageHeight - 20
             );
 
             doc.text(
                 "Authorized Signature",
-                135,
-                finalY
+                140,
+                 pageHeight - 20
+                // finalY+20
             );
+
+
+
 
             // Save PDF
             doc.save(
@@ -268,6 +354,209 @@ if (!pdfData || pdfData.length === 0) {
             console.log(err);
         }
     };
+//     const generatePDF = async (item) => {
+
+//     try {
+
+//         const resp = await axios.get(
+//             `http://localhost:5000/api/pdf1/${item.rma_no}`
+//         );
+
+//         const pdfData = resp.data;
+
+//         console.log("RESP DATA:", pdfData);
+
+//         if (!pdfData || pdfData.length === 0) {
+//             alert("No Data Found");
+//             return;
+//         }
+
+//         const headerData = pdfData[0];
+
+//         const entryDate = headerData.entry_date || "";
+//            console.log("HEADER DATA:", headerData);
+// console.log("STAFF NAME:", headerData.created_by_name); 
+//             const doc = new jsPDF({
+//                 orientation: "landscape",
+//                 unit: "mm",
+//                 format: "a4"
+//             });
+//             doc.rect(5, 5, 287, 200);
+
+//             // Company Header
+//             doc.setFontSize(22);
+//             doc.setFont(undefined, "bold");
+
+//             doc.text(
+//                 "M K ELECTRONICS",
+//                 155,
+//                 15,
+//                 { align: "center" }
+//             );
+
+//             doc.setFontSize(10);
+//             doc.setFont(undefined, "normal");
+
+//             doc.text(
+//                 "36B, Chakra Complex, Nalli Hospital Road, Near Erode Bus Stand, Erode - 638011",
+//                 148,
+//                 23,
+//                 { align: "center" }
+//             );
+
+//             doc.text(
+//                 "GSTIN: 33DSEPK8530C1Z1",
+//                 148,
+//                 29,
+//                 { align: "center" }
+//             );
+
+//             doc.text(
+//                 "Contact: 9003838352, 9500508118, 9003866653, 9566672229",
+//                 148,
+//                 35,
+//                 { align: "center" }
+//             );
+//             doc.text(
+//                 "E-Mail:mkelectronicsservices@gmail.com",
+//                 148,
+//                 40,
+//                 { align: "center" }
+
+//             );
+
+//             // RMA
+
+//             doc.rect(210, 50, 75, 40);
+
+//             doc.setFont(undefined, "bold");
+//             doc.text("RMA DETAILS", 215, 55);
+
+//             doc.setFont(undefined, "normal");
+
+//             doc.text(`RMA No : ${headerData.rma_no}`, 215, 65);
+
+// // doc.text(
+// //     `Cus DC No : ${headerData.customer_dc_no}`,
+// //     215,
+// //     65
+// // );
+
+//             doc.text(
+//                 `Entry Date : ${entryDate}`,
+//                 215,
+//                 75
+//             );
+
+//             doc.text(
+//                 `Staff Name : ${headerData.created_by_name|| ""}`,
+//                 215,
+//                 85
+//             );
+
+//             // Customer Details Table
+//             // -------- Customer Details (Text Format) --------
+//             doc.rect(10, 50, 190, 40);
+//             doc.setFontSize(11);
+//             doc.setFont(undefined, "bold");
+
+//             doc.text("Service Center Details", 15, 58);
+
+//             doc.setFont(undefined, "normal");
+
+//             doc.text(
+//                 `Service Center Name : ${headerData.center_name || ""}`,
+//                 15,
+//                 68
+//             );
+//             doc.text(
+//                 `phone : ${headerData.phone_no || ""}`,
+//                 110,
+//                 68
+//             );
+//             doc.text(
+//                 ` Email : ${headerData.email}`,
+//                 15,
+//                 78
+//             );
+//             doc.text(
+
+//                 `Address: ${headerData.address}`,
+//                 110,
+//                 78
+//             );
+
+
+//             // RMA Details Table
+//             autoTable(doc, {
+//     startY: 95,
+
+//     theme: "grid",
+
+//     head: [[
+//         "Product Name",
+//         "Model No",
+//         "Qty",
+//         "Serial No",
+//         "Accessory",
+//         "Issue"
+//     ]],
+
+//     body: pdfData.map((row, index) => [
+
+//     row.product_name || "",
+
+//     row.model_number || "",
+
+//     index === 0 ? row.quantity_no : "",
+
+//     row.serial_no || "",
+
+//     row.accessory || "",
+
+//     row.issues || ""
+
+// ]),
+
+//     styles: {
+//         halign: "center",
+//         valign: "middle",
+//         fontSize: 10
+//     },
+
+//     headStyles: {
+//         fillColor: [220, 220, 220],
+//         textColor: [0, 0, 0]
+//     }
+// });
+
+//             // Signature
+//             const finalY =
+//                 doc.lastAutoTable
+//                     ? doc.lastAutoTable.finalY + 35
+//                     : 160;
+
+//             doc.text(
+//                 "Customer Signature",
+//                 20,
+//                 finalY
+//             );
+
+//             doc.text(
+//                 "Authorized Signature",
+//                 135,
+//                 finalY
+//             );
+
+//             // Save PDF
+//             doc.save(
+//                 `RMA_${item.id}.pdf`
+//             );
+
+//         } catch (err) {
+//             console.log(err);
+//         }
+//     };
 
 
 
@@ -282,7 +571,7 @@ Model Number: ${item.model_number}
 Quantity: ${item.quantity_no}
 Serial No: ${item.serial_no}
 Accessory: ${item.accessory}
-Customer DC No: ${item.customer_dc_no}
+
 Entry Date: ${item.entry_date}
 `;
 
@@ -294,7 +583,7 @@ Entry Date: ${item.entry_date}
     };
 
     return (
-        <div className="home-container">
+        <div className="top-btns">
             <div className="top-buttons">
 
                 <Link to="/Dashboard">
@@ -305,7 +594,7 @@ Entry Date: ${item.entry_date}
 
 
                 <Link to="/home/Out">
-                    <button className="add-btn">
+                    <button className="btn-phone">
                         + Add RMA outer
                     </button>
                 </Link>
@@ -323,8 +612,10 @@ Entry Date: ${item.entry_date}
                         <th>status</th>
                         <th>Entry Date</th>
                         <th>view</th>
+                        {role === "admin" && (
+                      <>
                         <th>Action</th>
-
+</>)}
                         <th>View</th>
                         <th>Share</th>
 
@@ -359,7 +650,8 @@ Entry Date: ${item.entry_date}
                                     </Link>
 
                                 </td>
-
+{role === "admin" && (
+                      <>
                                 <td>
                                     <Link to={`/update-rma/${item.rma_no}`}>
                                         <button className="edit-btn">
@@ -376,10 +668,11 @@ Entry Date: ${item.entry_date}
                                         Delete
                                     </button>
 
+                                            </td>
+                                            </>)}
 
 
-
-                                </td>
+                                
                                 {/* <td>
                                     <Link to={`/history_l/${item.id}`}>
                                         <button className="btn btn-view">
@@ -391,8 +684,8 @@ Entry Date: ${item.entry_date}
 
                                 </td> */}
                                 <td>
-                                    <button className="view-btn"
-                                        onClick={() => generatePDF(item.rma_no)}
+                                    <button className="btn-view"
+                                        onClick={() => generatePDF(item)}
                                     >
                                         PDF
                                     </button>
