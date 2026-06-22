@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 
 function SearchModel() {
-    const { model_number } = useParams();
     const [modelNumber, setModelNumber] = useState("");
     const [data, setData] = useState([]);
 
@@ -279,6 +277,14 @@ doc.text(
                                         ? item.entry_date.substring(0, 10)
                                         : ""}
                                 </td>
+                                <td>
+                                    <button
+                                        className="view-btn"
+                                        onClick={() => generatePDF(item)}
+                                    >
+                                        View
+                                    </button>
+                                </td>
                             </tr>
 
                         ))
@@ -287,7 +293,7 @@ doc.text(
 
                         <tr>
                             <td
-                                colSpan="8"
+                                colSpan="9"
                                 style={{
                                     textAlign: "center"
                                 }}
@@ -297,14 +303,6 @@ doc.text(
                         </tr>
 
                     )}
-                    <td>
-                                    <button
-                                        className="view-btn"
-                                       // onClick={() => generatePDF(item)}
-                                    >
-                                        View
-                                    </button>
-                                </td>
 
                 </tbody>
                 

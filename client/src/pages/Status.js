@@ -1,9 +1,8 @@
-import React,
-{
+import React, {
     useEffect,
-    useState
-}
-    from "react";
+    useState,
+    useCallback
+} from "react";
 
 import axios from "axios";
 
@@ -12,8 +11,7 @@ import "./Status.css";
 import {
     useParams,
     Link
-}
-    from "react-router-dom";
+} from "react-router-dom";
 
 const Status = () => {
 
@@ -29,28 +27,27 @@ const Status = () => {
         setStatus
     ] = useState("");
 
+    const loadData = useCallback(async () => {
+
+        const res =
+            await axios.get(
+                `https://crud-operation-wn6g.onrender.com/api/rma/${id}`
+            );
+
+        setData(
+            res.data[0]
+        );
+
+        setStatus(
+            res.data[0].status
+        );
+    }, [id]);
+
     useEffect(() => {
 
         loadData();
 
-    }, [id]);
-
-    const loadData =
-        async () => {
-
-            const res =
-                await axios.get(
-                    `https://crud-operation-wn6g.onrender.com/api/rma/${id}`
-                );
-
-            setData(
-                res.data[0]
-            );
-
-            setStatus(
-                res.data[0].status
-            );
-        };
+    }, [loadData]);
 
 
         const updateStatus = async () => {
