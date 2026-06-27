@@ -28,7 +28,7 @@ const role=localStorage.getItem("role")
     const loadData = async () => {
         try {
             const response = await axios.get(
-                "https://crud-operation-wn6g.onrender.com/api/get_o"
+                "http://localhost:5000/api/get_o"
             );
 
             console.log(response.data);
@@ -55,7 +55,7 @@ const role=localStorage.getItem("role")
         try {
 
             await axios.delete(
-                `https://crud-operation-wn6g.onrender.com/delete-rma/${rma_no}`
+                `http://localhost:5000/delete-rma/${rma_no}`
             );
 
             alert("Deleted Successfully");
@@ -74,7 +74,7 @@ const role=localStorage.getItem("role")
         try {
 
             const resp = await axios.get(
-                `https://crud-operation-wn6g.onrender.com/api/pdf1/${item.rma_no}`
+                `http://localhost:5000/api/pdf1/${item.rma_no}`
             );
 
             const pdfData = resp.data;
@@ -143,7 +143,7 @@ const role=localStorage.getItem("role")
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            doc.rect(138, 35, 60, 35);
+            doc.rect(138, 35, 58, 27);
             doc.setFontSize(8);
             doc.setFont(undefined, "normal");
 
@@ -156,13 +156,13 @@ const role=localStorage.getItem("role")
             doc.text(
                 `Entry Date : ${entryDate}`,
                 142,
-                55
+                50
             );
 
             doc.text(
                 `Staff Name : ${headerData.created_by_name || ""}`,
                 142,
-                65
+                55
             );
 
 
@@ -215,14 +215,14 @@ const role=localStorage.getItem("role")
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 120, 35);
+            doc.rect(13, 35, 120, 27);
             doc.setFontSize(10);
             doc.setFont(undefined, "bold");
 
             doc.text(
                 "Service Center Details",
                 17,
-                43
+                41
             );
 
             doc.setFont(undefined, "normal");
@@ -231,31 +231,31 @@ const role=localStorage.getItem("role")
             doc.text(
                 `Service Center Name: ${headerData.center_name || ""}`,
                 17,
-                52
+                48
             );
 
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
                 75,
-                52
+                48
             );
 
             doc.text(
                 `Email : ${headerData.email || ""}`,
                 17,
-                62
+                55
             );
 
             doc.text(
                 `Address : ${headerData.address || ""}`,
                 75,
-                62
+                55
             );
 
 
             // RMA Details Table
             autoTable(doc, {
-                startY: 78,
+                startY: 68,
 
                 theme: "grid",
 
@@ -359,7 +359,7 @@ const role=localStorage.getItem("role")
 //     try {
 
 //         const resp = await axios.get(
-//             `https://crud-operation-wn6g.onrender.com/api/pdf1/${item.rma_no}`
+//             `http://localhost:5000/api/pdf1/${item.rma_no}`
 //         );
 
 //         const pdfData = resp.data;
@@ -576,7 +576,7 @@ Entry Date: ${item.entry_date}
 `;
 
         const whatsappUrl =
-            `https://wa.me/?text=${encodeURIComponent(message)}`;
+            `http://wa.me/?text=${encodeURIComponent(message)}`;
 
         window.open(whatsappUrl, "_blank");
 

@@ -24,7 +24,7 @@ const UpdateStatus = () => {
  useEffect(() => {
 
    axios.get(
-   `https://crud-operation-wn6g.onrender.com/api/status/${id}`
+   `http://localhost:5000/api/status/${id}`
    )
    .then((res) => {
       setData(res.data);
@@ -38,7 +38,7 @@ const UpdateStatus = () => {
     try {
 
         await axios.post(
-        "https://crud-operation-wn6g.onrender.com/api/status",
+        "http://localhost:5000/api/status",
         {
             rma_id: id,
             status_text:

@@ -9,7 +9,7 @@ const Home = () => {
 
     const loadData = async () => {
         const response = await axios.get(
-            "https://crud-operation-wn6g.onrender.com/api/get"
+            "http://localhost:5000/api/get"
         );
 
         console.log(response.data);
@@ -26,7 +26,7 @@ const Home = () => {
         console.log("Delete id:", id);
         if (window.confirm("Are you sure you wanted to delete the customer ?")) {
             try {
-                await axios.delete(`https://crud-operation-wn6g.onrender.com/api/remove/${id}`);
+                await axios.delete(`http://localhost:5000/api/remove/${id}`);
                 toast.success("customer deleted successfully");
                 loadData();
             } catch (error) {

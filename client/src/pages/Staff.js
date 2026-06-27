@@ -8,7 +8,7 @@ const Staff = () => {
 
     const loadData = async () => {
         const response = await axios.get(
-            "https://crud-operation-wn6g.onrender.com/api/staff"
+            "http://localhost:5000/api/staff"
         );
 
         console.log(response.data);

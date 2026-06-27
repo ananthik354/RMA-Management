@@ -9,8 +9,8 @@ const SView = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`https://crud-operation-wn6g.onrender.com/api/getservice/${id}`)
-            .then((resp) => setUser({ ...resp.data[0] }))
+        axios.get(`http://localhost:5000/api/getservice/${id}`)
+            .then((resp) => setUser({ ...resp.data }))
     }, [id]);
     return (
         <div className="details-container">

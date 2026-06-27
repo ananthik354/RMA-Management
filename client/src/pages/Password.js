@@ -36,7 +36,7 @@ const Password = () => {
 
     axios
         .get(
-            `https://crud-operation-wn6g.onrender.com/api/password/${id}`
+            `http://localhost:5000/api/password/${id}`
         )
         .then((resp) => {
 
@@ -46,7 +46,7 @@ const Password = () => {
 
             setState({
                 username:
-                    resp.data[0]
+                    resp.data
                         .username,
                 password: "",
                 confirmPassword:
@@ -104,7 +104,7 @@ const Password = () => {
         try {
 
             await axios.put(
-                `https://crud-operation-wn6g.onrender.com/api/password/${id}`,
+                `http://localhost:5000/api/password/${id}`,
                 {
                     password:
                         state.password

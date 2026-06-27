@@ -31,7 +31,7 @@ const Status = () => {
 
         const res =
             await axios.get(
-                `https://crud-operation-wn6g.onrender.com/api/rma/${id}`
+                `http://localhost:5000/api/rma/${id}`
             );
 
         setData(
@@ -55,7 +55,7 @@ const Status = () => {
     try {
 
         await axios.put(
-            `https://crud-operation-wn6g.onrender.com/api/status/${id}`,
+            `http://localhost:5000/api/status/${id}`,
             {
                 status
             }
@@ -75,7 +75,7 @@ const Status = () => {
             try {
 
                 await axios.put(
-                    `https://crud-operation-wn6g.onrender.com/api/status/${id}`,
+                    `http://localhost:5000/api/status/${id}`,
                     {
                         status:
                             "Completed"

@@ -11,9 +11,9 @@ const View = () => {
 
     useEffect(() => {
         axios
-            .get(`https://crud-operation-wn6g.onrender.com/api/get/${id}`)
+            .get(`http://localhost:5000/api/get/${id}`)
             .then((resp) =>
-                setUser({ ...resp.data[0] })
+                setUser({ ...resp.data })
             );
     }, [id]);
     return (

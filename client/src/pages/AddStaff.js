@@ -16,7 +16,7 @@ const AddStaff = () => {
     const [state, setState] = useState(initialState);
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`https://crud-operation-wn6g.onrender.com/api/get/${id}`)
+        axios.get(`http://localhost:5000/api/get_staff/${id}`)
             .then((resp) => setState({ ...resp.data[0] }))
     }, [id]);
     const handleInputChange = (e) => {
@@ -52,7 +52,7 @@ const AddStaff = () => {
 
                 try {
                     await axios.post(
-                        "https://crud-operation-wn6g.onrender.com/api/addstaff",
+                        "http://localhost:5000/api/addstaff",
                         state
                     );
 
@@ -67,7 +67,7 @@ const AddStaff = () => {
 
                 try {
                     await axios.put(
-                        `https://crud-operation-wn6g.onrender.com/api/update/${id}`,
+                        `http://localhost:5000/api/update/${id}`,
                         state
                     );
 

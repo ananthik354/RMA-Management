@@ -14,7 +14,7 @@ function RmaIn_Update() {
   useEffect(() => {
 
     axios
-      .get(`https://crud-operation-wn6g.onrender.com/rma-details_r/${rma_no}`)
+      .get(`http://localhost:5000/rma-details_r/${rma_no}`)
       .then((res) => {
         console.log(res.data);
         setData(res.data);
@@ -44,7 +44,7 @@ const updateData = async () => {
   try {
 
     await axios.put(
-      `https://crud-operation-wn6g.onrender.com/update-rma_in/${rma_no}`,
+      `http://localhost:5000/update-rma_in/${rma_no}`,
       data
     );
 
@@ -63,7 +63,7 @@ const updateStatus = async () => {
     try {
 
         await axios.put(
-            `https://crud-operation-wn6g.onrender.com/update-rma-status/${rma_no}`,
+            `http://localhost:5000/update-rma-status/${rma_no}`,
             {
                 status: "Completed"
             }

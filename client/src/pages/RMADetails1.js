@@ -15,7 +15,7 @@ function RMADetails1() {
   useEffect(() => {
 
     axios
-      .get(`https://crud-operation-wn6g.onrender.com/rma-details/${rma_no}`)
+      .get(`http://localhost:5000/rma-details/${rma_no}`)
       .then((res) => {
         console.log(res.data);
         setData(res.data);
@@ -33,7 +33,7 @@ const updateStatus = async () => {
     try {
 
         await axios.put(
-            `https://crud-operation-wn6g.onrender.com/update-rma-status/${rma_no}`,
+            `http://localhost:5000/update-rma-status/${rma_no}`,
             {
                 status: "Completed"
             }

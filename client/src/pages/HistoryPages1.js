@@ -11,7 +11,7 @@ function HistoryPage1() {
   useEffect(() => {
 
     axios
-      .get(`https://crud-operation-wn6g.onrender.com/history_l/${rma_id}`)
+      .get(`http://localhost:5000/history_l/${rma_id}`)
       .then((res) => {
 
         setData(res.data);

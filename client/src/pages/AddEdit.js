@@ -33,8 +33,8 @@ const AddEdit = () => {
     const [state, setState] = useState(initialState);
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`https://crud-operation-wn6g.onrender.com/api/get/${id}`)
-            .then((resp) => setState({ ...resp.data[0] }))
+        axios.get(`http://localhost:5000/api/get/${id}`)
+            .then((resp) => setState({ ...resp.data }))
     }, [id]);
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -84,7 +84,7 @@ const AddEdit = () => {
 
                 try {
                     await axios.post(
-                        "https://crud-operation-wn6g.onrender.com/api/post",
+                        "http://localhost:5000/api/post",
                         state
                     );
 
@@ -99,7 +99,7 @@ const AddEdit = () => {
 
                 try {
                     await axios.put(
-                        `https://crud-operation-wn6g.onrender.com/api/update/${id}`,
+                        `http://localhost:5000/api/update/${id}`,
                         state
                     );
 

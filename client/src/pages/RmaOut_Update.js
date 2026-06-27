@@ -14,7 +14,7 @@ function RmaOut_Update() {
   useEffect(() => {
 
     axios
-      .get(`https://crud-operation-wn6g.onrender.com/rma-details/${rma_no}`)
+      .get(`http://localhost:5000/rma-details/${rma_no}`)
       .then((res) => {
         console.log(res.data);
         setData(res.data);
@@ -44,7 +44,7 @@ const updateData = async () => {
   try {
 
     await axios.put(
-      `https://crud-operation-wn6g.onrender.com/update-rma/${rma_no}`,
+      `http://localhost:5000/update-rma/${rma_no}`,
       data
     );
 
@@ -63,7 +63,7 @@ const updateStatus = async () => {
     try {
 
         await axios.put(
-            `https://crud-operation-wn6g.onrender.com/update-rma-status/${rma_no}`,
+            `http://localhost:5000/update-rma-status/${rma_no}`,
             {
                 status: "Completed"
             }
@@ -132,37 +132,31 @@ const updateStatus = async () => {
     <tr key={item.id}>
 
       <td>{index + 1}</td>
-      <td>
-        <input
-  value={item.product_name || ""}
-  onChange={(e) =>
-    handleChange(index, "product_name", e.target.value)
-  }
-/>
-      </td>
-      <td>
-        <input
-  value={item.model_number || ""}
-  onChange={(e) =>
-    handleChange(index, "model_number", e.target.value)
-  }
-/>
 
+      <td>
+        <input
+          type="text"
+          className="form-control"
+          value={item.product_name || ""}
+          readOnly
+        />
       </td>
-      
+
+      <td>
+        <input
+          type="text"
+          className="form-control"
+          value={item.model_number || ""}
+          readOnly
+        />
+      </td>
 
       <td>
         <input
           type="text"
           className="form-control"
           value={item.serial_no || ""}
-          onChange={(e) =>
-            handleChange(
-              index,
-              "serial_no",
-              e.target.value
-            )
-          }
+          readOnly
         />
       </td>
 
@@ -171,27 +165,18 @@ const updateStatus = async () => {
           type="text"
           className="form-control"
           value={item.accessory || ""}
-          onChange={(e) =>
-            handleChange(
-              index,
-              "accessory",
-              e.target.value
-            )
-          }
+          readOnly
         />
       </td>
 
+      {/* Only this field can be edited */}
       <td>
         <input
           type="text"
           className="form-control"
           value={item.issues || ""}
           onChange={(e) =>
-            handleChange(
-              index,
-              "issues",
-              e.target.value
-            )
+            handleChange(index, "issues", e.target.value)
           }
         />
       </td>
@@ -213,7 +198,7 @@ const updateStatus = async () => {
                     </button>
                 </Link>
 
-      </table>
+  </table>
 
     </div>
   );

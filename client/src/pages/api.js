@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API =
-  "https://crud-operation-wn6g.onrender.com/api";
+  "http://localhost:5000/api";
 
 export const getReminder =
 (id) =>

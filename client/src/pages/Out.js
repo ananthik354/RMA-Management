@@ -83,7 +83,7 @@ const removeItem = (index) => {
 };
     useEffect(() => {
         axios
-            .get("https://crud-operation-wn6g.onrender.com/get-services")
+            .get("http://localhost:5000/get-services")
             .then((res) => {
                 setServices(res.data);
             });
@@ -122,7 +122,7 @@ const removeItem = (index) => {
     try {
 
         const res = await axios.get(
-            `https://crud-operation-wn6g.onrender.com/search-serial/${serialNo}`
+            `http://localhost:5000/search-serial/${serialNo}`
         );
         if (!res.data.success) {
     alert(res.data.message);
@@ -258,7 +258,7 @@ console.log("USER ID FROM STORAGE:", userId);
         };
 
         const res = await axios.post(
-            "https://crud-operation-wn6g.onrender.com/api/entry_out",
+            "http://localhost:5000/api/entry_out",
             payload
         );
 

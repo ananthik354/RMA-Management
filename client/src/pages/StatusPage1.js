@@ -14,7 +14,7 @@ function StatusPage1() {
 
   useEffect(() => {
     axios
-      .get("https://crud-operation-wn6g.onrender.com/reminders_ls")
+      .get("http://localhost:5000/reminders_ls")
       .then((res) => {
         console.log(res.data);
       })
@@ -24,7 +24,7 @@ function StatusPage1() {
   const saveStatus = async () => {
     try {
       await axios.post(
-        `https://crud-operation-wn6g.onrender.com/update-status_ls/${item_id}`,
+        `http://localhost:5000/update-status_ls/${item_id}`,
         {
           item_id,
           reminder_id,

@@ -13,7 +13,7 @@ function SearchModel() {
         try {
 
             const res = await axios.get(
-                `https://crud-operation-wn6g.onrender.com/search-model/${modelNumber}`
+                `http://localhost:5000/search-model/${modelNumber}`
             );
 
             setData(res.data);
@@ -28,7 +28,7 @@ function SearchModel() {
         try {
 
             const resp = await axios.get(
-                `https://crud-operation-wn6g.onrender.com/api/pdf/${item.id}`
+                `http://localhost:5000/api/pdf/${item.id}`
             );
 
             const pdfData = resp.data;
