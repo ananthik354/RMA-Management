@@ -66,7 +66,7 @@ console.log("Logged User:", userId);
 
     useEffect(() => {
         axios
-            .get("http://localhost:5000/get-services_r")
+            .get("https://rma-management.onrender.com/get-services_r")
             .then((res) => {
                 setServices(res.data);
             });
@@ -137,7 +137,7 @@ console.log("USER ID FROM STORAGE:", userId);
 
 
             const res = await axios.post(
-                "http://localhost:5000/api/entry_in",
+                "https://rma-management.onrender.com/api/entry_in",
                 payload
             );
 

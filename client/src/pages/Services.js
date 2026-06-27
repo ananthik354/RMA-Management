@@ -9,7 +9,7 @@ const Services = () => {
 
     const loadData = async () => {
         const response = await axios.get(
-            "http://localhost:5000/api/service"
+            "https://rma-management.onrender.com/api/service"
         );
 
         console.log(response.data);
@@ -26,7 +26,7 @@ const Services = () => {
         console.log("Delete id:", id);
         if (window.confirm("Are you sure you wanted to delete the customer ?")) {
             try {
-                await axios.delete(`http://localhost:5000/api/ser_remove/${id}`);
+                await axios.delete(`https://rma-management.onrender.com/api/ser_remove/${id}`);
                 toast.success("service details deleted successfully");
                 loadData();
             } catch (error) {

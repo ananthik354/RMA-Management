@@ -12,7 +12,7 @@ function History1() {
    useEffect(() => {
 
     axios
-        .get(`http://localhost:5000/serial-history/${serial_no}`)
+        .get(`https://rma-management.onrender.com/serial-history/${serial_no}`)
         .then(res => {
 
             console.log("HISTORY RESPONSE:", res.data);

@@ -19,7 +19,7 @@ const type =
 
 useEffect(() => {
     axios
-        .get("http://localhost:5000/pending-serials")
+        .get("https://rma-management.onrender.com/pending-serials")
         .then((res) => {
             setPendingData(res.data);
         })
@@ -32,7 +32,7 @@ useEffect(() => {
 
 useEffect(() => {
     axios
-        .get("http://localhost:5000/complete-serials")
+        .get("https://rma-management.onrender.com/complete-serials")
         .then((res) => {
             setCompleteData(res.data);
         })

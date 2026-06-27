@@ -31,7 +31,7 @@ const Status = () => {
 
         const res =
             await axios.get(
-                `http://localhost:5000/api/rma/${id}`
+                `https://rma-management.onrender.com/api/rma/${id}`
             );
 
         setData(
@@ -55,7 +55,7 @@ const Status = () => {
     try {
 
         await axios.put(
-            `http://localhost:5000/api/status/${id}`,
+            `https://rma-management.onrender.com/api/status/${id}`,
             {
                 status
             }
@@ -75,7 +75,7 @@ const Status = () => {
             try {
 
                 await axios.put(
-                    `http://localhost:5000/api/status/${id}`,
+                    `https://rma-management.onrender.com/api/status/${id}`,
                     {
                         status:
                             "Completed"

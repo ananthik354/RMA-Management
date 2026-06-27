@@ -12,7 +12,7 @@ function History() {
     useEffect(() => {
 
         axios
-            .get(`http://localhost:5000/status-history_lsr/${item_id}`)
+            .get(`https://rma-management.onrender.com/status-history_lsr/${item_id}`)
             .then((res) => {
                 setHistory(res.data);
             })

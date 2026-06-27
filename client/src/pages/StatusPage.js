@@ -14,7 +14,7 @@ function StatusPage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/reminders_lsr")
+      .get("https://rma-management.onrender.com/reminders_lsr")
       .then((res) => {
         console.log(res.data);
       })
@@ -24,7 +24,7 @@ function StatusPage() {
   const saveStatus = async () => {
     try {
       await axios.post(
-        `http://localhost:5000/update-status_lsr/${item_id}`,
+        `https://rma-management.onrender.com/update-status_lsr/${item_id}`,
         {
           item_id,
           reminder_id,

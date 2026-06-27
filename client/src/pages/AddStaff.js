@@ -16,7 +16,7 @@ const AddStaff = () => {
     const [state, setState] = useState(initialState);
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/get_staff/${id}`)
+        axios.get(`https://rma-management.onrender.com/api/get_staff/${id}`)
             .then((resp) => setState({ ...resp.data[0] }))
     }, [id]);
     const handleInputChange = (e) => {
@@ -52,7 +52,7 @@ const AddStaff = () => {
 
                 try {
                     await axios.post(
-                        "http://localhost:5000/api/addstaff",
+                        "https://rma-management.onrender.com/api/addstaff",
                         state
                     );
 
@@ -67,7 +67,7 @@ const AddStaff = () => {
 
                 try {
                     await axios.put(
-                        `http://localhost:5000/api/update/${id}`,
+                        `https://rma-management.onrender.com/api/update/${id}`,
                         state
                     );
 

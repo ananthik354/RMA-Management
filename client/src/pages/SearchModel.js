@@ -13,7 +13,7 @@ function SearchModel() {
         try {
 
             const res = await axios.get(
-                `http://localhost:5000/search-model/${modelNumber}`
+                `https://rma-management.onrender.com/search-model/${modelNumber}`
             );
 
             setData(res.data);
@@ -28,7 +28,7 @@ function SearchModel() {
         try {
 
             const resp = await axios.get(
-                `http://localhost:5000/api/pdf/${item.id}`
+                `https://rma-management.onrender.com/api/pdf/${item.id}`
             );
 
             const pdfData = resp.data;

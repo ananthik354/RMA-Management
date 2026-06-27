@@ -31,7 +31,7 @@ const [reminders, setReminders] =
 const loadReminders = async () => {
 
     const res = await axios.get(
-        "http://localhost:5000/reminders_ls"
+        "https://rma-management.onrender.com/reminders_ls"
     );
 
     setReminders(res.data);
@@ -47,7 +47,7 @@ useEffect(() => {
 const loadReminders_l = async () => {
 
     const res = await axios.get(
-        "http://localhost:5000/reminders_lsr"
+        "https://rma-management.onrender.com/reminders_lsr"
     );
 
     setInreminders(res.data);
@@ -70,7 +70,7 @@ useEffect(() => {
 
   // ✅ LOAD REMINDERS
   useEffect(() => {
-  axios.get("http://localhost:5000/reminders")
+  axios.get("https://rma-management.onrender.com/reminders")
     .then((res) => {
       console.log("RMA:", res.data);
       setRmaReminders(res.data);
@@ -79,7 +79,7 @@ useEffect(() => {
 }, []);
  console.log("OUT:", rmaReminders);
 useEffect(() => {
-  axios.get("http://localhost:5000/reminders_l")
+  axios.get("https://rma-management.onrender.com/reminders_l")
     .then((res) => {
       console.log("OUT:", res.data);
       setOutReminders(res.data);
@@ -91,7 +91,7 @@ useEffect(() => {
   const getPendingCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/InwardCount"
+        "https://rma-management.onrender.com/api/InwardCount"
       );
       setPencount(resp.data.total);
       
@@ -115,7 +115,7 @@ useEffect(() => {
   const getCompleteCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/CompleteCount"
+        "https://rma-management.onrender.com/api/CompleteCount"
       );
       setComcount(resp.data.total);
       
@@ -139,7 +139,7 @@ useEffect(() => {
   const getOutcompleteCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/CompleteCount_o"
+        "https://rma-management.onrender.com/api/CompleteCount_o"
       );
       setOutcomcount(resp.data.total);
       
@@ -162,7 +162,7 @@ useEffect(() => {
   const getOutpendingCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/OutwardCount"
+        "https://rma-management.onrender.com/api/OutwardCount"
       );
       setOutpencount(resp.data.total);
       
@@ -186,7 +186,7 @@ useEffect(() => {
   const getRmaOutcompleteCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/completeCount_orma"
+        "https://rma-management.onrender.com/api/completeCount_orma"
       );
       setRmaoutcomcount(resp.data.total);
       
@@ -209,7 +209,7 @@ useEffect(() => {
   const getRmaOutpendingCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/pendingCount_orma"
+        "https://rma-management.onrender.com/api/pendingCount_orma"
       );
       setRmaoutpencount(resp.data.total);
       
@@ -233,7 +233,7 @@ useEffect(() => {
   const getIrmacompleteCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/completeCount_irma"
+        "https://rma-management.onrender.com/api/completeCount_irma"
       );
       setIrmacomcount(resp.data.total);
       
@@ -256,7 +256,7 @@ useEffect(() => {
   const getIrmapendingCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/pendingCount_irma"
+        "https://rma-management.onrender.com/api/pendingCount_irma"
       );
       setIrmapencount(resp.data.total);
       
@@ -280,7 +280,7 @@ useEffect(() => {
   const getCustomerCount = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:5000/api/customerCount"
+        "https://rma-management.onrender.com/api/customerCount"
       );
       setCount(resp.data.total);
     } catch (err) {

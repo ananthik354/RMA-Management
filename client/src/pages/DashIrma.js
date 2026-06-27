@@ -19,7 +19,7 @@ const type =
 
 useEffect(() => {
     axios
-        .get("http://localhost:5000/all-irma-data_pending")
+        .get("https://rma-management.onrender.com/all-irma-data_pending")
         .then((res) => {
             setPendingData(res.data);
         })
@@ -32,7 +32,7 @@ useEffect(() => {
 
 useEffect(() => {
     axios
-        .get("http://localhost:5000/all-irma-data_complete")
+        .get("https://rma-management.onrender.com/all-irma-data_complete")
         .then((res) => {
             setCompleteData(res.data);
         })

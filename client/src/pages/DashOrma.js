@@ -19,7 +19,7 @@ const type =
 
 useEffect(() => {
     axios
-        .get("http://localhost:5000/all-orma-data_pending")
+        .get("https://rma-management.onrender.com/all-orma-data_pending")
         .then((res) => {
             setPendingData(res.data);
         })
@@ -32,7 +32,7 @@ useEffect(() => {
 
 useEffect(() => {
     axios
-        .get("http://localhost:5000/all-orma-data_complete")
+        .get("https://rma-management.onrender.com/all-orma-data_complete")
         .then((res) => {
             setCompleteData(res.data);
         })

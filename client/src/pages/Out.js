@@ -83,7 +83,7 @@ const removeItem = (index) => {
 };
     useEffect(() => {
         axios
-            .get("http://localhost:5000/get-services")
+            .get("https://rma-management.onrender.com/get-services")
             .then((res) => {
                 setServices(res.data);
             });
@@ -122,7 +122,7 @@ const removeItem = (index) => {
     try {
 
         const res = await axios.get(
-            `http://localhost:5000/search-serial/${serialNo}`
+            `https://rma-management.onrender.com/search-serial/${serialNo}`
         );
         if (!res.data.success) {
     alert(res.data.message);
@@ -258,7 +258,7 @@ console.log("USER ID FROM STORAGE:", userId);
         };
 
         const res = await axios.post(
-            "http://localhost:5000/api/entry_out",
+            "https://rma-management.onrender.com/api/entry_out",
             payload
         );
 

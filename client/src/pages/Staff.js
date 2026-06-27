@@ -8,7 +8,7 @@ const Staff = () => {
 
     const loadData = async () => {
         const response = await axios.get(
-            "http://localhost:5000/api/staff"
+            "https://rma-management.onrender.com/api/staff"
         );
 
         console.log(response.data);

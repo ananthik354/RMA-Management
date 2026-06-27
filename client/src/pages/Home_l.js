@@ -28,7 +28,7 @@ const role=localStorage.getItem("role")
     const loadData = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:5000/api/get_P"
+                "https://rma-management.onrender.com/api/get_P"
             );
 
             console.log(response.data);
@@ -55,7 +55,7 @@ const role=localStorage.getItem("role")
         try {
 
             await axios.delete(
-                `http://localhost:5000/delete-rma_r/${rma_no}`
+                `https://rma-management.onrender.com/delete-rma_r/${rma_no}`
             );
 
             alert("Deleted Successfully");
@@ -75,7 +75,7 @@ const role=localStorage.getItem("role")
         try {
 
             const resp = await axios.get(
-                `http://localhost:5000/api/pdf/${item.rma_no}`
+                `https://rma-management.onrender.com/api/pdf/${item.rma_no}`
             );
 
             const pdfData = resp.data;

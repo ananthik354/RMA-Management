@@ -9,7 +9,7 @@ const SView = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/getservice/${id}`)
+        axios.get(`https://rma-management.onrender.com/api/getservice/${id}`)
             .then((resp) => setUser({ ...resp.data }))
     }, [id]);
     return (

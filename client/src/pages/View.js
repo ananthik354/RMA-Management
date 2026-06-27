@@ -11,7 +11,7 @@ const View = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:5000/api/get/${id}`)
+            .get(`https://rma-management.onrender.com/api/get/${id}`)
             .then((resp) =>
                 setUser({ ...resp.data })
             );

@@ -14,7 +14,7 @@ function RmaIn_Update() {
   useEffect(() => {
 
     axios
-      .get(`http://localhost:5000/rma-details_r/${rma_no}`)
+      .get(`https://rma-management.onrender.com/rma-details_r/${rma_no}`)
       .then((res) => {
         console.log(res.data);
         setData(res.data);
@@ -44,7 +44,7 @@ const updateData = async () => {
   try {
 
     await axios.put(
-      `http://localhost:5000/update-rma_in/${rma_no}`,
+      `https://rma-management.onrender.com/update-rma_in/${rma_no}`,
       data
     );
 
@@ -63,7 +63,7 @@ const updateStatus = async () => {
     try {
 
         await axios.put(
-            `http://localhost:5000/update-rma-status/${rma_no}`,
+            `https://rma-management.onrender.com/update-rma-status/${rma_no}`,
             {
                 status: "Completed"
             }
