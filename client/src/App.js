@@ -14,9 +14,9 @@ import Services from "./pages/Services";
 import AddService from "./pages/AddService";
 import SView from "./pages/SView";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Home_l from "./pages/Home_l";
+import HomeL from "./pages/HomeL";
 import Add from "./pages/Add";
-import Home_z from "./pages/Home_z";
+import HomeZ from "./pages/HomeZ";
 import Out from "./pages/Out";
 import Status from "./pages/Status";
 import History from "./pages/History";
@@ -47,8 +47,8 @@ function App() {
           <Route path="/" element={<Login />} />
 
           <Route path="/home" element={<Home />} />
-          <Route path="/home/home_l" element={<Home_l />} />
-          <Route path="/home/home_z" element={<Home_z />} />
+          <Route path="/home/home_l" element={<HomeL />} />
+          <Route path="/home/home_z" element={<HomeZ />} />
           <Route path="/home/addCustomer" element={<AddEdit />} />
           <Route path="/home/staff" element={<Staff />} />
           <Route path="/home/addstaff" element={<AddStaff />} />

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "./Home_l.css";
+import "./Home_z.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const Home_l = () => {
+const HomeZ = () => {
 
     const [data, setData] = useState([]); // MUST BE []
 const role=localStorage.getItem("role")
@@ -28,7 +28,7 @@ const role=localStorage.getItem("role")
     const loadData = async () => {
         try {
             const response = await axios.get(
-                "https://rma-management.onrender.com/api/get_P"
+                "https://rma-management.onrender.com/api/get_o"
             );
 
             console.log(response.data);
@@ -55,7 +55,7 @@ const role=localStorage.getItem("role")
         try {
 
             await axios.delete(
-                `https://rma-management.onrender.com/delete-rma_r/${rma_no}`
+                `https://rma-management.onrender.com/delete-rma/${rma_no}`
             );
 
             alert("Deleted Successfully");
@@ -69,13 +69,12 @@ const role=localStorage.getItem("role")
         }
 
     };
-
     const generatePDF = async (item) => {
 
         try {
 
             const resp = await axios.get(
-                `https://rma-management.onrender.com/api/pdf/${item.rma_no}`
+                `https://rma-management.onrender.com/api/pdf1/${item.rma_no}`
             );
 
             const pdfData = resp.data;
@@ -187,7 +186,7 @@ const role=localStorage.getItem("role")
                 doc.setFont(undefined, "normal");
 
                 // Single Line
-                doc.text( `Customer Name : ${headerData.customer_name || ""}`,11,16);
+                doc.text( `Service Center Name : ${headerData.center_name || ""}`,11,16);
 
                 doc.text(`Phone : ${headerData.phone_no || ""}`, 60, 16);
 
@@ -221,7 +220,7 @@ const role=localStorage.getItem("role")
             doc.setFont(undefined, "bold");
 
             doc.text(
-                "Customer Details",
+                "Service Center Details",
                 17,
                 41
             );
@@ -230,7 +229,7 @@ const role=localStorage.getItem("role")
             doc.setFontSize(9);
 
             doc.text(
-                `Customer Name: ${headerData.customer_name || ""}`,
+                `Service Center Name: ${headerData.center_name || ""}`,
                 17,
                 48
             );
@@ -281,7 +280,7 @@ const role=localStorage.getItem("role")
                     return [
                         row.product_name || "",
                         row.model_number || "",
-                        showQty ? row.quantity_no : "",
+                        index === 0 ? row.quantity_no : "",
                         row.serial_no || "",
                         row.accessory || "",
                         row.issues || ""
@@ -322,6 +321,10 @@ const role=localStorage.getItem("role")
                 }
             });
             // Signature
+            // const finalY =
+            //     doc.lastAutoTable
+            //         ? doc.lastAutoTable.finalY + 15
+            //         : 100;
             const pageHeight = doc.internal.pageSize.height;
 
             doc.setFontSize(8);
@@ -351,6 +354,210 @@ const role=localStorage.getItem("role")
             console.log(err);
         }
     };
+//     const generatePDF = async (item) => {
+
+//     try {
+
+//         const resp = await axios.get(
+//             `https://rma-management.onrender.com/api/pdf1/${item.rma_no}`
+//         );
+
+//         const pdfData = resp.data;
+
+//         console.log("RESP DATA:", pdfData);
+
+//         if (!pdfData || pdfData.length === 0) {
+//             alert("No Data Found");
+//             return;
+//         }
+
+//         const headerData = pdfData[0];
+
+//         const entryDate = headerData.entry_date || "";
+//            console.log("HEADER DATA:", headerData);
+// console.log("STAFF NAME:", headerData.created_by_name); 
+//             const doc = new jsPDF({
+//                 orientation: "landscape",
+//                 unit: "mm",
+//                 format: "a4"
+//             });
+//             doc.rect(5, 5, 287, 200);
+
+//             // Company Header
+//             doc.setFontSize(22);
+//             doc.setFont(undefined, "bold");
+
+//             doc.text(
+//                 "M K ELECTRONICS",
+//                 155,
+//                 15,
+//                 { align: "center" }
+//             );
+
+//             doc.setFontSize(10);
+//             doc.setFont(undefined, "normal");
+
+//             doc.text(
+//                 "36B, Chakra Complex, Nalli Hospital Road, Near Erode Bus Stand, Erode - 638011",
+//                 148,
+//                 23,
+//                 { align: "center" }
+//             );
+
+//             doc.text(
+//                 "GSTIN: 33DSEPK8530C1Z1",
+//                 148,
+//                 29,
+//                 { align: "center" }
+//             );
+
+//             doc.text(
+//                 "Contact: 9003838352, 9500508118, 9003866653, 9566672229",
+//                 148,
+//                 35,
+//                 { align: "center" }
+//             );
+//             doc.text(
+//                 "E-Mail:mkelectronicsservices@gmail.com",
+//                 148,
+//                 40,
+//                 { align: "center" }
+
+//             );
+
+//             // RMA
+
+//             doc.rect(210, 50, 75, 40);
+
+//             doc.setFont(undefined, "bold");
+//             doc.text("RMA DETAILS", 215, 55);
+
+//             doc.setFont(undefined, "normal");
+
+//             doc.text(`RMA No : ${headerData.rma_no}`, 215, 65);
+
+// // doc.text(
+// //     `Cus DC No : ${headerData.customer_dc_no}`,
+// //     215,
+// //     65
+// // );
+
+//             doc.text(
+//                 `Entry Date : ${entryDate}`,
+//                 215,
+//                 75
+//             );
+
+//             doc.text(
+//                 `Staff Name : ${headerData.created_by_name|| ""}`,
+//                 215,
+//                 85
+//             );
+
+//             // Customer Details Table
+//             // -------- Customer Details (Text Format) --------
+//             doc.rect(10, 50, 190, 40);
+//             doc.setFontSize(11);
+//             doc.setFont(undefined, "bold");
+
+//             doc.text("Service Center Details", 15, 58);
+
+//             doc.setFont(undefined, "normal");
+
+//             doc.text(
+//                 `Service Center Name : ${headerData.center_name || ""}`,
+//                 15,
+//                 68
+//             );
+//             doc.text(
+//                 `phone : ${headerData.phone_no || ""}`,
+//                 110,
+//                 68
+//             );
+//             doc.text(
+//                 ` Email : ${headerData.email}`,
+//                 15,
+//                 78
+//             );
+//             doc.text(
+
+//                 `Address: ${headerData.address}`,
+//                 110,
+//                 78
+//             );
+
+
+//             // RMA Details Table
+//             autoTable(doc, {
+//     startY: 95,
+
+//     theme: "grid",
+
+//     head: [[
+//         "Product Name",
+//         "Model No",
+//         "Qty",
+//         "Serial No",
+//         "Accessory",
+//         "Issue"
+//     ]],
+
+//     body: pdfData.map((row, index) => [
+
+//     row.product_name || "",
+
+//     row.model_number || "",
+
+//     index === 0 ? row.quantity_no : "",
+
+//     row.serial_no || "",
+
+//     row.accessory || "",
+
+//     row.issues || ""
+
+// ]),
+
+//     styles: {
+//         halign: "center",
+//         valign: "middle",
+//         fontSize: 10
+//     },
+
+//     headStyles: {
+//         fillColor: [220, 220, 220],
+//         textColor: [0, 0, 0]
+//     }
+// });
+
+//             // Signature
+//             const finalY =
+//                 doc.lastAutoTable
+//                     ? doc.lastAutoTable.finalY + 35
+//                     : 160;
+
+//             doc.text(
+//                 "Customer Signature",
+//                 20,
+//                 finalY
+//             );
+
+//             doc.text(
+//                 "Authorized Signature",
+//                 135,
+//                 finalY
+//             );
+
+//             // Save PDF
+//             doc.save(
+//                 `RMA_${item.id}.pdf`
+//             );
+
+//         } catch (err) {
+//             console.log(err);
+//         }
+//     };
+
 
 
     const shareWhatsApp = (item) => {
@@ -365,7 +572,7 @@ Quantity: ${item.quantity_no}
 Serial No: ${item.serial_no}
 Accessory: ${item.accessory}
 
-Reminder Date: ${item.reminder_date}
+Entry Date: ${item.entry_date}
 `;
 
         const whatsappUrl =
@@ -386,33 +593,29 @@ Reminder Date: ${item.reminder_date}
                 </Link>
 
 
-                <Link to="/home/add">
+                <Link to="/home/Out">
                     <button className="btn-phone">
-                        Add RMA Entry
+                        + Add RMA outer
                     </button>
                 </Link>
 
             </div>
-
-            <table className="rma-table">
+            <table>
                 <thead>
                     <tr>
                         <th>RMA NO</th>
-                        <th>Customer Name</th>
+                        <th>Center Name</th>
                         <th>Product Name</th>
                         <th>Model Number</th>
                         <th>Quantity</th>
-                        {/* <th>Serial No</th>
-                        <th>Accessory</th> */}
-                        <th>Status</th>
-                        <th>Entry Date</th>
+
                         <th>status</th>
-                        <th>Summary</th>
+                        <th>Entry Date</th>
+                        <th>view</th>
                         {role === "admin" && (
                       <>
                         <th>Action</th>
-                        </>)}
-
+</>)}
                         <th>View</th>
                         <th>Share</th>
 
@@ -424,12 +627,12 @@ Reminder Date: ${item.reminder_date}
                         return (
                             <tr key={item.id}>
                                 <td>{item.rma_no}</td>
-                                <td>{item.customer_name}</td>
+                                <td>{item.center_name}</td>
                                 <td>{item.product_name}</td>
                                 <td>{item.model_number}</td>
                                 <td>{item.quantity_no}</td>
-                                {/* <td>{item.serial_no}</td>
-                                <td>{item.accessory}</td> */}
+
+
                                 <td>{item.status}</td>
 
                                 <td>
@@ -437,19 +640,20 @@ Reminder Date: ${item.reminder_date}
                                         ? new Date(item.entry_date).toLocaleDateString("en-GB")
                                         : "-"}
                                 </td>
-
-                                <td>{item.status}</td>
                                 <td>
+
                                     <Link
 
-                                        to={`/rma-details_r/${item.rma_no}`}
+                                        to={`/rma-details/${item.rma_no}`}
                                     >
                                         View
                                     </Link>
+
                                 </td>
 {role === "admin" && (
-                      <>                             <td>
-                                    <Link to={`/update-rma_in/${item.rma_no}`}>
+                      <>
+                                <td>
+                                    <Link to={`/update-rma/${item.rma_no}`}>
                                         <button className="edit-btn">
                                             Edit
                                         </button>
@@ -464,13 +668,13 @@ Reminder Date: ${item.reminder_date}
                                         Delete
                                     </button>
 
+                                            </td>
+                                            </>)}
 
 
-
-                                </td>
-</>
-                             )}                             {/* <td>
-                                    <Link to={`/status-history_lsr/${item.id}`}>
+                                
+                                {/* <td>
+                                    <Link to={`/history_l/${item.id}`}>
                                         <button className="btn btn-view">
                                             View History
                                         </button>
@@ -479,16 +683,8 @@ Reminder Date: ${item.reminder_date}
 
 
                                 </td> */}
-                                {/* <td>
-                                    <Link to={`/search-model/${item.model_number}`}>
-                                        <button className="edit-btn">
-                                            search
-                                        </button>
-                                    </Link>
-                                </td> */}
                                 <td>
-                                    <button
-                                        className="btn-view"
+                                    <button className="btn-view"
                                         onClick={() => generatePDF(item)}
                                     >
                                         PDF
@@ -505,7 +701,6 @@ Reminder Date: ${item.reminder_date}
                             </tr>
 
 
-
                         );
                     })}
                 </tbody>
@@ -515,4 +710,4 @@ Reminder Date: ${item.reminder_date}
 
 }
 
-export default Home_l;
+export default HomeZ;
