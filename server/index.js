@@ -91,35 +91,35 @@ function generateReminders(item_id) {
 // login api
 app.post("/login", (req, res) => {
 
+    console.log("LOGIN REQUEST:", req.body);
+
     const { username, password } = req.body;
 
     const sql =
         "SELECT id,username,role FROM login_user WHERE username=$1 AND password=$2";
 
-    db.query(
-        sql,
-        [username, password],
-        (err, data) => {
+    db.query(sql, [username, password], (err, data) => {
 
-            if (err) {
-                console.log(err);
-                return res.status(500).json("Error");
-            }
-
-            console.log(data.rows); // Check what PostgreSQL returns
-
-            if (data.rows.length > 0) {
-                return res.json({
-                    message: "Login Successfully",
-                    role: data.rows[0].role,
-                    id: data.rows[0].id,
-                    username: data.rows[0].username,
-                });
-            } else {
-                return res.json("No Record");
-            }
+        if (err) {
+            console.error("LOGIN ERROR:", err);
+            return res.status(500).json({
+                error: err.message
+            });
         }
-    );
+
+        console.log("LOGIN RESULT:", data.rows);
+
+        if (data.rows.length > 0) {
+            return res.json({
+                message: "Login Successfully",
+                role: data.rows[0].role,
+                id: data.rows[0].id,
+                username: data.rows[0].username,
+            });
+        } else {
+            return res.json("No Record");
+        }
+    });
 });
 
 
