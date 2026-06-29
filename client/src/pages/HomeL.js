@@ -98,7 +98,7 @@ const role=localStorage.getItem("role")
 
             const addressLines = doc.splitTextToSize(
     `Address : ${headerData.address || ""}`,
-    220
+    250
 );
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
@@ -166,13 +166,13 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.text(
                 `RMA No : ${headerData.rma_no}`,
                 158,
-                46
+                48
             );
 
             doc.text(
                 `Entry Date : ${entryDate}`,
                 158,
-                55
+                54
             );
 
             doc.text(
