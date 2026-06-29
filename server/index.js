@@ -1121,7 +1121,7 @@ app.post("/api/entry_out", (req, res) => {
 
 
         const getRmaNo =
-            "SELECT COALESCE(MAX(rma_no),1000)+1 AS rmano FROM rma_out";
+            "SELECT COALESCE(MAX(rma_no),1260)+1 AS rmano FROM rma_out";
 
         db.query(getRmaNo, (err, result) => {
             if (err) {
@@ -1941,7 +1941,7 @@ app.post("/api/entry_in", async (req, res) => {
 
         // Generate next RMA Number
         const rmaResult = await client.query(`
-            SELECT COALESCE(MAX(rma_no),1220)+1 AS "rmaNo"
+            SELECT COALESCE(MAX(rma_no),2020)+1 AS "rmaNo"
             FROM rma_entry1
         `);
 
