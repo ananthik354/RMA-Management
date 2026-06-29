@@ -101,7 +101,7 @@ const role=localStorage.getItem("role")
     250
 );
 
-const boxHeight = Math.max(32, 18 + addressLines.length * 5);
+const boxHeight = Math.max(32, 25 + addressLines.length * 5);
 
             
             doc.rect(5, 5, 200, 138);
