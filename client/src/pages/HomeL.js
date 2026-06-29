@@ -103,11 +103,7 @@ const role=localStorage.getItem("role")
 
 const boxHeight = Math.max(28, 18 + addressLines.length * 5);
 
-            const doc = new jsPDF({
-                orientation: "landscape",
-                unit: "mm",
-                format: "a5"
-            });
+            
             doc.rect(5, 5, 200, 138);
 
             // Company Header
