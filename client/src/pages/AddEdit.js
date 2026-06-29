@@ -135,7 +135,7 @@ const AddEdit = () => {
                             name="customer_name"
                             value={state.customer_name || ""}
                             onChange={handleInputChange}
-                            required
+                           
                         />
                     </div>
 
@@ -146,7 +146,7 @@ const AddEdit = () => {
                             name="company_name"
                             value={state.company_name || ""}
                             onChange={handleInputChange}
-                            required
+                           
                         />
                     </div>
 
@@ -156,7 +156,7 @@ const AddEdit = () => {
                             name="address"
                             value={state.address || ""}
                             onChange={handleInputChange}
-                            required
+                            
                         />
                     </div>
 
@@ -177,7 +177,7 @@ const AddEdit = () => {
                                     });
                                 }
                             }}
-                        required/>
+                        />
                     </div>
 
                     <div className="form-group">
@@ -197,7 +197,7 @@ const AddEdit = () => {
                             name="location"
                             value={state.location || ""}
                             onChange={handleInputChange}
-                       required />
+                      />
                     </div>
 
                     <div className="form-group">
@@ -207,7 +207,7 @@ const AddEdit = () => {
                             name="email"
                             value={state.email || ""}
                             onChange={handleInputChange}
-                            required
+                         
                         />
                     </div>
                 </div>

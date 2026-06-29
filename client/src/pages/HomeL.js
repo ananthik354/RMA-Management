@@ -348,7 +348,7 @@ const role=localStorage.getItem("role")
 
             // Save PDF
             doc.save(
-                `RMA_${item.id}.pdf`
+                `RMA_${item.rma_no}.pdf`
             );
 
         } catch (err) {

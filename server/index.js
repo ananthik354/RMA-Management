@@ -748,6 +748,7 @@ app.get("/api/pdf/:rmaNo", (req, res) => {
         r.created_by,
         l.username AS created_by_name,
         c.customer_name,
+        c.company_name,
         c.phone_no,
         c.email,
         c.address,
