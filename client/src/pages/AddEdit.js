@@ -75,10 +75,10 @@ const AddEdit = () => {
         const emailRegex =
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!emailRegex.test(state.email)) {
-            toast.error("Invalid Email Address");
-            return;
-        }
+        if (email && !emailRegex.test(email)) {
+    alert("Invalid Email");
+    return;
+}
         else {
             if (!id) {
 
@@ -140,7 +140,7 @@ const AddEdit = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Company Name<span className="required">*</span></label>
+                        <label>Company Name</label>
                         <input
                             type="text"
                             name="company_name"
@@ -201,7 +201,7 @@ const AddEdit = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Email<span className="required">*</span></label>
+                        <label>Email</label>
                         <input
                             type="email"
                             name="email"

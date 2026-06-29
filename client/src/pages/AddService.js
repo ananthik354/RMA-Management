@@ -130,7 +130,7 @@ const AddService = () => {
                 <div className="form-grid">
 
                     <div className="form-group">
-                        <label>Servicer Name</label>
+                        <label>Servicer Name<span className="required">*</span></label>
                         <input
                             type="text"
                             name="servicer_name"
