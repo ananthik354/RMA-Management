@@ -265,9 +265,12 @@ app.post("/api/post", (req, res) => {
         ],
         (err, result) => {
             if (err) {
-                console.log(err);
-                return res.status(500).json("Database Error");
-            }
+    console.error("POST CUSTOMER ERROR:", err);
+    return res.status(500).json({
+        error: err.message,
+        detail: err.detail
+    });
+}
 
             res.json({
                 message: "Customer Added Successfully",
