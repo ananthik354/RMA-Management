@@ -96,10 +96,10 @@ const role=localStorage.getItem("role")
                 format: "a5"
             });
 
-            const addressLines = doc.splitTextToSize(
-    `Address : ${headerData.address || ""}`,
-    250
-);
+//             const addressLines = doc.splitTextToSize(
+//     `Address : ${headerData.address || ""}`,
+//     250
+// );
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
@@ -150,7 +150,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            doc.rect(155, 35, 40, 27);
+            doc.rect(155, 35, 40, 29);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
@@ -263,12 +263,18 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
                 54
             );
 
-            doc.text(addressLines, 17,60);
+           
             doc.text(
                 `Email : ${headerData.email || "null"}`,
                 79,
                 54
             );
+             const addressLines = doc.splitTextToSize(
+    `Address: ${headerData.address || ""}`,
+    125 // full customer box width
+);
+
+doc.text(addressLines, 17, 60);
 const tableStartY = 35 + boxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
