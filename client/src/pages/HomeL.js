@@ -90,6 +90,11 @@ const role=localStorage.getItem("role")
             const headerData = pdfData[0];
 
           const entryDate = headerData.entry_date || "";
+          const doc = new jsPDF({
+                orientation: "landscape",
+                unit: "mm",
+                format: "a5"
+            });
 
             const addressLines = doc.splitTextToSize(
     `Address : ${headerData.address || ""}`,
