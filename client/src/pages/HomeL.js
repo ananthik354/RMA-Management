@@ -245,13 +245,14 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.setFontSize(9);
 
             doc.text(
-                `Customer Name: ${headerData.customer_name || ""}`,
+                `Phone : ${headerData.phone_no || ""}`,
+                
                 17,
                 48
             );
 
             doc.text(
-                `Phone : ${headerData.phone_no || ""}`,
+                `Customer Name: ${headerData.customer_name || ""}`,
                 79,
                 48
             );
