@@ -101,7 +101,7 @@ const role=localStorage.getItem("role")
     250
 );
 
-const boxHeight = Math.max(32, 25 + addressLines.length * 5);
+const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             
             doc.rect(5, 5, 200, 138);
@@ -231,7 +231,7 @@ const boxHeight = Math.max(32, 25 + addressLines.length * 5);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 120, boxHeight);
+            doc.rect(13, 35, 140, boxHeight);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
