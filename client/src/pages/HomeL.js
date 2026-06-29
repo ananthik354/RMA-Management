@@ -98,10 +98,10 @@ const role=localStorage.getItem("role")
 
             const addressLines = doc.splitTextToSize(
     `Address : ${headerData.address || ""}`,
-    200
+    220
 );
 
-const boxHeight = Math.max(28, 18 + addressLines.length * 5);
+const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             
             doc.rect(5, 5, 200, 138);
@@ -151,25 +151,34 @@ const boxHeight = Math.max(28, 18 + addressLines.length * 5);
 
             // doc.rect(10, 45, 120, 35);
             doc.rect(155, 35, 40, 27);
+            doc.setFontSize(11);
+            doc.setFont(undefined, "bold");
+
+            doc.text(
+                "RMA Details",
+                158,
+                41
+            );
+
             doc.setFontSize(8);
             doc.setFont(undefined, "normal");
 
             doc.text(
                 `RMA No : ${headerData.rma_no}`,
                 158,
-                45
+                46
             );
 
             doc.text(
                 `Entry Date : ${entryDate}`,
                 158,
-                50
+                55
             );
 
             doc.text(
                 `Staff Name : ${headerData.created_by_name || ""}`,
                 158,
-                55
+                60
             );
 
 
