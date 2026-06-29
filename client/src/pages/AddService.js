@@ -130,7 +130,7 @@ const AddService = () => {
                 <div className="form-grid">
 
                     <div className="form-group">
-                        <label>Servicer Name</label>
+                        <label>Servicer Name<span className="required">*</span></label>
                         <input
                             type="text"
                             name="servicer_name"
@@ -140,7 +140,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Center Name</label>
+                        <label>Center Name<span className="required">*</span></label>
                         <input
                             type="text"
                             name="center_name"
@@ -150,7 +150,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group full-width">
-                        <label>Address</label>
+                        <label>Address<span className="required">*</span></label>
                         <textarea
                             name="address"
                             value={state?.address || ""}
@@ -159,7 +159,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Phone No1</label>
+                        <label>Phone No1<span className="required">*</span></label>
                         <input
                             type="text"
                             name="phone_no"
@@ -179,7 +179,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Phone No2</label>
+                        <label>Phone No2<span className="required">*</span></label>
                         <input
                             type="text"
                             name="mobile"
@@ -199,7 +199,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Location</label>
+                        <label>Location<span className="required">*</span></label>
                         <input
                             type="text"
                             name="location"
@@ -209,7 +209,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Email</label>
+                        <label>Email<span className="required">*</span></label>
                         <input
                             type="email"
                             name="email"

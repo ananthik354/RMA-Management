@@ -111,3 +111,8 @@
     justify-content: center;
     margin-top: 25px;
 }
+.required::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+}

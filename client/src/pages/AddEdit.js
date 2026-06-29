@@ -129,36 +129,39 @@ const AddEdit = () => {
                 <div className="form-grid">
 
                     <div className="form-group">
-                        <label>Customer Name</label>
+                        <label>Customer Name <span className="required">*</span></label>
                         <input
                             type="text"
                             name="customer_name"
                             value={state.customer_name || ""}
                             onChange={handleInputChange}
+                            required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label>Company Name</label>
+                        <label>Company Name<span className="required">*</span></label>
                         <input
                             type="text"
                             name="company_name"
                             value={state.company_name || ""}
                             onChange={handleInputChange}
+                            required
                         />
                     </div>
 
                     <div className="form-group full-width">
-                        <label>Address</label>
+                        <label>Address<span className="required">*</span></label>
                         <textarea
                             name="address"
                             value={state.address || ""}
                             onChange={handleInputChange}
+                            required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label>Phone No</label>
+                        <label>Phone No<span className="required">*</span></label>
                         <input
                             type="text"
                             name="phone_no"
@@ -174,7 +177,7 @@ const AddEdit = () => {
                                     });
                                 }
                             }}
-                        />
+                        required/>
                     </div>
 
                     <div className="form-group">
@@ -188,17 +191,17 @@ const AddEdit = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Location</label>
+                        <label>Location<span className="required">*</span></label>
                         <input
                             type="text"
                             name="location"
                             value={state.location || ""}
                             onChange={handleInputChange}
-                        />
+                       required />
                     </div>
 
                     <div className="form-group">
-                        <label>Email</label>
+                        <label>Email<span className="required">*</span></label>
                         <input
                             type="email"
                             name="email"
