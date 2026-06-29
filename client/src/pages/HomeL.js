@@ -252,7 +252,7 @@ const role=localStorage.getItem("role")
                 75,
                 54,
                 {
-        maxWidth: 110
+        maxWidth: 55
     }
             );
             doc.text(
@@ -263,7 +263,7 @@ const role=localStorage.getItem("role")
 
             // RMA Details Table
             autoTable(doc, {
-                startY: 68,
+                startY: 72,
 
                 theme: "grid",
 
