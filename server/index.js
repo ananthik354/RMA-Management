@@ -1049,7 +1049,7 @@ app.get("/history/:rma_id", (req, res) => {
 
 app.get("/get-customers", (req, res) => {
 
-    const sql = "SELECT id, customer_name FROM customer_details";
+    const sql = "SELECT id, customer_name,company_name FROM customer_details";
 
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json(err);
@@ -1937,7 +1937,7 @@ app.post("/api/entry_in", async (req, res) => {
 
         // Generate next RMA Number
         const rmaResult = await client.query(`
-            SELECT COALESCE(MAX(rma_no),1000)+1 AS "rmaNo"
+            SELECT COALESCE(MAX(rma_no),1220)+1 AS "rmaNo"
             FROM rma_entry1
         `);
 
@@ -2585,7 +2585,7 @@ ORDER BY h.updated_at ASC`;
 
 app.get("/get-services_r", (req, res) => {
 
-    const sql = "SELECT id, customer_name FROM customer_details";
+    const sql = "SELECT id, customer_name,company_name FROM customer_details";
 
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json(err);

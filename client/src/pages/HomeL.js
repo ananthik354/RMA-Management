@@ -216,8 +216,8 @@ const role=localStorage.getItem("role")
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 120, 27);
-            doc.setFontSize(10);
+            doc.rect(13, 35, 120, 28);
+            doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
             doc.text(
@@ -242,17 +242,21 @@ const role=localStorage.getItem("role")
             );
 
             doc.text(
-                `Email : ${headerData.email || ""}`,
+                `Company Name : ${headerData.company_name || ""}`,
                 17,
-                55
+                54
             );
 
             doc.text(
                 `Address : ${headerData.address || ""}`,
                 75,
-                55
+                54
             );
-
+            doc.text(
+                `Email : ${headerData.email || ""}`,
+                17,
+                60
+            );
 
             // RMA Details Table
             autoTable(doc, {

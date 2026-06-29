@@ -65,12 +65,16 @@ console.log("Logged User:", userId);
     // };
 
     useEffect(() => {
-        axios
-            .get("https://rma-management.onrender.com/get-services_r")
-            .then((res) => {
-                setServices(res.data);
-            });
-    }, []);
+    axios
+        .get("https://rma-management.onrender.com/get-services_r")
+        .then((res) => {
+            console.log(res.data);      // Entire array
+            console.log(res.data[0]);   // First object
+
+            setServices(res.data);
+        })
+        .catch((err) => console.log(err));
+}, []);
 
     const handleProductChange = (
         index,
@@ -184,7 +188,7 @@ console.log("USER ID FROM STORAGE:", userId);
                         key={item.id}
                         value={item.id}
                     >
-                        {item.customer_name}
+                        {item.customer_name} - {item.company_name|| "No Company"}
                     </option>
                 ))}
             </select>
