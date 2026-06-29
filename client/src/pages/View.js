@@ -39,7 +39,7 @@ const View = () => {
 
                     <div className="detail-box">
                         <label>Company Name</label>
-                        <span>{user.company_name}</span>
+                        <span>{user.company_name||"null"}</span>
                     </div>
 
                     <div className="detail-box">
@@ -54,7 +54,7 @@ const View = () => {
 
                     <div className="detail-box">
                         <label>GST No</label>
-                        <span>{user.gst_no}</span>
+                        <span>{user.gst_no||"null"}</span>
                     </div>
 
                     <div className="detail-box">
@@ -64,7 +64,7 @@ const View = () => {
 
                     <div className="detail-box">
                         <label>Email</label>
-                        <span>{user.email}</span>
+                        <span>{user.email||"null"}</span>
                     </div>
 
                 </div>

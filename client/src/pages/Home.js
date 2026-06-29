@@ -78,7 +78,7 @@ const Home = () => {
                 </td>
 
                 <td data-label="Company Name">
-                  {item.company_name}
+                  {item.company_name||"null"}
                 </td>
 
                 <td data-label="Phone Number">

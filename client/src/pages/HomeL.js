@@ -242,7 +242,7 @@ const role=localStorage.getItem("role")
             );
 
             doc.text(
-                `Company Name : ${headerData.company_name || ""}`,
+                `Company Name : ${headerData.company_name || "null"}`,
                 17,
                 54
             );
@@ -253,7 +253,7 @@ const role=localStorage.getItem("role")
                 54
             );
             doc.text(
-                `Email : ${headerData.email || ""}`,
+                `Email : ${headerData.email || "null"}`,
                 17,
                 60
             );
