@@ -75,7 +75,7 @@ const AddEdit = () => {
         const emailRegex =
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (email && !emailRegex.test(email)) {
+        if (state.email && !emailRegex.test(state.email)) {
     alert("Invalid Email");
     return;
 }
