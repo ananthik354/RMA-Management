@@ -243,7 +243,7 @@ const boxHeight = Math.max(28, 18 + addressLines.length * 5);
 
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
-                75,
+                79,
                 48
             );
 
@@ -256,7 +256,7 @@ const boxHeight = Math.max(28, 18 + addressLines.length * 5);
             doc.text(addressLines, 17,60);
             doc.text(
                 `Email : ${headerData.email || "null"}`,
-                75,
+                79,
                 54
             );
 const tableStartY = 35 + boxHeight + 8;
