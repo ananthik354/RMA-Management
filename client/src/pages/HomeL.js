@@ -96,10 +96,10 @@ const role=localStorage.getItem("role")
                 format: "a5"
             });
 
-//             const addressLines = doc.splitTextToSize(
-//     `Address : ${headerData.address || ""}`,
-//     250
-// );
+            const addressLines = doc.splitTextToSize(
+    `Address: ${headerData.address || ""}`,
+    125 // full customer box width
+);
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
@@ -269,10 +269,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
                 79,
                 54
             );
-             const addressLines = doc.splitTextToSize(
-    `Address: ${headerData.address || ""}`,
-    125 // full customer box width
-);
+             
 
 doc.text(addressLines, 17, 60);
 const tableStartY = 35 + boxHeight + 8;
