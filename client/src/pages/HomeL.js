@@ -91,7 +91,12 @@ const role=localStorage.getItem("role")
 
           const entryDate = headerData.entry_date || "";
 
+            const addressLines = doc.splitTextToSize(
+    `Address : ${headerData.address || ""}`,
+    55
+);
 
+const boxHeight = Math.max(28, 18 + addressLines.length * 5);
 
             const doc = new jsPDF({
                 orientation: "landscape",
@@ -216,7 +221,7 @@ const role=localStorage.getItem("role")
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 140, 28);
+            doc.rect(13, 35, 120, boxHeight);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
@@ -247,14 +252,7 @@ const role=localStorage.getItem("role")
                 54
             );
 
-            doc.text(
-                `Address : ${headerData.address || ""}`,
-                75,
-                54,
-                {
-        maxWidth: 55
-    }
-            );
+            doc.text(addressLines, 75, 54);
             doc.text(
                 `Email : ${headerData.email || "null"}`,
                 17,
