@@ -98,7 +98,7 @@ const role=localStorage.getItem("role")
 
             const addressLines = doc.splitTextToSize(
     `Address : ${headerData.address || ""}`,
-    55
+    200
 );
 
 const boxHeight = Math.max(28, 18 + addressLines.length * 5);
@@ -253,11 +253,11 @@ const boxHeight = Math.max(28, 18 + addressLines.length * 5);
                 54
             );
 
-            doc.text(addressLines, 75, 54);
+            doc.text(addressLines, 17,60);
             doc.text(
                 `Email : ${headerData.email || "null"}`,
-                17,
-                60
+                75,
+                54
             );
 const tableStartY = 35 + boxHeight + 8;
             // RMA Details Table
