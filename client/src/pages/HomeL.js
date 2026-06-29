@@ -96,9 +96,12 @@ const role=localStorage.getItem("role")
                 format: "a5"
             });
 
-            const addressLines = doc.splitTextToSize(
-    `Address: ${headerData.address || ""}`,
-    130 // full customer box width
+            doc.text("Address :", 17, 60);
+
+// Address starts immediately after label
+const addressLines = doc.splitTextToSize(
+    headerData.address || "",
+    118
 );
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
@@ -271,7 +274,6 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             );
              
 
-doc.text("Address :", 17, 60);
 doc.text(addressLines, 35, 60);
 const tableStartY = 35 + boxHeight + 8;
             // RMA Details Table
