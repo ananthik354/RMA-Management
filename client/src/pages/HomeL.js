@@ -144,25 +144,25 @@ const role=localStorage.getItem("role")
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            doc.rect(138, 35, 58, 27);
+            doc.rect(155, 35, 40, 27);
             doc.setFontSize(8);
             doc.setFont(undefined, "normal");
 
             doc.text(
                 `RMA No : ${headerData.rma_no}`,
-                142,
+                158,
                 45
             );
 
             doc.text(
                 `Entry Date : ${entryDate}`,
-                142,
+                158,
                 50
             );
 
             doc.text(
                 `Staff Name : ${headerData.created_by_name || ""}`,
-                142,
+                158,
                 55
             );
 
@@ -216,7 +216,7 @@ const role=localStorage.getItem("role")
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 120, 28);
+            doc.rect(13, 35, 140, 28);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
