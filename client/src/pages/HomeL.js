@@ -98,7 +98,7 @@ const role=localStorage.getItem("role")
 
             const addressLines = doc.splitTextToSize(
     `Address: ${headerData.address || ""}`,
-    125 // full customer box width
+    130 // full customer box width
 );
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
