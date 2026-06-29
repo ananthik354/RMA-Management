@@ -65,7 +65,7 @@ const AddEdit = () => {
             toast.error(
                 "Customer Name, Address, Phone No and Location are required"
             );
-            
+            return;
         }
 
         if (!validatePhone(phone_no)) {
