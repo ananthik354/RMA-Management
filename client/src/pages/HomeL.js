@@ -245,20 +245,20 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.setFontSize(9);
 
             doc.text(
-                `Phone : ${headerData.phone_no || ""}`,
-                
+                `Customer Name: ${headerData.customer_name || ""}`,
                 17,
                 48
             );
 
             doc.text(
-                `Customer Name: ${headerData.customer_name || ""}`,
+                `Company Name : ${headerData.company_name || "null"}`,
                 79,
                 48
             );
 
             doc.text(
-                `Company Name : ${headerData.company_name || "null"}`,
+                `Phone : ${headerData.phone_no || ""}`,
+                
                 17,
                 54
             );
