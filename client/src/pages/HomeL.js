@@ -258,10 +258,10 @@ const boxHeight = Math.max(28, 18 + addressLines.length * 5);
                 17,
                 60
             );
-
+const tableStartY = 35 + boxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
-                startY: 72,
+                startY: tableStartY,
 
                 theme: "grid",
 
