@@ -256,12 +256,12 @@ app.post("/api/post", (req, res) => {
         sql,
         [
             customer_name,
-            company_name,
+            company_name|| null,
             address,
             phone_no,
-            gst_no,
+            gst_no||null,
             location,
-            email
+            email|| null
         ],
         (err, result) => {
             if (err) {
