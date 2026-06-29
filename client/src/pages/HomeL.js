@@ -250,7 +250,10 @@ const role=localStorage.getItem("role")
             doc.text(
                 `Address : ${headerData.address || ""}`,
                 75,
-                54
+                54,
+                {
+        maxWidth: 110
+    }
             );
             doc.text(
                 `Email : ${headerData.email || "null"}`,
