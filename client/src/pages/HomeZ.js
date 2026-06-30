@@ -97,7 +97,10 @@ const role=localStorage.getItem("role")
                 unit: "mm",
                 format: "a5"
             });
-            
+            const addressLines = doc.splitTextToSize(
+    headerData.address || "",
+    110
+);
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.rect(5, 5, 200, 138);
@@ -228,48 +231,39 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
             doc.rect(13, 35, 140, boxHeight);
+            doc.setFontSize(10);
+            doc.setFont(undefined, "bold");
 
-doc.setFontSize(10);
-doc.setFont(undefined, "bold");
-doc.text("Service Center Details", 17, 41);
+            doc.text(
+                "Service Center Details",
+                17,
+                41
+            );
 
-doc.setFont(undefined, "normal");
-doc.setFontSize(9);
+            doc.setFont(undefined, "normal");
+            doc.setFontSize(9);
 
-let y = 48;
+            doc.text(
+                `S.Center Name: ${headerData.center_name || ""}`,
+                17,
+                48
+            );
 
-// Service Center Name
-const centerNameLines = doc.splitTextToSize(
-    `S.Center Name: ${headerData.center_name || ""}`,
-    55
-);
-doc.text(centerNameLines, 17, y);
+            doc.text(
+                `Phone : ${headerData.phone_no || ""}`,
+                80,
+                48
+            );
 
-// Phone
-const phoneLines = doc.splitTextToSize(
-    `Phone : ${headerData.phone_no || ""}`,
-    55
-);
-doc.text(phoneLines, 80, y);
+            doc.text(
+                `Email : ${headerData.email || ""}`,
+                17,
+                55
+            );
 
-y += Math.max(centerNameLines.length, phoneLines.length) * 5 + 2;
-
-// Email
-const emailLines = doc.splitTextToSize(
-    `Email : ${headerData.email || ""}`,
-    55
-);
-doc.text(emailLines, 17, y);
-
-// Address
-const addressText = `Address : ${headerData.address || ""}`;
-const addressLines = doc.splitTextToSize(addressText, 60);
-doc.text(addressLines, 80, y);
-
-const contentHeight =
-    Math.max(emailLines.length, addressLines.length) * 5;
-
-y += contentHeight + 5;
+            
+            doc.text("Address :", 75, 55);
+            doc.text(addressLines,85 , 55);
             const tableStartY = 35 + boxHeight + 8;
                         
 
