@@ -99,7 +99,7 @@ const role=localStorage.getItem("role")
             });
             const addressLines = doc.splitTextToSize(
     headerData.address || "",
-    118
+    77
 );
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
@@ -149,7 +149,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            doc.rect(155, 35, 40, 29);
+            doc.rect(155, 35, 40, boxHeight);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
@@ -201,11 +201,11 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
                 doc.setFont(undefined, "normal");
 
                 // Single Line
-                doc.text( `Service Center Name : ${headerData.center_name || ""}`,11,16);
+                doc.text( `S.Center Name : ${headerData.center_name || ""}`,11,16);
+                doc.text( `RMA No : ${headerData.rma_no || ""}`,66, 16);
+                doc.text(`Phone : ${headerData.phone_no || ""}`, 110, 16);
 
-                doc.text(`Phone : ${headerData.phone_no || ""}`, 60, 16);
-
-                doc.text( `RMA No : ${headerData.rma_no || ""}`,110, 16);
+               
 
                 doc.text(`Entry Date : ${entryDate}`, 155, 16);
                 // doc.line(10, 13, 200, 13);
@@ -230,7 +230,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 120, 27);
+            doc.rect(13, 35, 140, boxHeight);
             doc.setFontSize(10);
             doc.setFont(undefined, "bold");
 
@@ -244,7 +244,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.setFontSize(9);
 
             doc.text(
-                `Service Center Name: ${headerData.center_name || ""}`,
+                `S.Center Name: ${headerData.center_name || ""}`,
                 17,
                 48
             );
@@ -261,17 +261,15 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
                 55
             );
 
-            doc.text(
-                `Address : ${headerData.address || ""}`,
-                75,
-                55
-            );
+            // doc.text(
+            //     `Address : ${headerData.address || ""}`,
+            //     75,
+            //     55
+            // );
             doc.text("Address :", 75, 55);
-            doc.text(addressLines, 80, 55);
-            const tableStartY = 80 + boxHeight + 8;
-                        // RMA Details Table
-                        // autoTable(doc, {
-                        //     startY: tableStartY,
+            doc.text(addressLines, 75, 60);
+            const tableStartY = 35 + boxHeight + 8;
+                        
 
 
             // RMA Details Table
