@@ -97,6 +97,12 @@ const role=localStorage.getItem("role")
                 unit: "mm",
                 format: "a5"
             });
+            const addressLines = doc.splitTextToSize(
+    headerData.address || "",
+    118
+);
+
+const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.rect(5, 5, 200, 138);
 
             // Company Header
@@ -143,26 +149,35 @@ const role=localStorage.getItem("role")
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            doc.rect(138, 35, 58, 27);
+            doc.rect(155, 35, 40, 29);
+            doc.setFontSize(11);
+            doc.setFont(undefined, "bold");
+
+            doc.text(
+                "RMA Details",
+                158,
+                41
+            );
+
             doc.setFontSize(8);
             doc.setFont(undefined, "normal");
 
             doc.text(
                 `RMA No : ${headerData.rma_no}`,
-                142,
-                45
+                158,
+                48
             );
 
             doc.text(
                 `Entry Date : ${entryDate}`,
-                142,
-                50
+                158,
+                54
             );
 
             doc.text(
                 `Staff Name : ${headerData.created_by_name || ""}`,
-                142,
-                55
+                158,
+                60
             );
 
 
@@ -251,11 +266,17 @@ const role=localStorage.getItem("role")
                 75,
                 55
             );
+            doc.text("Address :", 75, 55);
+            doc.text(addressLines, 80, 55);
+            const tableStartY = 35 + boxHeight + 8;
+                        // RMA Details Table
+                        // autoTable(doc, {
+                        //     startY: tableStartY,
 
 
             // RMA Details Table
             autoTable(doc, {
-                startY: 68,
+                startY: tableStartY,
 
                 theme: "grid",
 
