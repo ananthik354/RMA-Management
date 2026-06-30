@@ -97,10 +97,7 @@ const role=localStorage.getItem("role")
                 unit: "mm",
                 format: "a5"
             });
-            const addressLines = doc.splitTextToSize(
-    headerData.address || "",
-    110
-);
+            
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.rect(5, 5, 200, 138);
