@@ -268,7 +268,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             );
             doc.text("Address :", 75, 55);
             doc.text(addressLines, 80, 55);
-            const tableStartY = 35 + boxHeight + 8;
+            const tableStartY = 80 + boxHeight + 8;
                         // RMA Details Table
                         // autoTable(doc, {
                         //     startY: tableStartY,
@@ -368,7 +368,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             // Save PDF
             doc.save(
-                `RMA_${item.id}.pdf`
+                `RMA_${item.rma_no}.pdf`
             );
 
         } catch (err) {
