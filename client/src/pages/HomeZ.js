@@ -99,7 +99,7 @@ const role=localStorage.getItem("role")
             });
             const addressLines = doc.splitTextToSize(
     headerData.address || "",
-    77
+    110
 );
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
@@ -251,7 +251,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
-                75,
+                80,
                 48
             );
 
@@ -267,7 +267,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             //     55
             // );
             doc.text("Address :", 75, 55);
-            doc.text(addressLines, 75, 60);
+            doc.text(addressLines,80 , 55);
             const tableStartY = 35 + boxHeight + 8;
                         
 
