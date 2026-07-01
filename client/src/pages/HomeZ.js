@@ -97,13 +97,14 @@ const role=localStorage.getItem("role")
                 unit: "mm",
                 format: "a5"
             });
-            const addressLines = doc.splitTextToSize(
-    headerData.address || "",
-    90
-);
+            const address = headerData.address || "";
 
-const boxHeight = Math.max(32, 18 + addressLines.length * 5);
-            doc.rect(5, 5, 200, 138);
+const addressLines = doc.splitTextToSize(address, 180);
+
+// Box height based on address
+const customerBoxHeight = Math.max(
+    28,
+    20 + addressLines.length * 5);
 
             // Company Header
             doc.setFontSize(16);
@@ -149,36 +150,21 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            doc.rect(155, 35, 40, boxHeight);
-            doc.setFontSize(11);
-            doc.setFont(undefined, "bold");
+            doc.rect(14, 31, 180, 8);
 
-            doc.text(
-                "RMA Details",
-                158,
-                41
-            );
+// doc.setFontSize(11);
+// doc.setFont(undefined, "bold");
+// doc.text("RMA Details", 17, 26);
 
-            doc.setFontSize(8);
-            doc.setFont(undefined, "normal");
+doc.setFontSize(9);
+doc.setFont(undefined, "normal");
 
-            doc.text(
-                `RMA No : ${headerData.rma_no}`,
-                158,
-                48
-            );
+// First row
+doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 35);
 
-            doc.text(
-                `Entry Date : ${entryDate}`,
-                158,
-                54
-            );
+doc.text(`Entry Date : ${entryDate || ""}`, 70, 35);
 
-            doc.text(
-                `Staff Name : ${headerData.created_by_name || ""}`,
-                158,
-                60
-            );
+doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
 
 
             const drawMiniHeader = () => {
@@ -230,14 +216,14 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 140, boxHeight);
-            doc.setFontSize(10);
+            doc.rect(14, 40, 180, customerBoxHeight);
+            doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
             doc.text(
                 "Service Center Details",
                 17,
-                41
+                46
             );
 
             doc.setFont(undefined, "normal");
@@ -246,31 +232,29 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             doc.text(
                 `S.Center Name: ${headerData.center_name || ""}`,
                 17,
-                48
+                52
             );
 
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
-                80,
-                48
+                115,
+                52
             );
 
             doc.text(
                 `Email : ${headerData.email || ""}`,
                 17,
-                55
+                58
             );
 
             
-            doc.text("Address :", 75, 55);
-            doc.text(addressLines,92 , 55);
-            const tableStartY = 35 + boxHeight + 8;
-                        
-
-
-            // RMA Details Table
-            autoTable(doc, {
-                startY: tableStartY,
+            addressLines.forEach((line, index) => {
+                doc.text(line, 35, 64 + index * 5);
+            });
+            const tableStartY = 38+ customerBoxHeight + 8;
+                        // RMA Details Table
+                        autoTable(doc, {
+                            startY: tableStartY,
 
                 theme: "grid",
 

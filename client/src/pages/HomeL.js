@@ -247,7 +247,7 @@ doc.text("Address :", 17, 64);
 addressLines.forEach((line, index) => {
     doc.text(line, 35, 64 + index * 5);
 });
-const tableStartY = 40+ customerBoxHeight + 8;
+const tableStartY = 38+ customerBoxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
