@@ -223,7 +223,7 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(14, 40, 180, 35);
+            doc.rect(14, 40, 180, customerBoxHeight);
 
 doc.setFontSize(11);
 doc.setFont(undefined, "bold");
