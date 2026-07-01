@@ -99,12 +99,15 @@ const role=localStorage.getItem("role")
             
 
 // Address starts immediately after label
-const addressLines = doc.splitTextToSize(
-    headerData.address || "",
-    240
-);
+const address = headerData.address || "";
 
-const boxHeight = Math.max(32, 18 + addressLines.length * 5);
+const addressLines = doc.splitTextToSize(address, 105);
+
+// Box height based on address
+const customerBoxHeight = Math.max(
+    37,
+    25 + addressLines.length * 5
+);
 
             
             doc.rect(5, 5, 200, 138);
@@ -153,36 +156,22 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            doc.rect(13, 20, 40, 20);
-            // doc.setFontSize(11);
-            // doc.setFont(undefined, "bold");
+            // RMA Details Box
+doc.rect(13, 20, 160, 18);
 
-            // doc.text(
-            //     "RMA Details",
-            //     15,
-            //     35
-            // );
+doc.setFontSize(11);
+doc.setFont(undefined, "bold");
+doc.text("RMA Details", 17, 26);
 
-            doc.setFontSize(10);
-            doc.setFont(undefined, "normal");
+doc.setFontSize(9);
+doc.setFont(undefined, "normal");
 
-            doc.text(
-                `RMA No : ${headerData.rma_no}`,
-                15,
-                35
-            );
+// First row
+doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 33);
 
-            doc.text(
-                `Entry Date : ${entryDate}`,
-                70,
-                35
-            );
+doc.text(`Entry Date : ${entryDate || ""}`, 70, 33);
 
-            doc.text(
-                `Staff Name : ${headerData.created_by_name || ""}`,
-                115,
-                35
-            );
+doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 33);
 
 
             const drawMiniHeader = () => {
@@ -234,48 +223,36 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 40, 160, 37);
-            doc.setFontSize(11);
-            doc.setFont(undefined, "bold");
+            doc.rect(13, 40, 160, customerBoxHeight);
 
-            doc.text(
-                "Customer Details",
-                17,
-                41
-            );
+doc.setFontSize(11);
+doc.setFont(undefined, "bold");
+doc.text("Customer Details", 17, 46);
 
-            doc.setFont(undefined, "normal");
-            doc.setFontSize(9);
+doc.setFont(undefined, "normal");
+doc.setFontSize(9);
 
-            doc.text(
-                `Customer Name: ${headerData.customer_name || ""}`,
-                17,
-                48
-            );
+// First row
+doc.text(`Customer Name : ${headerData.customer_name || ""}`, 17, 54);
+doc.text(`Email : ${headerData.email || ""}`, 105, 54);
 
-            doc.text(
-                `Company Name : ${headerData.company_name || "null"}`,
-                17,
-                54
-            );
+// Second row
+doc.text(`Company Name : ${headerData.company_name || ""}`, 17, 61);
+doc.text(`Phone : ${headerData.phone_no || ""}`, 105, 61);
 
-            doc.text(
-                `Phone : ${headerData.phone_no || ""}`,
-                
-                110,
-                54
-            );
+// Address
+doc.text("Address :", 17, 68);
 
-           
-            doc.text(
-                `Email : ${headerData.email || "null"}`,
-                110,
-                48
-            );
-             
-doc.text("Address :", 17, 60);
-doc.text(addressLines, 33, 60);
-const tableStartY = 35 + boxHeight + 8;
+// First address line
+if (addressLines.length > 0) {
+    doc.text(addressLines[0], 35, 68);
+
+    // Remaining address lines
+    if (addressLines.length > 1) {
+        doc.text(addressLines.slice(1), 35, 73);
+    }
+}
+const tableStartY = 40 + customerBoxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
