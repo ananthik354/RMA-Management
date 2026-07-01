@@ -101,7 +101,7 @@ const role=localStorage.getItem("role")
 // Address starts immediately after label
 const addressLines = doc.splitTextToSize(
     headerData.address || "",
-    118
+    240
 );
 
 const boxHeight = Math.max(32, 18 + addressLines.length * 5);
@@ -168,20 +168,20 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             doc.text(
                 `RMA No : ${headerData.rma_no}`,
-                13,
-                37
+                15,
+                35
             );
 
             doc.text(
                 `Entry Date : ${entryDate}`,
                 70,
-                37
+                35
             );
 
             doc.text(
                 `Staff Name : ${headerData.created_by_name || ""}`,
                 115,
-                37
+                35
             );
 
 
@@ -234,13 +234,13 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(20, 35, 140, 35);
+            doc.rect(22, 35, 130, 40);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
             doc.text(
                 "Customer Details",
-                23,
+                25,
                 41
             );
 
@@ -249,31 +249,31 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             doc.text(
                 `Customer Name: ${headerData.customer_name || ""}`,
-                23,
+                25,
                 48
             );
 
             doc.text(
                 `Company Name : ${headerData.company_name || "null"}`,
-                23,
-                52
+                25,
+                54
             );
 
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
                 
-                99,
-                52
+                120,
+                54
             );
 
            
             doc.text(
                 `Email : ${headerData.email || "null"}`,
-                99,
+                120,
                 48
             );
              
-doc.text("Address :", 23, 60);
+doc.text("Address :", 25, 60);
 doc.text(addressLines, 39, 60);
 const tableStartY = 35 + boxHeight + 8;
             // RMA Details Table
