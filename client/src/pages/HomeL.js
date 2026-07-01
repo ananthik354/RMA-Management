@@ -417,7 +417,12 @@ Reminder Date: ${item.reminder_date}
                     {data.map((item, index) => {
                         return (
                             <tr key={item.id}>
-                                <td>{item.rma_no}</td>
+                                <td style={{
+        backgroundColor:
+            item.status?.trim().toLowerCase() === "completed"
+                ? "#99970f"
+                : "white"
+    }}>{item.rma_no}</td>
                                 <td>{item.customer_name}</td>
                                 <td>{item.product_name}</td>
                                 <td>{item.model_number}</td>
