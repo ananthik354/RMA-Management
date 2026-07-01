@@ -5,7 +5,17 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const Services = () => {
+     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
+    const filteredData = data.filter((item) => {
+      const value = search.toLowerCase();
+    
+      return (
+        item.center_name?.toLowerCase().includes(value) ||
+        
+        item.phone_no?.toLowerCase().includes(value)
+      );
+    });
 
     const loadData = async () => {
         const response = await axios.get(
@@ -44,6 +54,20 @@ const Services = () => {
                         </button>
                     </Link>
                 </div>
+                <div style={{ marginBottom: "15px" }}>
+  <input
+    type="text"
+    placeholder="Search Center name or Phone..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    style={{
+      width: "300px",
+      padding: "10px",
+      border: "1px solid #ccc",
+      borderRadius: "5px"
+    }}
+  />
+</div>
 
                 <Link to="/home/addservice">
                     <button className="btn-phone">
@@ -66,7 +90,7 @@ const Services = () => {
                     </thead>
 
                     <tbody>
-                        {data.map((item) => {
+                        {filteredData.map((item) => {
                             return (
                                 <tr key={item.id}>
 

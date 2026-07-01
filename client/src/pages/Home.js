@@ -58,7 +58,7 @@ const filteredData = data.filter((item) => {
 <div style={{ marginBottom: "15px" }}>
   <input
     type="text"
-    placeholder="Search Customer, Company or Phone..."
+    placeholder="Search Customer or Phone..."
     value={search}
     onChange={(e) => setSearch(e.target.value)}
     style={{
