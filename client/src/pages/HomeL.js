@@ -153,14 +153,14 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             // RMA
 
             // doc.rect(10, 45, 120, 35);
-            // doc.rect(155, 35, 40, boxHeight);
+            doc.rect(13, 20, 40, 20);
             // doc.setFontSize(11);
             // doc.setFont(undefined, "bold");
 
             // doc.text(
             //     "RMA Details",
-            //     158,
-            //     41
+            //     15,
+            //     35
             // );
 
             doc.setFontSize(10);
