@@ -163,7 +163,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
             //     41
             // );
 
-            doc.setFontSize(8);
+            doc.setFontSize(10);
             doc.setFont(undefined, "normal");
 
             doc.text(
@@ -180,7 +180,7 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             doc.text(
                 `Staff Name : ${headerData.created_by_name || ""}`,
-                100,
+                115,
                 37
             );
 
@@ -234,13 +234,13 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(17, 35, 140, 35);
+            doc.rect(20, 35, 140, 35);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
             doc.text(
                 "Customer Details",
-                20,
+                23,
                 41
             );
 
@@ -249,32 +249,32 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             doc.text(
                 `Customer Name: ${headerData.customer_name || ""}`,
-                20,
+                23,
                 48
             );
 
             doc.text(
                 `Company Name : ${headerData.company_name || "null"}`,
-                20,
+                23,
                 52
             );
 
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
                 
-                89,
+                99,
                 52
             );
 
            
             doc.text(
                 `Email : ${headerData.email || "null"}`,
-                89,
+                99,
                 48
             );
              
-doc.text("Address :", 20, 60);
-doc.text(addressLines, 37, 60);
+doc.text("Address :", 23, 60);
+doc.text(addressLines, 39, 60);
 const tableStartY = 35 + boxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
