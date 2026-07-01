@@ -157,7 +157,7 @@ const customerBoxHeight = Math.max(
 
             // doc.rect(10, 45, 120, 35);
             // RMA Details Box
-doc.rect(15, 35, 170, 15);
+doc.rect(15, 28, 180, 10);
 
 // doc.setFontSize(11);
 // doc.setFont(undefined, "bold");
@@ -223,7 +223,7 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 37);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(15, 40, 170, 35);
+            doc.rect(15, 40, 180, 35);
 
 doc.setFontSize(11);
 doc.setFont(undefined, "bold");
