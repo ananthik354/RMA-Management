@@ -101,12 +101,12 @@ const role=localStorage.getItem("role")
 // Address starts immediately after label
 const address = headerData.address || "";
 
-const addressLines = doc.splitTextToSize(address, 105);
+const addressLines = doc.splitTextToSize(address, 110);
 
 // Box height based on address
 const customerBoxHeight = Math.max(
-    37,
-    25 + addressLines.length * 5
+    28,
+    20 + addressLines.length * 5
 );
 
             
@@ -157,7 +157,7 @@ const customerBoxHeight = Math.max(
 
             // doc.rect(10, 45, 120, 35);
             // RMA Details Box
-doc.rect(13, 30, 160, 18);
+doc.rect(13, 30, 187, customerBoxHeight);
 
 // doc.setFontSize(11);
 // doc.setFont(undefined, "bold");
@@ -223,7 +223,7 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 37);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 40, 160, customerBoxHeight);
+            doc.rect(13, 40, 200, 40);
 
 doc.setFontSize(11);
 doc.setFont(undefined, "bold");
@@ -244,15 +244,10 @@ doc.text(`Phone : ${headerData.phone_no || ""}`, 105, 58);
 doc.text("Address :", 17, 64);
 
 // First address line
-if (addressLines.length > 0) {
-    doc.text(addressLines[0], 35, 64);
-
-    // Remaining address lines
-    if (addressLines.length > 1) {
-        doc.text(addressLines.slice(1), 35, 73);
-    }
-}
-const tableStartY = 38 + customerBoxHeight + 8;
+addressLines.forEach((line, index) => {
+    doc.text(line, 35, 61 + index * 5);
+});
+const tableStartY = 32+ customerBoxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
