@@ -234,13 +234,13 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(22, 35, 130, 40);
+            doc.rect(27, 35, 160, 37);
             doc.setFontSize(11);
             doc.setFont(undefined, "bold");
 
             doc.text(
                 "Customer Details",
-                25,
+                31,
                 41
             );
 
@@ -249,13 +249,13 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
 
             doc.text(
                 `Customer Name: ${headerData.customer_name || ""}`,
-                25,
+                31,
                 48
             );
 
             doc.text(
                 `Company Name : ${headerData.company_name || "null"}`,
-                25,
+                31,
                 54
             );
 
@@ -273,8 +273,8 @@ const boxHeight = Math.max(32, 18 + addressLines.length * 5);
                 48
             );
              
-doc.text("Address :", 25, 60);
-doc.text(addressLines, 39, 60);
+doc.text("Address :", 31, 60);
+doc.text(addressLines, 42, 60);
 const tableStartY = 35 + boxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
