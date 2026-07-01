@@ -157,7 +157,7 @@ const customerBoxHeight = Math.max(
 
             // doc.rect(10, 45, 120, 35);
             // RMA Details Box
-doc.rect(15, 28, 180, 10);
+doc.rect(14, 31, 180, 8);
 
 // doc.setFontSize(11);
 // doc.setFont(undefined, "bold");
@@ -167,11 +167,11 @@ doc.setFontSize(9);
 doc.setFont(undefined, "normal");
 
 // First row
-doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 37);
+doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 35);
 
-doc.text(`Entry Date : ${entryDate || ""}`, 70, 37);
+doc.text(`Entry Date : ${entryDate || ""}`, 70, 35);
 
-doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 37);
+doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
 
 
             const drawMiniHeader = () => {
@@ -223,7 +223,7 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 37);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(15, 40, 180, 35);
+            doc.rect(14, 40, 180, 35);
 
 doc.setFontSize(11);
 doc.setFont(undefined, "bold");
@@ -245,7 +245,7 @@ doc.text("Address :", 17, 64);
 
 // First address line
 addressLines.forEach((line, index) => {
-    doc.text(line, 35, 61 + index * 5);
+    doc.text(line, 35, 64 + index * 5);
 });
 const tableStartY = 40+ customerBoxHeight + 8;
             // RMA Details Table
