@@ -157,21 +157,21 @@ const customerBoxHeight = Math.max(
 
             // doc.rect(10, 45, 120, 35);
             // RMA Details Box
-doc.rect(13, 20, 160, 18);
+doc.rect(13, 30, 160, 18);
 
-doc.setFontSize(11);
-doc.setFont(undefined, "bold");
-doc.text("RMA Details", 17, 26);
+// doc.setFontSize(11);
+// doc.setFont(undefined, "bold");
+// doc.text("RMA Details", 17, 26);
 
 doc.setFontSize(9);
 doc.setFont(undefined, "normal");
 
 // First row
-doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 33);
+doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 37);
 
-doc.text(`Entry Date : ${entryDate || ""}`, 70, 33);
+doc.text(`Entry Date : ${entryDate || ""}`, 70, 37);
 
-doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 33);
+doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 37);
 
 
             const drawMiniHeader = () => {
@@ -233,26 +233,26 @@ doc.setFont(undefined, "normal");
 doc.setFontSize(9);
 
 // First row
-doc.text(`Customer Name : ${headerData.customer_name || ""}`, 17, 54);
-doc.text(`Email : ${headerData.email || ""}`, 105, 54);
+doc.text(`Customer Name : ${headerData.customer_name || ""}`, 17, 52);
+doc.text(`Email : ${headerData.email || ""}`, 105, 52);
 
 // Second row
-doc.text(`Company Name : ${headerData.company_name || ""}`, 17, 61);
-doc.text(`Phone : ${headerData.phone_no || ""}`, 105, 61);
+doc.text(`Company Name : ${headerData.company_name || ""}`, 17, 58);
+doc.text(`Phone : ${headerData.phone_no || ""}`, 105, 58);
 
 // Address
-doc.text("Address :", 17, 68);
+doc.text("Address :", 17, 64);
 
 // First address line
 if (addressLines.length > 0) {
-    doc.text(addressLines[0], 35, 68);
+    doc.text(addressLines[0], 35, 64);
 
     // Remaining address lines
     if (addressLines.length > 1) {
         doc.text(addressLines.slice(1), 35, 73);
     }
 }
-const tableStartY = 40 + customerBoxHeight + 8;
+const tableStartY = 38 + customerBoxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
