@@ -157,7 +157,7 @@ const customerBoxHeight = Math.max(
 
             // doc.rect(10, 45, 120, 35);
             // RMA Details Box
-doc.rect(13, 20, 187, 18);
+doc.rect(13, 18, 187, 15);
 
 // doc.setFontSize(11);
 // doc.setFont(undefined, "bold");
@@ -223,7 +223,7 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 37);
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
-            doc.rect(13, 35, 160, 35);
+            doc.rect(15, 35, 187, 35);
 
 doc.setFontSize(11);
 doc.setFont(undefined, "bold");
@@ -247,7 +247,7 @@ doc.text("Address :", 17, 64);
 addressLines.forEach((line, index) => {
     doc.text(line, 35, 61 + index * 5);
 });
-const tableStartY = 32+ customerBoxHeight + 8;
+const tableStartY = 40+ customerBoxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
