@@ -99,7 +99,7 @@ const role=localStorage.getItem("role")
             });
             const address = headerData.address || "";
 
-const addressLines = doc.splitTextToSize(address, 180);
+const addressLines = doc.splitTextToSize(address, 200);
 
 // Box height based on address
 const customerBoxHeight = Math.max(
@@ -237,7 +237,7 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
 
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
-                115,
+                122,
                 52
             );
 
@@ -247,11 +247,11 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
                 58
             );
 
-            
+            doc.text("Address :", 17, 64);
             addressLines.forEach((line, index) => {
                 doc.text(line, 35, 64 + index * 5);
             });
-            const tableStartY = 38+ customerBoxHeight + 8;
+            const tableStartY = 35+ customerBoxHeight + 8;
                         // RMA Details Table
                         autoTable(doc, {
                             startY: tableStartY,
