@@ -7,8 +7,18 @@ import autoTable from "jspdf-autotable";
 
 const HomeL = () => {
 
-    const [data, setData] = useState([]); // MUST BE []
-const role=localStorage.getItem("role")
+    const [search, setSearch] = useState("");
+    const [data, setData] = useState([]);
+    const filteredData = data.filter((item) => {
+        const value = search.toLowerCase();
+
+        return (
+            item.customer_name?.toLowerCase().includes(value) ||
+            item.product_name?.toLowerCase().includes(value) ||
+            item.model_number?.toLowerCase().includes(value)
+        );
+    });// MUST BE []
+    const role = localStorage.getItem("role")
     useEffect(() => {
         loadData();
     }, []);
@@ -89,27 +99,27 @@ const role=localStorage.getItem("role")
 
             const headerData = pdfData[0];
 
-          const entryDate = headerData.entry_date || "";
-          const doc = new jsPDF({
+            const entryDate = headerData.entry_date || "";
+            const doc = new jsPDF({
                 orientation: "landscape",
                 unit: "mm",
                 format: "a5"
             });
 
-            
 
-// Address starts immediately after label
-const address = headerData.address || "";
 
-const addressLines = doc.splitTextToSize(address, 200);
+            // Address starts immediately after label
+            const address = headerData.address || "";
 
-// Box height based on address
-const customerBoxHeight = Math.max(
-    28,
-    20 + addressLines.length * 5
-);
+            const addressLines = doc.splitTextToSize(address, 200);
 
-            
+            // Box height based on address
+            const customerBoxHeight = Math.max(
+                28,
+                20 + addressLines.length * 5
+            );
+
+
             doc.rect(5, 5, 200, 138);
 
             // Company Header
@@ -130,7 +140,7 @@ const customerBoxHeight = Math.max(
 
             doc.setFontSize(9);
             doc.setFont(undefined, "bold");
-            
+
             doc.text(
                 "36B, Chakra Complex, Nalli Hospital Road, Near Erode Bus Stand, Erode - 638011,  Email: mkelectronicservices@gmail.com",
                 105,
@@ -152,35 +162,35 @@ const customerBoxHeight = Math.max(
                 { align: "center" }
             );
 
-            
+
             // RMA
 
             // doc.rect(10, 45, 120, 35);
             // RMA Details Box
-doc.rect(14, 31, 180, 8);
+            doc.rect(14, 31, 180, 8);
 
-// doc.setFontSize(11);
-// doc.setFont(undefined, "bold");
-// doc.text("RMA Details", 17, 26);
+            // doc.setFontSize(11);
+            // doc.setFont(undefined, "bold");
+            // doc.text("RMA Details", 17, 26);
 
-doc.setFontSize(9);
-doc.setFont(undefined, "normal");
+            doc.setFontSize(9);
+            doc.setFont(undefined, "normal");
 
-// First row
-doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 35);
+            // First row
+            doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 35);
 
-doc.text(`Entry Date : ${entryDate || ""}`, 70, 35);
+            doc.text(`Entry Date : ${entryDate || ""}`, 70, 35);
 
-doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
+            doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
 
 
             const drawMiniHeader = () => {
 
-                
 
-                  doc.setLineWidth(0.2);
-    // doc.rect(5, 5, 200, 25);
-    doc.setFontSize(12);
+
+                doc.setLineWidth(0.2);
+                // doc.rect(5, 5, 200, 25);
+                doc.setFontSize(12);
                 doc.setFont(undefined, "bold");
 
                 doc.text(
@@ -194,11 +204,11 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
                 doc.setFont(undefined, "normal");
 
                 // Single Line
-                doc.text( `Customer Name : ${headerData.customer_name || ""}`,11,16);
+                doc.text(`Customer Name : ${headerData.customer_name || ""}`, 11, 16);
 
                 doc.text(`Phone : ${headerData.phone_no || ""}`, 60, 16);
 
-                doc.text( `RMA No : ${headerData.rma_no || ""}`,110, 16);
+                doc.text(`RMA No : ${headerData.rma_no || ""}`, 110, 16);
 
                 doc.text(`Entry Date : ${entryDate}`, 155, 16);
                 // doc.line(10, 13, 200, 13);
@@ -213,11 +223,11 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
                 didDrawPage: function (data) {
                     if (data.pageNumber > 1) {
                         drawMiniHeader();
-                        
+
                     }
                 },
 
-                
+
 
             });
 
@@ -225,29 +235,29 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
             // -------- Customer Details (Text Format) --------
             doc.rect(14, 40, 180, customerBoxHeight);
 
-doc.setFontSize(11);
-doc.setFont(undefined, "bold");
-doc.text("Customer Details", 17, 46);
+            doc.setFontSize(11);
+            doc.setFont(undefined, "bold");
+            doc.text("Customer Details", 17, 46);
 
-doc.setFont(undefined, "normal");
-doc.setFontSize(9);
+            doc.setFont(undefined, "normal");
+            doc.setFontSize(9);
 
-// First row
-doc.text(`Customer Name : ${headerData.customer_name || ""}`, 17, 52);
-doc.text(`Email : ${headerData.email || ""}`, 120, 52);
+            // First row
+            doc.text(`Customer Name : ${headerData.customer_name || ""}`, 17, 52);
+            doc.text(`Email : ${headerData.email || ""}`, 120, 52);
 
-// Second row
-doc.text(`Company Name : ${headerData.company_name || ""}`, 17, 58);
-doc.text(`Phone : ${headerData.phone_no || ""}`, 120, 58);
+            // Second row
+            doc.text(`Company Name : ${headerData.company_name || ""}`, 17, 58);
+            doc.text(`Phone : ${headerData.phone_no || ""}`, 120, 58);
 
-// Address
-doc.text("Address :", 17, 64);
+            // Address
+            doc.text("Address :", 17, 64);
 
-// First address line
-addressLines.forEach((line, index) => {
-    doc.text(line, 35, 64 + index * 5);
-});
-const tableStartY = 35+ customerBoxHeight + 8;
+            // First address line
+            addressLines.forEach((line, index) => {
+                doc.text(line, 35, 64 + index * 5);
+            });
+            const tableStartY = 35 + customerBoxHeight + 8;
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
@@ -289,19 +299,19 @@ const tableStartY = 35+ customerBoxHeight + 8;
                 //     }
                 // },
                 margin: {
-        top: 25   // space reserved for header on every page
-    },
+                    top: 25   // space reserved for header on every page
+                },
 
-    willDrawPage: function (data) {
+                willDrawPage: function (data) {
 
-        if (data.pageNumber > 1) {
+                    if (data.pageNumber > 1) {
 
-            drawMiniHeader();
+                        drawMiniHeader();
 
-            // move table below header
-            data.settings.margin.top = 25;
-        }
-    },
+                        // move table below header
+                        data.settings.margin.top = 25;
+                    }
+                },
 
 
                 styles: {
@@ -323,13 +333,13 @@ const tableStartY = 35+ customerBoxHeight + 8;
             doc.text(
                 "Customer Signature",
                 15,
-                 pageHeight - 20
+                pageHeight - 20
             );
 
             doc.text(
                 "Authorized Signature",
                 140,
-                 pageHeight - 20
+                pageHeight - 20
                 // finalY+20
             );
 
@@ -378,7 +388,20 @@ Reminder Date: ${item.reminder_date}
                         Go Back
                     </button>
                 </Link>
-
+                <div style={{ marginBottom: "15px" }}>
+                    <input
+                        type="text"
+                        placeholder="Search Customer,Product or Model no."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        style={{
+                            width: "300px",
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "5px"
+                        }}
+                    />
+                </div>
 
                 <Link to="/home/add">
                     <button className="btn-phone">
@@ -403,9 +426,9 @@ Reminder Date: ${item.reminder_date}
                         <th>status</th>
                         <th>Summary</th>
                         {role === "admin" && (
-                      <>
-                        <th>Action</th>
-                        </>)}
+                            <>
+                                <th>Action</th>
+                            </>)}
 
                         <th>View</th>
                         <th>Share</th>
@@ -414,15 +437,15 @@ Reminder Date: ${item.reminder_date}
                 </thead>
 
                 <tbody>
-                    {data.map((item, index) => {
+                    {filteredData.map((item, index) => {
                         return (
                             <tr key={item.id}>
                                 <td style={{
-        backgroundColor:
-            item.status?.trim().toLowerCase() === "completed"
-                ? "#99970f"
-                : "white"
-    }}>{item.rma_no}</td>
+                                    backgroundColor:
+                                        item.status?.trim().toLowerCase() === "completed"
+                                            ? "#99970f"
+                                            : "white"
+                                }}>{item.rma_no}</td>
                                 <td>{item.customer_name}</td>
                                 <td>{item.product_name}</td>
                                 <td>{item.model_number}</td>
@@ -446,29 +469,29 @@ Reminder Date: ${item.reminder_date}
                                         View
                                     </Link>
                                 </td>
-{role === "admin" && (
-                      <>                             <td>
-                                    <Link to={`/update-rma_in/${item.rma_no}`}>
-                                        <button className="edit-btn">
-                                            Edit
+                                {role === "admin" && (
+                                    <>                             <td>
+                                        <Link to={`/update-rma_in/${item.rma_no}`}>
+                                            <button className="edit-btn">
+                                                Edit
+                                            </button>
+                                        </Link>
+
+                                        <button
+                                            className="delete-btn"
+                                            onClick={() =>
+                                                deleteRMA(item.rma_no)
+                                            }
+                                        >
+                                            Delete
                                         </button>
-                                    </Link>
-
-                                    <button
-                                        className="delete-btn"
-                                        onClick={() =>
-                                            deleteRMA(item.rma_no)
-                                        }
-                                    >
-                                        Delete
-                                    </button>
 
 
 
 
-                                </td>
-</>
-                             )}                             {/* <td>
+                                    </td>
+                                    </>
+                                )}                             {/* <td>
                                     <Link to={`/status-history_lsr/${item.id}`}>
                                         <button className="btn btn-view">
                                             View History

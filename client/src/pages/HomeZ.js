@@ -7,8 +7,18 @@ import autoTable from "jspdf-autotable";
 
 const HomeZ = () => {
 
-    const [data, setData] = useState([]); // MUST BE []
-const role=localStorage.getItem("role")
+    const [search, setSearch] = useState("");
+    const [data, setData] = useState([]);
+    const filteredData = data.filter((item) => {
+        const value = search.toLowerCase();
+
+        return (
+            item.center_name?.toLowerCase().includes(value) ||
+            item.product_name?.toLowerCase().includes(value) ||
+            item.model_number?.toLowerCase().includes(value)
+        );
+    });// MUST BE []
+    const role = localStorage.getItem("role")
     useEffect(() => {
         loadData();
     }, []);
@@ -88,7 +98,7 @@ const role=localStorage.getItem("role")
 
             const headerData = pdfData[0];
 
-          const entryDate = headerData.entry_date || "";
+            const entryDate = headerData.entry_date || "";
 
 
 
@@ -99,12 +109,12 @@ const role=localStorage.getItem("role")
             });
             const address = headerData.address || "";
 
-const addressLines = doc.splitTextToSize(address, 200);
+            const addressLines = doc.splitTextToSize(address, 200);
 
-// Box height based on address
-const customerBoxHeight = Math.max(
-    28,
-    20 + addressLines.length * 5);
+            // Box height based on address
+            const customerBoxHeight = Math.max(
+                28,
+                20 + addressLines.length * 5);
 
             // Company Header
             doc.setFontSize(16);
@@ -124,7 +134,7 @@ const customerBoxHeight = Math.max(
 
             doc.setFontSize(9);
             doc.setFont(undefined, "bold");
-            
+
             doc.text(
                 "36B, Chakra Complex, Nalli Hospital Road, Near Erode Bus Stand, Erode - 638011,  Email: mkelectronicservices@gmail.com",
                 105,
@@ -146,34 +156,34 @@ const customerBoxHeight = Math.max(
                 { align: "center" }
             );
 
-            
+
             // RMA
 
             // doc.rect(10, 45, 120, 35);
             doc.rect(14, 31, 180, 8);
 
-// doc.setFontSize(11);
-// doc.setFont(undefined, "bold");
-// doc.text("RMA Details", 17, 26);
+            // doc.setFontSize(11);
+            // doc.setFont(undefined, "bold");
+            // doc.text("RMA Details", 17, 26);
 
-doc.setFontSize(9);
-doc.setFont(undefined, "normal");
+            doc.setFontSize(9);
+            doc.setFont(undefined, "normal");
 
-// First row
-doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 35);
+            // First row
+            doc.text(`RMA No : ${headerData.rma_no || ""}`, 17, 35);
 
-doc.text(`Entry Date : ${entryDate || ""}`, 70, 35);
+            doc.text(`Entry Date : ${entryDate || ""}`, 70, 35);
 
-doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
+            doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
 
 
             const drawMiniHeader = () => {
 
-                
 
-                  doc.setLineWidth(0.2);
-    // doc.rect(5, 5, 200, 25);
-    doc.setFontSize(12);
+
+                doc.setLineWidth(0.2);
+                // doc.rect(5, 5, 200, 25);
+                doc.setFontSize(12);
                 doc.setFont(undefined, "bold");
 
                 doc.text(
@@ -187,11 +197,11 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
                 doc.setFont(undefined, "normal");
 
                 // Single Line
-                doc.text( `S.Center Name : ${headerData.center_name || ""}`,11,16);
-                doc.text( `RMA No : ${headerData.rma_no || ""}`,66, 16);
+                doc.text(`S.Center Name : ${headerData.center_name || ""}`, 11, 16);
+                doc.text(`RMA No : ${headerData.rma_no || ""}`, 66, 16);
                 doc.text(`Phone : ${headerData.phone_no || ""}`, 110, 16);
 
-               
+
 
                 doc.text(`Entry Date : ${entryDate}`, 155, 16);
                 // doc.line(10, 13, 200, 13);
@@ -206,11 +216,11 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
                 didDrawPage: function (data) {
                     if (data.pageNumber > 1) {
                         drawMiniHeader();
-                        
+
                     }
                 },
 
-                
+
 
             });
 
@@ -251,10 +261,10 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
             addressLines.forEach((line, index) => {
                 doc.text(line, 35, 64 + index * 5);
             });
-            const tableStartY = 35+ customerBoxHeight + 8;
-                        // RMA Details Table
-                        autoTable(doc, {
-                            startY: tableStartY,
+            const tableStartY = 35 + customerBoxHeight + 8;
+            // RMA Details Table
+            autoTable(doc, {
+                startY: tableStartY,
 
                 theme: "grid",
 
@@ -293,19 +303,19 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
                 //     }
                 // },
                 margin: {
-        top: 25   // space reserved for header on every page
-    },
+                    top: 25   // space reserved for header on every page
+                },
 
-    willDrawPage: function (data) {
+                willDrawPage: function (data) {
 
-        if (data.pageNumber > 1) {
+                    if (data.pageNumber > 1) {
 
-            drawMiniHeader();
+                        drawMiniHeader();
 
-            // move table below header
-            data.settings.margin.top = 25;
-        }
-    },
+                        // move table below header
+                        data.settings.margin.top = 25;
+                    }
+                },
 
 
                 styles: {
@@ -331,13 +341,13 @@ doc.text(`Staff Name : ${headerData.created_by_name || ""}`, 125, 35);
             doc.text(
                 "Customer Signature",
                 15,
-                 pageHeight - 20
+                pageHeight - 20
             );
 
             doc.text(
                 "Authorized Signature",
                 140,
-                 pageHeight - 20
+                pageHeight - 20
                 // finalY+20
             );
 
@@ -388,7 +398,20 @@ Entry Date: ${item.entry_date}
                         Go Back
                     </button>
                 </Link>
-
+                <div style={{ marginBottom: "15px" }}>
+                    <input
+                        type="text"
+                        placeholder="Search Center,product or model no."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        style={{
+                            width: "300px",
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "5px"
+                        }}
+                    />
+                </div>
 
                 <Link to="/home/Out">
                     <button className="btn-phone">
@@ -410,9 +433,9 @@ Entry Date: ${item.entry_date}
                         <th>Entry Date</th>
                         <th>view</th>
                         {role === "admin" && (
-                      <>
-                        <th>Action</th>
-</>)}
+                            <>
+                                <th>Action</th>
+                            </>)}
                         <th>View</th>
                         <th>Share</th>
 
@@ -420,15 +443,15 @@ Entry Date: ${item.entry_date}
                 </thead>
 
                 <tbody>
-                    {data.map((item, index) => {
+                    {filteredData.map((item, index) => {
                         return (
                             <tr key={item.id}>
                                 <td style={{
-        backgroundColor:
-            item.status?.trim().toLowerCase() === "completed"
-                ? "#99970f"
-                : "white"
-    }}>{item.rma_no}</td>
+                                    backgroundColor:
+                                        item.status?.trim().toLowerCase() === "completed"
+                                            ? "#99970f"
+                                            : "white"
+                                }}>{item.rma_no}</td>
                                 <td>{item.center_name}</td>
                                 <td>{item.product_name}</td>
                                 <td>{item.model_number}</td>
@@ -452,29 +475,29 @@ Entry Date: ${item.entry_date}
                                     </Link>
 
                                 </td>
-{role === "admin" && (
-                      <>
-                                <td>
-                                    <Link to={`/update-rma/${item.rma_no}`}>
-                                        <button className="edit-btn">
-                                            Edit
-                                        </button>
-                                    </Link>
+                                {role === "admin" && (
+                                    <>
+                                        <td>
+                                            <Link to={`/update-rma/${item.rma_no}`}>
+                                                <button className="edit-btn">
+                                                    Edit
+                                                </button>
+                                            </Link>
 
-                                    <button
-                                        className="delete-btn"
-                                        onClick={() =>
-                                            deleteRMA(item.rma_no)
-                                        }
-                                    >
-                                        Delete
-                                    </button>
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() =>
+                                                    deleteRMA(item.rma_no)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
 
-                                            </td>
-                                            </>)}
+                                        </td>
+                                    </>)}
 
 
-                                
+
                                 {/* <td>
                                     <Link to={`/history_l/${item.id}`}>
                                         <button className="btn btn-view">
