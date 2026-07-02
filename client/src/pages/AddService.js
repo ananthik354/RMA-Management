@@ -91,6 +91,7 @@ if (state.email && !emailRegex.test(state.email)) {
             if (!id) {
 
                 try {
+                    console.log(state);
                     await axios.post(
                         "https://rma-management.onrender.com/api/service_d",
                         state
