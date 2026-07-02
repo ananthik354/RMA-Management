@@ -294,10 +294,10 @@ app.post("/api/service_d", (req, res) => {
 
     // Required validation
     if (
-        !servicer_name ||
+        
         !center_name ||
         !address ||
-        !phone_no ||
+        
         !mobile ||
         !location
     ) {
