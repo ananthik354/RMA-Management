@@ -54,12 +54,12 @@ const Staff = () => {
                                     item.role ===
                                     "user"
                             )
-                            .map((item) => {
+                            .map((item,index) => {
                                 return (
                                     <tr key={item.id}>
 
                                         <td data-label="No">
-                                            {item.id}
+                                            {index + 1}
                                         </td>
 
                                         <td data-label="Staff Name">

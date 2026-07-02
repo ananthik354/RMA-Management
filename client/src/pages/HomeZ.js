@@ -107,7 +107,10 @@ const HomeZ = () => {
                 unit: "mm",
                 format: "a5"
             });
-            const address = headerData.address || "";
+            const address = (headerData.address || "")
+    .replace(/\r?\n/g, " ")   // Replace Enter with a space
+    .replace(/\s+/g, " ")     // Remove extra spaces
+    .trim();
 
             const addressLines = doc.splitTextToSize(address, 200);
 
