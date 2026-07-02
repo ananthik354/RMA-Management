@@ -58,28 +58,35 @@ const AddService = () => {
 
         // Required validation
         if (
-            !servicer_name ||
+            
             !center_name||
             !address ||
             !phone_no ||
             !location
         ) {
             toast.error(
-                "Servicer Name, center Name,Address, Phone No and Location are required"
+                " center Name,Address, Phone No and Location are required"
             );
             
         }
-        if (!validatePhone(phone_no,mobile)) {
-                    toast.error("Phone number must contain exactly 10 digits");
-                    return;
-                }
-                const emailRegex =
-                            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                
-                        if (!emailRegex.test(state.email)) {
-                            toast.error("Invalid Email Address");
-                            return;
-                        }
+        // Phone No (required)
+if (!validatePhone(phone_no)) {
+    toast.error("Phone number must contain exactly 10 digits");
+    return;
+}
+
+// Phone No2 (optional)
+if (mobile && !validatePhone(mobile)) {
+    toast.error("Phone No2 must contain exactly 10 digits");
+    return;
+}
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Email is optional
+if (state.email && !emailRegex.test(state.email)) {
+    toast.error("Invalid Email Address");
+    return;
+}
         else {
             if (!id) {
 
@@ -130,7 +137,7 @@ const AddService = () => {
                 <div className="form-grid">
 
                     <div className="form-group">
-                        <label>Servicer Name<span className="required">*</span></label>
+                        <label>Servicer Name</label>
                         <input
                             type="text"
                             name="servicer_name"
@@ -179,7 +186,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Phone No2<span className="required">*</span></label>
+                        <label>Phone No2</label>
                         <input
                             type="text"
                             name="mobile"
@@ -209,7 +216,7 @@ const AddService = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Email<span className="required">*</span></label>
+                        <label>Email</label>
                         <input
                             type="email"
                             name="email"
