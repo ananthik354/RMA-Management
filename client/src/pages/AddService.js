@@ -25,6 +25,7 @@ const AddService = () => {
     };
 
     useEffect(() => {
+        if (id) {
     axios
         .get(
             `https://rma-management.onrender.com/api/getservice/${id}`
@@ -34,6 +35,7 @@ const AddService = () => {
             setState(resp.data);
         })
         .catch((err) => console.log(err));
+    }
     }, [id]);
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -67,7 +69,7 @@ const AddService = () => {
             toast.error(
                 " center Name,Address, Phone No and Location are required"
             );
-            
+            return;
         }
         // Phone No (required)
 if (!validatePhone(phone_no)) {

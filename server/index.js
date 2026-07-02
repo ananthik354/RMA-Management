@@ -281,11 +281,7 @@ app.post("/api/post", (req, res) => {
 });
 
 app.post("/api/service_d", (req, res) => {
-const mobileValue =
-    mobile === "" ? null : mobile;
 
-const emailValue =
-    email === "" ? null : email;
     const {
         servicer_name,
         center_name,
@@ -309,7 +305,11 @@ const emailValue =
             message: "Please fill required fields"
         });
     }
+const mobileValue =
+    mobile === "" ? null : mobile;
 
+const emailValue =
+    email === "" ? null : email;
     const sql = `
     INSERT INTO services_details
     (
