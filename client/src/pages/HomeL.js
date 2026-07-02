@@ -109,7 +109,10 @@ const HomeL = () => {
 
 
             // Address starts immediately after label
-            const address = headerData.address || "";
+            const address = (headerData.address || "")
+                .replace(/\r?\n/g, " ")   // Replace Enter with a space
+                .replace(/\s+/g, " ")     // Remove extra spaces
+                .trim();
 
             const addressLines = doc.splitTextToSize(address, 200);
 
@@ -421,7 +424,7 @@ Reminder Date: ${item.reminder_date}
                         <th>Quantity</th>
                         {/* <th>Serial No</th>
                         <th>Accessory</th> */}
-                        <th>Status</th>
+                        
                         <th>Entry Date</th>
                         <th>status</th>
                         <th>Summary</th>
@@ -452,7 +455,7 @@ Reminder Date: ${item.reminder_date}
                                 <td>{item.quantity_no}</td>
                                 {/* <td>{item.serial_no}</td>
                                 <td>{item.accessory}</td> */}
-                                <td>{item.status}</td>
+                              
 
                                 <td>
                                     {item.entry_date
