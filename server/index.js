@@ -281,7 +281,11 @@ app.post("/api/post", (req, res) => {
 });
 
 app.post("/api/service_d", (req, res) => {
+const mobileValue =
+    mobile === "" ? null : mobile;
 
+const emailValue =
+    email === "" ? null : email;
     const {
         servicer_name,
         center_name,
@@ -327,15 +331,19 @@ app.post("/api/service_d", (req, res) => {
             center_name,
             address,
             phone_no,
-            mobile,
-            location,
-            email
+            mobileValue,
+        location,
+        emailValue
         ],
         (err, result) => {
             if (err) {
-                console.log(err);
-                return res.status(500).json("Database Error");
-            }
+    console.error("Database Error:", err);
+    return res.status(500).json({
+        error: err.message,
+         detail: err.detail,
+                code: err.code
+    });
+}
 
             res.json("Service Added Successfully");
         }
