@@ -297,8 +297,8 @@ app.post("/api/service_d", (req, res) => {
         
         !center_name ||
         !address ||
-        
-        !mobile ||
+        !phone_no ||
+       
         !location
     ) {
         return res.status(400).json({
