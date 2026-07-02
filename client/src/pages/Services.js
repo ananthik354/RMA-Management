@@ -90,12 +90,12 @@ const Services = () => {
                     </thead>
 
                     <tbody>
-                        {filteredData.map((item) => {
+                        {filteredData.map((item,index) => {
                             return (
                                 <tr key={item.id}>
 
                                     <td data-label="No">
-                                        {item.id}
+                                        {index + 1}
                                     </td>
 
                                     <td data-label="Servicer Name">
