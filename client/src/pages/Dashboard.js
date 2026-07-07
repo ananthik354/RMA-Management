@@ -516,8 +516,7 @@ useEffect(() => {
 
     </div> */}
     <div className="dashboard-row">
-{role === "admin" && (
-                      <>
+
     <div className="reminder-section">
             <h2>RMA-InWard Reminders</h2>
 
@@ -585,7 +584,7 @@ useEffect(() => {
 
 )}
 
-    </div></>)}
+    </div>
     </div>
     </div>
     </div>
