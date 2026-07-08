@@ -210,22 +210,22 @@ const HomeZ = () => {
                 // doc.line(10, 13, 200, 13);
             };
 
-            autoTable(doc, {
-                startY: 65,
-                margin: {
-                    top: 45
-                },
+            // autoTable(doc, {
+            //     startY: 65,
+            //     margin: {
+            //         top: 45
+            //     },
 
-                didDrawPage: function (data) {
-                    if (data.pageNumber > 1) {
-                        drawMiniHeader();
+            //     didDrawPage: function (data) {
+            //         if (data.pageNumber > 1) {
+            //             drawMiniHeader();
 
-                    }
-                },
+            //         }
+            //     },
 
 
 
-            });
+            // });
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
@@ -268,6 +268,10 @@ const HomeZ = () => {
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
+                margin: {
+                    top: 25,
+                    bottom: 20,    // space reserved for header on every page
+                },
 
                 theme: "grid",
 
@@ -305,9 +309,7 @@ const HomeZ = () => {
                 //         drawMiniHeader();
                 //     }
                 // },
-                margin: {
-                    top: 25   // space reserved for header on every page
-                },
+                
 
                 willDrawPage: function (data) {
 
@@ -319,6 +321,22 @@ const HomeZ = () => {
                         data.settings.margin.top = 25;
                     }
                 },
+                didDrawPage: function (data) {
+    if (data.pageNumber > 1) {
+        drawMiniHeader();
+    }
+
+    const pageSize = doc.internal.pageSize;
+
+    doc.setFontSize(9);
+
+    doc.text(
+        `Page ${data.pageNumber}`,
+        pageSize.getWidth() / 2,
+        pageSize.getHeight() - 5,
+        { align: "center" }
+    );
+},
 
 
                 styles: {

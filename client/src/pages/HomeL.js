@@ -209,9 +209,9 @@ const HomeL = () => {
                 // Single Line
                 doc.text(`Customer Name : ${headerData.customer_name || ""}`, 11, 16);
 
-                doc.text(`Phone : ${headerData.phone_no || ""}`, 60, 16);
+                doc.text(`Phone : ${headerData.phone_no || ""}`, 90, 16);
 
-                doc.text(`RMA No : ${headerData.rma_no || ""}`, 110, 16);
+                doc.text(`RMA No : ${headerData.rma_no || ""}`, 125, 16);
 
                 doc.text(`Entry Date : ${entryDate}`, 155, 16);
                 // doc.line(10, 13, 200, 13);
@@ -330,7 +330,7 @@ const HomeL = () => {
     doc.text(
         `Page ${data.pageNumber}`,
         pageSize.getWidth() / 2,
-        pageSize.getHeight() - 5,
+        pageSize.getHeight() - 8,
         { align: "center" }
     );
 },
