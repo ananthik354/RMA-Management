@@ -304,9 +304,9 @@ const HomeL = () => {
                 //         drawMiniHeader();
                 //     }
                 // },
-                margin: {
-                    top: 25   // space reserved for header on every page
-                },
+                // margin: {
+                //     top: 25   // space reserved for header on every page
+                // },
 
                 willDrawPage: function (data) {
 
