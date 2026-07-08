@@ -217,22 +217,22 @@ const HomeL = () => {
                 // doc.line(10, 13, 200, 13);
             };
 
-            autoTable(doc, {
-                startY: 65,
-                margin: {
-                    top: 45
-                },
+            // autoTable(doc, {
+            //     startY: 65,
+            //     margin: {
+            //         top: 45
+            //     },
 
-                didDrawPage: function (data) {
-                    if (data.pageNumber > 1) {
-                        drawMiniHeader();
+            //     didDrawPage: function (data) {
+            //         if (data.pageNumber > 1) {
+            //             drawMiniHeader();
 
-                    }
-                },
+            //         }
+            //     },
 
 
 
-            });
+            // });
 
             // Customer Details Table
             // -------- Customer Details (Text Format) --------
@@ -264,7 +264,10 @@ const HomeL = () => {
             // RMA Details Table
             autoTable(doc, {
                 startY: tableStartY,
-
+                margin: {
+        top: 25,
+        bottom: 20,   // Reserve space for footer
+    },
                 theme: "grid",
 
                 head: [[
@@ -315,6 +318,23 @@ const HomeL = () => {
                         data.settings.margin.top = 25;
                     }
                 },
+                didDrawPage: function (data) {
+    if (data.pageNumber > 1) {
+        drawMiniHeader();
+    }
+
+    const pageSize = doc.internal.pageSize;
+
+    doc.setFontSize(9);
+
+    doc.text(
+        `Page ${data.pageNumber}`,
+        pageSize.getWidth() / 2,
+        pageSize.getHeight() - 5,
+        { align: "center" }
+    );
+},
+
 
 
                 styles: {
@@ -346,20 +366,7 @@ const HomeL = () => {
                 // finalY+20
             );
 
-            const pageCount = doc.internal.getNumberOfPages();
-
-for (let i = 1; i <= pageCount; i++) {
-  doc.setPage(i);
-
-  doc.setFontSize(10);
-
-  doc.text(
-    `Page ${i} of ${pageCount}`,
-    doc.internal.pageSize.getWidth() - 40,
-    doc.internal.pageSize.getHeight() - 10
-  );
-}
-
+            
 
             // Save PDF
             doc.save(
