@@ -201,12 +201,11 @@ const HomeZ = () => {
 
                 // Single Line
                 doc.text(`S.Center Name : ${headerData.center_name || ""}`, 11, 16);
-                doc.text(`RMA No : ${headerData.rma_no || ""}`, 66, 16);
-                doc.text(`Phone : ${headerData.phone_no || ""}`, 110, 16);
+                doc.text(`Phone : ${headerData.phone_no || ""}`, 100, 16);
 
+                doc.text(`RMA No : ${headerData.rma_no || ""}`, 133, 16);
 
-
-                doc.text(`Entry Date : ${entryDate}`, 155, 16);
+                doc.text(`Entry Date : ${entryDate}`, 160, 16);
                 // doc.line(10, 13, 200, 13);
             };
 
@@ -333,7 +332,7 @@ const HomeZ = () => {
     doc.text(
         `Page ${data.pageNumber}`,
         pageSize.getWidth() / 2,
-        pageSize.getHeight() - 5,
+        pageSize.getHeight() - 8,
         { align: "center" }
     );
 },

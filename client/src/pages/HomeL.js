@@ -209,11 +209,11 @@ const HomeL = () => {
                 // Single Line
                 doc.text(`Customer Name : ${headerData.customer_name || ""}`, 11, 16);
 
-                doc.text(`Phone : ${headerData.phone_no || ""}`, 90, 16);
+                doc.text(`Phone : ${headerData.phone_no || ""}`, 100, 16);
 
-                doc.text(`RMA No : ${headerData.rma_no || ""}`, 125, 16);
+                doc.text(`RMA No : ${headerData.rma_no || ""}`, 133, 16);
 
-                doc.text(`Entry Date : ${entryDate}`, 155, 16);
+                doc.text(`Entry Date : ${entryDate}`, 160, 16);
                 // doc.line(10, 13, 200, 13);
             };
 
