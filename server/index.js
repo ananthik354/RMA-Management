@@ -3049,15 +3049,15 @@ WHERE i.serial_no = $1
                 });
             }
 
-            if (
-                result.rows[0].status &&
-                result.rows[0].status.toLowerCase() !== "pending"
-            ) {
-                return res.json({
-                    success: false,
-                    message: `Serial Number status is ${result.rows[0].status}`
-                });
-            }
+            // if (
+            //     result.rows[0].status &&
+            //     result.rows[0].status.toLowerCase() !== "pending"
+            // ) {
+            //     return res.json({
+            //         success: false,
+            //         message: `Serial Number status is ${result.rows[0].status}`
+            //     });
+            // }
 
             res.json({
                 success: true,
