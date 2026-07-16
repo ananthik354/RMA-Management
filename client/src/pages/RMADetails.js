@@ -64,7 +64,7 @@ const updateStatus = async () => {
       {/* Header Details */}
       <div className="card p-3 mb-3">
         <p>
-          <strong>Customer :</strong>{" "}
+          <strong>Customer Name:</strong>{" "}
           {data[0].customer_name}
         </p>
 

@@ -2242,6 +2242,7 @@ app.get("/reminders_lsr", (req, res) => {
     const sql = `
     SELECT
         r.rma_no,
+        r.product_name,
         r.entry_date,
 
         i.id AS item_id,

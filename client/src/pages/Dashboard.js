@@ -529,8 +529,10 @@ useEffect(() => {
   <thead>
     <tr>
       <th>RMA No</th>
+      <th>Product Name</th>
       <th>Serial No</th>
       <th>Reminders</th>
+      <th>Update</th>
       {/* <th>Status</th>
       <th>Action</th> */}
     </tr>
@@ -543,19 +545,20 @@ useEffect(() => {
       <tr key={item.reminder_id}>
 
         <td>{item.rma_no}</td>
+        <td>{item.product_name}</td>
 
         <td>{item.serial_no}</td>
 
         <td>
-  {item.reminder_day} Day Reminder
-
+  {item.reminder_day} Day Reminder</td>
+<td>
   <button
     className="btn btn-warning btn-sm ms-2"
     onClick={() =>
       nav(`/statuspage/${item.item_id}/${item.reminder_id}`)
     }
   >
-    Update Status
+    View
   </button>
 </td>
 
