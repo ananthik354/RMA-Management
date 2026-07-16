@@ -175,7 +175,7 @@ body {
 .card {
   background: #f8f9fa;
   border-left: 5px solid #007bff;
-  padding: 15px;
+  padding: 1px;
   margin-bottom: 12px;
   border-radius: 8px;
   transition: 0.3s;
@@ -254,7 +254,7 @@ body {
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(115, 109, 109, 0.08);
   text-align: center;
   transition: 0.3s;
 }
@@ -274,14 +274,14 @@ body {
   padding: 10px;
   border: none;
   border-radius: 8px;
-  background: #2563eb;
+  background: #259ceb;
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 
 .card button:hover {
-  background: #1d4ed8;
+  background: #1da0d8;
 }
 
 .dashboard-cards {
@@ -289,4 +289,47 @@ body {
   gap: 30px;
   align-items: flex-start;
   flex-wrap: wrap;
+}
+.card{
+    border-radius:15px;
+}
+
+.table{
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.table td{
+    vertical-align:middle;
+}
+
+.table th{
+    white-space:nowrap;
+}
+
+.badge{
+    font-size:14px;
+    padding:8px 12px;
+    border-radius:20px;
+}
+
+.btn{
+    border-radius:8px;
+}
+.table td,
+.table th {
+    padding: 6px 10px;
+}
+
+.btn-sm {
+    padding: 2px 8px;
+    font-size: 12px;
+}
+
+.badge {
+    font-size: 11px;
+}
+.table-responsive{
+    margin-left:15px;
+    margin-right:15px;
 }

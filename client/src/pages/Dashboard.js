@@ -16,6 +16,9 @@ const[irmapencount,setIrmapencount]=useState(0);
   const[irmacomcount,setIrmacomcount]=useState(0);
 const[rmaoutpencount,setRmaoutpencount]=useState(0);
 const[rmaoutcomcount,setRmaoutcomcount]=useState(0);
+const [open, setOpen] = useState(false);
+const [search, setSearch] = useState("");
+
 
   const role = localStorage.getItem("role");
   const nav = useNavigate();
@@ -304,6 +307,12 @@ useEffect(() => {
     return () => clearInterval(interval);
   }, []);
 
+  const filteredReminders = inreminders.filter((item) =>
+  item.rma_no.toString().includes(search) ||
+  item.product_name.toLowerCase().includes(search.toLowerCase()) ||
+  item.serial_no.toLowerCase().includes(search.toLowerCase())
+);
+
   return (
     <div className="dashboard">
       {/* Sidebar */}
@@ -515,18 +524,53 @@ useEffect(() => {
 )}
 
     </div> */}
-    <div className="dashboard-row">
+    <div className="row justify-content-center">
+
+    <div className="col-lg-10">
+    <div className="card">
+
+    <div className="card-body">
+    <div
+  className="card-header d-flex justify-content-between align-items-center"
+  style={{ cursor: "pointer" }}
+  onClick={() => setOpen(!open)}
+>
+  <h5 className="mb-0">🔔 RMA-Inward Reminders</h5>
+
+  <div>
+    <span className="badge bg-danger me-2">
+      {inreminders.length} Pending
+    </span>
+
+    {open ? "▲" : "▼"}
+  </div>
+</div>
+{open && (
+
+<div className="card-body">
+        <input
+      type="text"
+      className="form-control mb-3"
+      placeholder="Search RMA / Product / Serial"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+    {/* <div className="dashboard-row">
 
     <div className="reminder-section">
             <h2>RMA-InWard Reminders</h2>
 
             {inreminders.length === 0 ? (
   <p>No active reminders</p>
-) : (
+) : ( */}
+<div className="table-responsive">
 
-<table className="table table-bordered">
+<table
+    className="table table-sm table-hover align-middle"
+    style={{ fontSize: "13px" }}
+>
 
-  <thead>
+  <thead className="table-dark">
     <tr>
       <th>RMA No</th>
       <th>Product Name</th>
@@ -540,7 +584,7 @@ useEffect(() => {
 
   <tbody>
 
-    {inreminders.map((item) => (
+    {filteredReminders.map((item) => (
 
       <tr key={item.reminder_id}>
 
@@ -550,10 +594,10 @@ useEffect(() => {
         <td>{item.serial_no}</td>
 
         <td>
-  {item.reminder_day} Day Reminder</td>
+  Day-{item.reminder_day}</td>
 <td>
   <button
-    className="btn btn-warning btn-sm ms-2"
+    className="btn btn-outline-primary btn-sm"
     onClick={() =>
       nav(`/statuspage/${item.item_id}/${item.reminder_id}`)
     }
@@ -585,13 +629,20 @@ useEffect(() => {
 
 </table>
 
+
+{/* )} */}
+
+    </div>
+    </div>
+   // </div>
+
 )}
-
     </div>
     </div>
+     </div>
+     </div>
     </div>
-    </div>
-
+</div>
   );
 };
 
