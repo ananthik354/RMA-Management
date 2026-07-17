@@ -250,7 +250,7 @@ const HomeZ = () => {
             doc.text(
                 `Phone : ${headerData.phone_no || ""}`,
                 122,
-                52
+                58
             );
 
             doc.text(

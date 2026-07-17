@@ -350,7 +350,12 @@ console.log("USER ID FROM STORAGE:", userId);
 
         <div className="field">
             <label>Accessory</label>
-    <input className="out-input" placeholder="Accessory" value={formData.accessory} readOnly /></div>
+    <input className="out-input" placeholder="Accessory" value={formData.accessory} onChange={(e) =>
+        setFormData({
+            ...formData,
+            accessory: e.target.value
+        })
+    } /></div>
     <div className="field">
             <label>Issues</label>
     <input className="out-input" placeholder="Issues" value={formData.issues}  onChange={(e) =>
