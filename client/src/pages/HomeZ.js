@@ -295,7 +295,7 @@ const HomeZ = () => {
                     return [
                         row.product_name || "",
                         row.model_number || "",
-                        index === 0 ? row.quantity_no : "",
+                        "1",// index === 0 ? row.quantity_no : "",
                         row.serial_no || "",
                         row.accessory || "",
                         row.issues || ""

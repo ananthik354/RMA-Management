@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import "./Home_l.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
+import { useLocation, useNavigate } from "react-router-dom";
 const HomeL = () => {
-
+    const nav = useNavigate();
+const location = useLocation();
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
     const filteredData = data.filter((item) => {
@@ -484,12 +485,19 @@ Reminder Date: ${item.reminder_date}
 
                                 <td>{item.status}</td>
                                 <td>
-                                    <Link
-
-                                        to={`/rma-details_r/${item.rma_no}`}
-                                    >
-                                        View
-                                    </Link>
+                                   
+                                    <button
+    className="btn btn-outline-primary btn-sm"
+    onClick={() =>
+      nav(`/rma-details_r/${item.rma_no}`, {
+    state: {
+        from: "/home/home_l"
+    }
+})
+    }
+  >
+    View
+  </button>
                                 </td>
                                 {role === "admin" && (
                                     <>                             <td>

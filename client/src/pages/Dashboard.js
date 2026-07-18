@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaUsers, FaHome, FaUserTie, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -16,12 +17,18 @@ const[irmapencount,setIrmapencount]=useState(0);
   const[irmacomcount,setIrmacomcount]=useState(0);
 const[rmaoutpencount,setRmaoutpencount]=useState(0);
 const[rmaoutcomcount,setRmaoutcomcount]=useState(0);
-const [open, setOpen] = useState(false);
+const [open, setOpen] = useState(() => {
+  return localStorage.getItem("inReminderOpen") === "true";
+});
+useEffect(() => {
+  localStorage.setItem("inReminderOpen", open);
+}, [open]);
 const [search, setSearch] = useState("");
 
 
   const role = localStorage.getItem("role");
   const nav = useNavigate();
+  const location = useLocation();
 
   const [rmaReminders, setRmaReminders] = useState([]);
 const [outReminders, setOutReminders] = useState([]);
@@ -537,13 +544,16 @@ useEffect(() => {
 >
   <h5 className="mb-0">🔔 RMA-Inward Reminders</h5>
 
-  <div>
-    <span className="badge bg-danger me-2">
-      {inreminders.length} Pending
-    </span>
+  <div
+  onClick={() => setOpen(!open)}
+  style={{ cursor: "pointer" }}
+>
+  <span className="badge bg-danger me-2">
+    {inreminders.length} Pending
+  </span>
 
-    {open ? "▲" : "▼"}
-  </div>
+  {open ? "▲" : "▼"}
+</div>
 </div>
 {open && (
 
@@ -574,9 +584,10 @@ useEffect(() => {
     <tr>
       <th>RMA No</th>
       <th>Product Name</th>
+      <th>Model Number</th>
       <th>Serial No</th>
       <th>Reminders</th>
-      <th>Update</th>
+      <th>Action</th>
       {/* <th>Status</th>
       <th>Action</th> */}
     </tr>
@@ -590,20 +601,33 @@ useEffect(() => {
 
         <td>{item.rma_no}</td>
         <td>{item.product_name}</td>
-
+        <td>{item.model_number}</td>
         <td>{item.serial_no}</td>
 
         <td>
   Day-{item.reminder_day}</td>
 <td>
   <button
+    className="btn btn-outline-secondary btn-sm"
+    onClick={() =>
+      nav(`/rma-details_r/${item.rma_no}`, {
+    state: {
+        from: "/Dashboard"
+    }
+})
+    }
+  >
+    View
+  </button>
+  <button
     className="btn btn-outline-primary btn-sm"
     onClick={() =>
       nav(`/statuspage/${item.item_id}/${item.reminder_id}`)
     }
   >
-    View
+    Update
   </button>
+  
 </td>
 
         {/* <td>{item.item_status}</td>

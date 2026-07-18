@@ -115,11 +115,11 @@ const updateStatus = async () => {
     }}
 >{item.product_name}</td>
               <td>{item.model_number}</td>
-              <td>
-  {index === 0 ||
+              <td>1
+  {/* {index === 0 ||
   data[index - 1].id !== item.id
     ? item.quantity_no
-    : ""}
+    : ""} */}
 </td>
               <td>{item.serial_no}</td>
               <td>{item.accessory}</td>

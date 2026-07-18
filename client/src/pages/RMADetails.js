@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams,Link } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 function RMADetails() {
   
+const navigate = useNavigate();
+const location = useLocation();
   const { rma_no } = useParams();
 
   console.log("rma_no =", rma_no);
@@ -142,12 +144,11 @@ const updateStatus = async () => {
         </tbody>
 
       </table>
-      <Link to="/home/home_l">
-                          <button className="back-btn">
-                              Go Back
-                          </button>
-                      </Link>
-
+      <button
+    onClick={() => navigate(location.state?.from || "/dashboard")}
+>
+    Back
+</button>
     </div>
   );
 }

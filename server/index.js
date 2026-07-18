@@ -2243,6 +2243,7 @@ app.get("/reminders_lsr", (req, res) => {
     SELECT
         r.rma_no,
         r.product_name,
+        r.model_number,
         r.entry_date,
 
         i.id AS item_id,
