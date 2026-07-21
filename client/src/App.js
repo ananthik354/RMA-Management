@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./pages/ProtectedRoute";
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import Home from './pages/Home';
@@ -46,90 +47,87 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
 
-          <Route path="/home" element={<Home />} />
-          <Route path="/home/home_l" element={<HomeL />} />
-          <Route path="/home/home_z" element={<HomeZ />} />
-          <Route path="/home/addCustomer" element={<AddEdit />} />
-          <Route path="/home/staff" element={<Staff />} />
-          <Route path="/home/addstaff" element={<AddStaff />} />
+          <Route path="/home" element={<ProtectedRoute><Home /> </ProtectedRoute>} />
+          <Route path="/home/home_l" element={<ProtectedRoute><HomeL /></ProtectedRoute>} />
+          <Route path="/home/home_z" element={<ProtectedRoute><HomeZ /></ProtectedRoute>} />
+          <Route path="/home/addCustomer" element={<ProtectedRoute><AddEdit /></ProtectedRoute>} />
+          <Route path="/home/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
+          <Route path="/home/addstaff" element={<ProtectedRoute><AddStaff /></ProtectedRoute>} />
           {/* <Route path="/home/get/:id" element={<AddStaff />} /> */}
-          <Route path="/home/update/:id" element={<AddEdit />} />
-          <Route path="/home/View/:id" element={<View />} />
-          <Route path="/home/services" element={<Services />} />
-          <Route path="/home/addservice" element={<AddService />} />
-          <Route path="/home/update_ser/:id" element={<AddService />} />
-          <Route path="/home/SView/:id" element={<SView />} />
-          <Route path="/home/Add" element={<Add />} />
-          <Route path="/home/update_P/:id" element={<Add />} />
-          <Route path="/home/pdf/:id" element={<Add />} />
-          <Route path="/home/pdf1/:id" element={<Out />} />
-          <Route path="/home/Out" element={<Out />} />
-          <Route path="/home/update_o/:id" element={<Out />} />
+          <Route path="/home/update/:id" element={<ProtectedRoute><AddEdit /></ProtectedRoute>} />
+          <Route path="/home/View/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />
+          <Route path="/home/services" element={<ProtectedRoute><Services /></ProtectedRoute>} />
+          <Route path="/home/addservice" element={<ProtectedRoute><AddService /></ProtectedRoute>} />
+          <Route path="/home/update_ser/:id" element={<ProtectedRoute><AddService /></ProtectedRoute>} />
+          <Route path="/home/SView/:id" element={<ProtectedRoute><SView /></ProtectedRoute>} />
+          <Route path="/home/Add" element={<ProtectedRoute><Add /></ProtectedRoute>} />
+          <Route path="/home/update_P/:id" element={<ProtectedRoute><Add /></ProtectedRoute>} />
+          <Route path="/home/pdf/:id" element={<ProtectedRoute><Add /></ProtectedRoute>} />
+          <Route path="/home/pdf1/:id" element={<ProtectedRoute><Out /></ProtectedRoute>} />
+          <Route path="/home/Out" element={<ProtectedRoute><Out /></ProtectedRoute>} />
+          <Route path="/home/update_o/:id" element={<ProtectedRoute><Out /></ProtectedRoute>} />
           
           <Route
             path="/home/status/:id"
-            element={<Status />}
+            element={<ProtectedRoute><Status /></ProtectedRoute>}
           />
-          <Route path="/home/reminder/:id" element={<ReminderPage />} />
+          <Route path="/home/reminder/:id" element={<ProtectedRoute><ReminderPage /></ProtectedRoute>} />
 
         {/* 📜 History Page */}
          <Route
           path="/status-history_lsr/:item_id"
-          element={<History />}
+          element={<ProtectedRoute><History /></ProtectedRoute>}
         />
         <Route
           path="/status-history_ls/:item_id"
-          element={<History1 />}
+          element={<ProtectedRoute><History1 /></ProtectedRoute>}
         />
         <Route
           path="/serial-history/:serial_no"
-          element={<History1 />}
+          element={<ProtectedRoute><History1 /></ProtectedRoute>}
         />
-          <Route
-            path="/dashboard"
-            element={<Dashboard />}
-          />
-          <Route path="/staff/password/:id" element={<Password />} />
-          <Route path="/statuspage/:item_id" element={<StatusPage />} />
-          <Route path="/statuspage1/:item_id" element={<StatusPage1 />} />
-           <Route path="/statuspage/:item_id/:reminder_id" element={<StatusPage />} />
-           <Route path="/update-status_ls/:item_id" element={<StatusPage1 />} />
+          <Route path="/dashboard"  element={<ProtectedRoute><Dashboard /></ProtectedRoute> }/>
+          <Route path="/staff/password/:id" element={<ProtectedRoute><Password /></ProtectedRoute>} />
+          <Route path="/statuspage/:item_id" element={<ProtectedRoute><StatusPage /></ProtectedRoute>} />
+          <Route path="/statuspage1/:item_id" element={<ProtectedRoute><StatusPage1 /></ProtectedRoute>} />
+           <Route path="/statuspage/:item_id/:reminder_id" element={<ProtectedRoute><StatusPage /></ProtectedRoute>} />
+           <Route path="/update-status_ls/:item_id" element={<ProtectedRoute><StatusPage1 /></ProtectedRoute>} />
            <Route
   path="/statuspage1/:item_id/:reminder_id"
-  element={<StatusPage1 />}
+  element={<ProtectedRoute><StatusPage1 /></ProtectedRoute>}
 />
            <Route
   path="/history/:rma_id"
-  element={<HistoryPage />}
+  element={<ProtectedRoute><HistoryPage /></ProtectedRoute>}
 
 />
           <Route
   path="/history_l/:rma_id"
-  element={<HistoryPage1 />}/>
+  element={<ProtectedRoute><HistoryPage1 /></ProtectedRoute>}/>
   <Route
   path="/search-model/:model_number"
-  element={<SearchModel />}
+  element={<ProtectedRoute><SearchModel /></ProtectedRoute>}
 
 />
-<Route path="/rma-summary" element={<RMASummary/>}/>
-<Route path="/rma-details/:customer_id/:model_number" element={<RMASummary/>}/>
+<Route path="/rma-summary" element={<ProtectedRoute><RMASummary/></ProtectedRoute>}/>
+<Route path="/rma-details/:customer_id/:model_number" element={<ProtectedRoute><RMASummary/></ProtectedRoute>}/>
 <Route
   path="/rma-details_r/:rma_no"
-  element={<RMADetails />}
+  element={<ProtectedRoute><RMADetails /></ProtectedRoute>}
 />
-<Route path="/rma-details/:rma_no" element={<RMADetails1/>}/>
-<Route path="/update-rma-status_l/:rma_no" element={<RMADetails/>}/>
-<Route path="/update-rma/:rma_no" element={<RmaOutUpdate />}/>
-<Route path="/update-rma_in/:rma_no" element={<RmaInUpdate/>}/>
-<Route path="/pending-serials" element={<DashPending/>}/>
-<Route path="/complete-serials" element={<DashPending/>}/>
+<Route path="/rma-details/:rma_no" element={<ProtectedRoute><RMADetails1/></ProtectedRoute>}/>
+<Route path="/update-rma-status_l/:rma_no" element={<ProtectedRoute><RMADetails/></ProtectedRoute>}/>
+<Route path="/update-rma/:rma_no" element={<ProtectedRoute><RmaOutUpdate /></ProtectedRoute>}/>
+<Route path="/update-rma_in/:rma_no" element={<ProtectedRoute><RmaInUpdate/></ProtectedRoute>}/>
+<Route path="/pending-serials" element={<ProtectedRoute><DashPending/></ProtectedRoute>}/>
+<Route path="/complete-serials" element={<ProtectedRoute><DashPending/></ProtectedRoute>}/>
 
-<Route path="/pending-serials_o" element={<DashPendingo />}/>
-<Route path="/complete-serials_o" element={<DashPendingo />}/>
-<Route path="/all-irma-data_pending" element={<DashIrma/>}/>
-<Route path="/all-irma-data_complete" element={<DashIrma/>}/>
-<Route path="/all-orma-data_pending" element={<DashOrma/>}/>
-<Route path="/all-orma-data_complete" element={<DashOrma/>}/>
+<Route path="/pending-serials_o" element={<ProtectedRoute><DashPendingo /></ProtectedRoute>}/>
+<Route path="/complete-serials_o" element={<ProtectedRoute><DashPendingo /></ProtectedRoute>}/>
+<Route path="/all-irma-data_pending" element={<ProtectedRoute><DashIrma/></ProtectedRoute>}/>
+<Route path="/all-irma-data_complete" element={<ProtectedRoute><DashIrma/></ProtectedRoute>}/>
+<Route path="/all-orma-data_pending" element={<ProtectedRoute><DashOrma/></ProtectedRoute>}/>
+<Route path="/all-orma-data_complete" element={<ProtectedRoute><DashOrma/></ProtectedRoute>}/>
         </Routes>
 
       </div>

@@ -12,7 +12,7 @@ const Dashboard = () => {
   const[comcount,setComcount]=useState(0);
 const[outpencount,setOutpencount]=useState(0);
 const[outcomcount,setOutcomcount]=useState(0);
-
+const navigate = useNavigate();
 const[irmapencount,setIrmapencount]=useState(0);
   const[irmacomcount,setIrmacomcount]=useState(0);
 const[rmaoutpencount,setRmaoutpencount]=useState(0);
@@ -319,6 +319,13 @@ useEffect(() => {
   item.product_name.toLowerCase().includes(search.toLowerCase()) ||
   item.serial_no.toLowerCase().includes(search.toLowerCase())
 );
+const handleLogout = () => {
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    localStorage.removeItem("id");
+
+    navigate("/");
+};
 
   return (
     <div className="dashboard">
@@ -367,9 +374,14 @@ useEffect(() => {
           
 
           <li>
-            <Link to="/">
-              <FaSignOutAlt /> Logout
-            </Link>
+            <li>
+    <button
+        className="btn btn-link text-decoration-none"
+        onClick={handleLogout}
+    >
+        <FaSignOutAlt /> Logout
+    </button>
+</li>
           </li>
         </ul>
       </div>
