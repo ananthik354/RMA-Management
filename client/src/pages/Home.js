@@ -13,7 +13,7 @@ const filteredData = data.filter((item) => {
 
   return (
     item.customer_name?.toLowerCase().includes(value) ||
-    
+    item.company_name?.toLowerCase().includes(value) ||
     item.phone_no?.toLowerCase().includes(value)
   );
 });
@@ -58,7 +58,7 @@ const filteredData = data.filter((item) => {
 <div style={{ marginBottom: "15px" }}>
   <input
     type="text"
-    placeholder="Search Customer or Phone..."
+    placeholder="Search Customer or Phone or Company..."
     value={search}
     onChange={(e) => setSearch(e.target.value)}
     style={{
