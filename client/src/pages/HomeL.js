@@ -439,6 +439,7 @@ Reminder Date: ${item.reminder_date}
                     <tr>
                         <th>RMA NO</th>
                         <th>Customer Name</th>
+                        <th>Company Name</th>
                         <th>Product Name</th>
                         <th>Model Number</th>
                         <th>Quantity</th>
@@ -470,6 +471,7 @@ Reminder Date: ${item.reminder_date}
                                             : "white"
                                 }}>{item.rma_no}</td>
                                 <td>{item.customer_name}</td>
+                                <td>{item.company_name}</td>
                                 <td>{item.product_name}</td>
                                 <td>{item.model_number}</td>
                                 <td>{item.quantity_no}</td>

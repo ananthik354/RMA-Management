@@ -673,6 +673,7 @@ app.get("/api/get_P", (req, res) => {
     MIN(r.id) AS id,
     r.rma_no,
     MAX(c.customer_name) AS customer_name,
+    MAX(c.company_name) AS company_name,
     MIN(r.product_name) AS product_name,
     MIN(r.model_number) AS model_number,
     MIN(r.quantity_no) AS quantity_no,
