@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "./Out.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
+import Select from "react-select";
 
 const Out = () => {
     const today = new Date().toISOString().split("T")[0];
@@ -88,6 +88,14 @@ const removeItem = (index) => {
                 setServices(res.data);
             });
     }, []);
+    const customerOptions = [...services]
+  .sort((a, b) =>
+    a.center_name.localeCompare(b.center_name)
+  )
+  .map((item) => ({
+    value: item.id,
+    label: `${item.center_name}`,
+  }));
 
     const handleProductChange = (
         index,
@@ -292,8 +300,22 @@ console.log("USER ID FROM STORAGE:", userId);
         <div className="field">
     {/* CENTER + DATE */}
     <label>Service Center</label>
-
-            <select
+        <Select
+          className="basic-single"
+          classNamePrefix="select"
+          options={customerOptions}
+          placeholder="Search Center..."
+          isSearchable
+          value={
+            customerOptions.find(
+              (option) => option.value === Number(servicesId)
+            ) || null
+          }
+          onChange={(selected) =>
+            setServicesId(selected ? String(selected.value) : "")
+          }
+        />
+            {/* <select
                 className="out-input"
                 value={servicesId}
                 onChange={(e) =>
@@ -312,7 +334,7 @@ console.log("USER ID FROM STORAGE:", userId);
                         {item.center_name}
                     </option>
                 ))}
-            </select>
+            </select> */}
 </div>
 <div className="field">
             <label>Date</label>
