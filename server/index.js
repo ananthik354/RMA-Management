@@ -1328,7 +1328,7 @@ app.get("/history_l/:rma_id", (req, res) => {
 
 app.get("/get-services", (req, res) => {
 
-    const sql = "SELECT id, center_name FROM services_details ORDER BY customer_name ASC";
+    const sql = "SELECT * FROM services_details ORDER BY center_name ASC";
 
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json(err);
