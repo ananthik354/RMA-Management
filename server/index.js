@@ -683,7 +683,7 @@ FROM rma_entry1 r
 JOIN customer_details c
 ON r.customer_id = c.id
 GROUP BY r.rma_no
-ORDER BY r.rma_no ASC`;
+ORDER BY r.rma_no DESC`;
 
     db.query(sql, (err, result) => {
         if (err) {
@@ -886,7 +886,7 @@ JOIN rma_items1 i
 
 GROUP BY r.rma_no
 
-ORDER BY r.rma_no ASC`;
+ORDER BY r.rma_no DESC`;
 
     db.query(sql, (err, result) => {
         if (err) {
@@ -2600,7 +2600,7 @@ ORDER BY h.updated_at ASC`;
 
 app.get("/get-services_r", (req, res) => {
 
-    const sql = "SELECT id, customer_name,company_name FROM customer_details";
+    const sql = "SELECT * FROM customer_details ORDER BY customer_name ASC";
 
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json(err);

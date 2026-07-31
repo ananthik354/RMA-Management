@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import Select from "react-select";
 import "./Add.css";
 import { Link } from "react-router-dom";
 
@@ -75,6 +75,16 @@ console.log("Logged User:", userId);
         })
         .catch((err) => console.log(err));
 }, []);
+const customerOptions = [...services]
+  .sort((a, b) =>
+    a.customer_name.localeCompare(b.customer_name)
+  )
+  .map((item) => ({
+    value: item.id,
+    label: `${item.customer_name} - ${
+      item.company_name || "No Company"
+    } - ${item.phone_no}`,
+  }));
 
     const handleProductChange = (
         index,
@@ -171,8 +181,22 @@ console.log("USER ID FROM STORAGE:", userId);
          <div className="col-md-4">
 
             <label>Customer Name</label>
-
-            <select
+            <Select
+  className="basic-single"
+  classNamePrefix="select"
+  options={customerOptions}
+  placeholder="Search Customer..."
+  isSearchable
+  value={
+    customerOptions.find(
+      (option) => option.value === Number(customerId)
+    ) || null
+  }
+  onChange={(selected) =>
+    setCustomerId(selected ? String(selected.value) : "")
+  }
+/>
+            {/* <select
                 className="form-control"
                 value={customerId}
                 onChange={(e) =>
@@ -188,10 +212,10 @@ console.log("USER ID FROM STORAGE:", userId);
                         key={item.id}
                         value={item.id}
                     >
-                        {item.customer_name} - {item.company_name|| "No Company"}
+                        {item.customer_name} - {item.company_name|| "No Company"}-{item.phone_no}
                     </option>
                 ))}
-            </select>
+            </select> */}
          </div><div className="col-md-4">    
                             <label>Customer DC No</label>
 
