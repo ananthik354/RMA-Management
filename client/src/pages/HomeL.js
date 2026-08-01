@@ -464,27 +464,12 @@ Reminder Date: ${item.reminder_date}
                     {filteredData.map((item, index) => {
                         return (
                             <tr key={item.id}>
-                                {/* <td style={{
+                                <td style={{
                                     backgroundColor:
                                         item.status?.trim().toLowerCase() === "completed"
                                             ? "#99970f"
                                             : "white"
-                                }}> */}
-                                <td
-  style={{
-    backgroundColor:
-      item.status?.trim().toLowerCase() === "completed"
-        ? "#99970f"
-        : item.outward_count > 0
-        ? "#ffd700"
-        : "white",
-
-    color:
-      item.status?.trim().toLowerCase() === "completed"
-        ? "#fff"
-        : "#000",
-  }}
->
+                                }}>
                                     {item.rma_no}</td>
                                 <td>{item.customer_name}</td>
                                 <td>{item.company_name}</td>
