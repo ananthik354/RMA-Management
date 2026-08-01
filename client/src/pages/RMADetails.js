@@ -113,7 +113,7 @@ const updateStatus = async () => {
                 ? "#99970f"
                 : "white"
     }}>{item.product_name}</td>
-              <td>{item.model_number}</td>
+              <td>{item.model_number}</td>  
               <td>
   {index === 0 ||
   data[index - 1].id !== item.id
