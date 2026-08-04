@@ -117,14 +117,10 @@ const updateStatus = async () => {
   style={{
     backgroundColor:
       item.status?.trim().toLowerCase() === "completed"
-        ? "#28a745" // Green
+        ? "#28a745"      // Green
         : item.sent_to_outward
-        ? "#ffd700" // Yellow
-        : "white",  // Not sent to outward
-    color:
-      item.status?.trim().toLowerCase() === "completed"
-        ? "white"
-        : "black",
+        ? "#ffd700"      // Yellow
+        : "white",
   }}
 >
   {item.product_name}
