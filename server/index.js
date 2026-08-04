@@ -2612,7 +2612,9 @@ app.get("/get-services_r", (req, res) => {
 app.get("/rma-details_r/:rma_no", (req, res) => {
 
     const { rma_no } = req.params;
-    const sql=`SELECT
+
+    const sql = `
+   SELECT
     r.id,
     r.rma_no,
     c.customer_name,
@@ -2626,12 +2628,7 @@ app.get("/rma-details_r/:rma_no", (req, res) => {
     i.serial_no,
     i.accessory,
     i.issues,
-    i.status,
-
-    CASE
-        WHEN o.id IS NOT NULL THEN true
-        ELSE false
-    END AS sent_to_outward
+    i.status
 
 FROM rma_entry1 r
 
@@ -2641,40 +2638,9 @@ LEFT JOIN customer_details c
 LEFT JOIN rma_items i
     ON r.id = i.rma_id
 
-LEFT JOIN rma_items1 o
-    ON i.serial_no = o.serial_no
-
 WHERE r.rma_no = $1
 
 ORDER BY r.id`;
-//     const sql = `
-//    SELECT
-//     r.id,
-//     r.rma_no,
-//     c.customer_name,
-//     r.product_name,
-//     r.model_number,
-//     r.quantity_no,
-//     r.customer_dc_no,
-//     r.entry_date,
-
-//     i.id AS item_id,
-//     i.serial_no,
-//     i.accessory,
-//     i.issues,
-//     i.status
-
-// FROM rma_entry1 r
-
-// LEFT JOIN customer_details c
-//     ON r.customer_id = c.id
-
-// LEFT JOIN rma_items i
-//     ON r.id = i.rma_id
-
-// WHERE r.rma_no = $1
-
-// ORDER BY r.id`;
 
     db.query(sql, [rma_no], (err, result) => {
 
