@@ -669,21 +669,39 @@ app.put("/api/update_ser/:id", (req, res) => {
 // RMA Entry
 
 app.get("/api/get_P", (req, res) => {
-    const sql = `SELECT
+    const sql = 
+    `SELECT
     MIN(r.id) AS id,
     r.rma_no,
     MAX(c.customer_name) AS customer_name,
     MAX(c.company_name) AS company_name,
     MIN(r.product_name) AS product_name,
     MIN(r.model_number) AS model_number,
-    MIN(r.quantity_no) AS quantity_no,
+    COUNT(i.id) AS total_serials,
     MIN(r.status) AS status,
     MIN(r.entry_date) AS entry_date
 FROM rma_entry1 r
 JOIN customer_details c
-ON r.customer_id = c.id
+    ON r.customer_id = c.id
+LEFT JOIN rma_items i
+    ON r.id = i.rma_id
 GROUP BY r.rma_no
 ORDER BY r.rma_no DESC`;
+//     `SELECT
+//     MIN(r.id) AS id,
+//     r.rma_no,
+//     MAX(c.customer_name) AS customer_name,
+//     MAX(c.company_name) AS company_name,
+//     MIN(r.product_name) AS product_name,
+//     MIN(r.model_number) AS model_number,
+//     MIN(r.quantity_no) AS quantity_no,
+//     MIN(r.status) AS status,
+//     MIN(r.entry_date) AS entry_date
+// FROM rma_entry1 r
+// JOIN customer_details c
+// ON r.customer_id = c.id
+// GROUP BY r.rma_no
+// ORDER BY r.rma_no DESC`;
 
     db.query(sql, (err, result) => {
         if (err) {

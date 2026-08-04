@@ -475,7 +475,7 @@ Reminder Date: ${item.reminder_date}
                                 <td>{item.company_name}</td>
                                 <td>{item.product_name}</td>
                                 <td>{item.model_number}</td>
-                                <td>{item.quantity_no}</td>
+                                <td>{item.total_serials}</td>
                                 {/* <td>{item.serial_no}</td>
                                 <td>{item.accessory}</td> */}
                               
