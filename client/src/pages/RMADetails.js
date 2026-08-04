@@ -117,10 +117,14 @@ const updateStatus = async () => {
   style={{
     backgroundColor:
       item.status?.trim().toLowerCase() === "completed"
-        ? "#28a745"      // Green
+        ? "#28a745"       // Green
         : item.sent_to_outward
-        ? "#ffd700"      // Yellow
-        : "white",
+        ? "#ffd700"       // Yellow
+        : "white",        // Not sent to outward
+    color:
+      item.status?.trim().toLowerCase() === "completed"
+        ? "white"
+        : "black",
   }}
 >
   {item.product_name}
@@ -135,6 +139,7 @@ const updateStatus = async () => {
               <td>{item.serial_no}</td>
               <td>{item.accessory}</td>
               <td>{item.issues}</td>
+              <td>{String(item.sent_to_outward)}</td>
               <td> <Link
 
                 to={`/serial-history/${item.serial_no}`}
