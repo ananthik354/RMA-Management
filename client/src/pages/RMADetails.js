@@ -107,12 +107,28 @@ const updateStatus = async () => {
             <tr key={item.serial_no || index}
             >
               <td>{index + 1}</td>
-              <td style={{
+              {/* <td style={{
         backgroundColor:
             item.status?.trim().toLowerCase() === "completed"
                 ? "#99970f"
                 : "white"
-    }}>{item.product_name}</td>
+    }}>{item.product_name}</td> */}
+    <td
+  style={{
+    backgroundColor:
+      item.status?.trim().toLowerCase() === "completed"
+        ? "#28a745" // Green
+        : item.sent_to_outward
+        ? "#ffd700" // Yellow
+        : "white",  // Not sent to outward
+    color:
+      item.status?.trim().toLowerCase() === "completed"
+        ? "white"
+        : "black",
+  }}
+>
+  {item.product_name}
+</td>
               <td>{item.model_number}</td>  
               <td>
   {index === 0 ||
