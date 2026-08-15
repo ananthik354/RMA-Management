@@ -624,7 +624,7 @@ const handleLogout = () => {
     onClick={() =>
       nav(`/rma-details_r/${item.rma_no}`, {
     state: {
-        from: "/Dashboard"
+        from: "/dashboard"
     }
 })
     }

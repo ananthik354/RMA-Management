@@ -105,7 +105,7 @@ function DashOrma() {
                 </tbody>
             </table>
 
-            <Link to="/Dashboard">
+            <Link to="/dashboard">
                 <button className="back-btn">
                     Go Back
                 </button>

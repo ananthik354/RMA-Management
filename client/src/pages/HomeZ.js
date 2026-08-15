@@ -413,7 +413,7 @@ Entry Date: ${item.entry_date}
         <div className="top-btns">
             <div className="top-buttons">
 
-                <Link to="/Dashboard">
+                <Link to="/dashboard">
                     <button className="back-btn">
                         Go Back
                     </button>

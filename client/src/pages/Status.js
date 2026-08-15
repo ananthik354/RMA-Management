@@ -183,7 +183,7 @@ const Status = () => {
             </button>
 
             <Link
-                to="/Dashboard"
+                to="/dashboard"
             >
                 <button
                     className=
