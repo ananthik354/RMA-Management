@@ -3198,22 +3198,22 @@ app.get("/test-db", async (req, res) => {
 });
 
 // React build files
-app.use(
-    express.static(
-        path.join(__dirname, "build")
-    )
-);
+// app.use(
+//     express.static(
+//         path.join(__dirname, "build")
+//     )
+// );
 
-// Keep this LAST — it catches React page routes only
-app.use((req, res) => {
-    res.sendFile(
-        path.join(
-            __dirname,
-            "build",
-            "index.html"
-        )
-    );
-});
+// // Keep this LAST — it catches React page routes only
+// app.use((req, res) => {
+//     res.sendFile(
+//         path.join(
+//             __dirname,
+//             "build",
+//             "index.html"
+//         )
+//     );
+// });
 
 
 
