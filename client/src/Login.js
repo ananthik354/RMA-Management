@@ -60,7 +60,7 @@ function Login() {
                     );
 
                     navigate(
-                        "/Dashboard"
+                        "/dashboard"
                     );
 
                 } else {
