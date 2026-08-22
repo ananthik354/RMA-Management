@@ -1482,7 +1482,8 @@ app.get("/rma-details/:rma_no", (req, res) => {
 const sql=`
 SELECT
     r.id,
-    r.rma_no,
+    r.rma_no AS outward_rma_no,
+    re.rma_no AS inward_rma_no,
     cd.customer_name,
     c.center_name,
     i.product_name,
