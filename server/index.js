@@ -1482,18 +1482,13 @@ app.get("/rma-details/:rma_no", (req, res) => {
 const sql=`
 SELECT
     r.id,
-    r.rma_no AS outward_rma_no,
-
-    e.rma_no AS inward_rma_no,
-
-    cust.customer_name,
-
+    r.rma_no,
+    cd.customer_name,
     c.center_name,
-
-    r.product_name,
-    r.model_number,
+    i.product_name,
+    i.model_number,
     r.quantity_no,
-    r.customer_dc_no,
+
     r.entry_date,
 
     i.id AS item_id,
@@ -1510,15 +1505,11 @@ LEFT JOIN services_details c
 LEFT JOIN rma_items1 i
     ON r.id = i.rma_id
 
- 
-LEFT JOIN rma_items ii
-    ON ii.serial_no = i.serial_no
+LEFT JOIN rma_entry1 re
+    ON r.rma_no = re.rma_no
 
-LEFT JOIN rma_entry1 e
-    ON e.id = ii.rma_id
-
-LEFT JOIN customer_details cust
-    ON cust.id = e.customer_id
+LEFT JOIN customer_details cd
+    ON re.customer_id = cd.id
 
 WHERE r.rma_no = $1
 
