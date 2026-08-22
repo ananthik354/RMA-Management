@@ -1488,9 +1488,7 @@ SELECT
     i.product_name,
     i.model_number,
     r.quantity_no,
-
     r.entry_date,
-
     i.id AS item_id,
     i.serial_no,
     i.accessory,
@@ -1505,8 +1503,11 @@ LEFT JOIN services_details c
 LEFT JOIN rma_items1 i
     ON r.id = i.rma_id
 
+LEFT JOIN rma_items ii
+    ON i.serial_no = ii.serial_no
+
 LEFT JOIN rma_entry1 re
-    ON r.rma_no = re.rma_no
+    ON ii.rma_id = re.id
 
 LEFT JOIN customer_details cd
     ON re.customer_id = cd.id
