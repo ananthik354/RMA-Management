@@ -1451,15 +1451,49 @@ app.get("/rma-details/:rma_no", (req, res) => {
 
     const { rma_no } = req.params;
 
-    const sql = `
-   SELECT
-    r.id,
-    r.rma_no,
-    c.center_name,
-    i.product_name,
-    i.model_number,
-    r.quantity_no,
+//     const sql = `
+//    SELECT
+//     r.id,
+//     r.rma_no,
+//     c.center_name,
+//     i.product_name,
+//     i.model_number,
+//     r.quantity_no,
     
+//     r.entry_date,
+
+//     i.id AS item_id,
+//     i.serial_no,
+//     i.accessory,
+//     i.issues,
+//     i.status
+
+// FROM rma_out r
+
+// LEFT JOIN services_details c
+//     ON r.services_id = c.id
+
+// LEFT JOIN rma_items1 i
+//     ON r.id = i.rma_id
+
+// WHERE r.rma_no = $1
+
+// ORDER BY r.id`;
+const sql=`
+SELECT
+    r.id,
+    r.rma_no AS outward_rma_no,
+
+    e.rma_no AS inward_rma_no,
+
+    cust.customer_name,
+
+    c.center_name,
+
+    r.product_name,
+    r.model_number,
+    r.quantity_no,
+    r.customer_dc_no,
     r.entry_date,
 
     i.id AS item_id,
@@ -1475,6 +1509,16 @@ LEFT JOIN services_details c
 
 LEFT JOIN rma_items1 i
     ON r.id = i.rma_id
+
+ 
+LEFT JOIN rma_items ii
+    ON ii.serial_no = i.serial_no
+
+LEFT JOIN rma_entry1 e
+    ON e.id = ii.rma_id
+
+LEFT JOIN customer_details cust
+    ON cust.id = e.customer_id
 
 WHERE r.rma_no = $1
 

@@ -90,6 +90,8 @@ const updateStatus = async () => {
           <tr>
 
             <th>S.No</th>
+            <th>RMA No</th>
+            <th>Customer Name</th>
             <th>product Name</th>
             <th>model Number</th>
             <th>quantity</th>
@@ -105,6 +107,8 @@ const updateStatus = async () => {
             <tr key={item.serial_no || index}
             >
               <td>{index + 1}</td>
+              <td>{item.inward_rma_no}</td>
+              <td>{item.customer_name}</td>
               <td
               
     style={{
