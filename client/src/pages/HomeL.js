@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./Home_l.css";
+import RMADetails from "./RMADetails";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,12 +10,15 @@ const HomeL = () => {
     const nav = useNavigate();
 const location = useLocation();
     const [search, setSearch] = useState("");
+    const [showRMADetails, setShowRMADetails] = useState(false);
+const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     const [data, setData] = useState([]);
     const filteredData = data.filter((item) => {
         const value = search.toLowerCase();
 
         return (
             item.customer_name?.toLowerCase().includes(value) ||
+            item.company_name?.toLowerCase().includes(value) ||
             item.product_name?.toLowerCase().includes(value) ||
             item.model_number?.toLowerCase().includes(value)
         );
@@ -414,7 +418,7 @@ Reminder Date: ${item.reminder_date}
                 <div style={{ marginBottom: "15px" }}>
                     <input
                         type="text"
-                        placeholder="Search Customer,Product or Model no."
+                        placeholder="Search Customer,Company,Product or Model no."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         style={{
@@ -489,7 +493,7 @@ Reminder Date: ${item.reminder_date}
                                 <td>{item.status}</td>
                                 <td>
                                    
-                                    <button
+                                    {/* <button
     className="btn btn-outline-primary btn-sm"
     onClick={() =>
       nav(`/rma-details_r/${item.rma_no}`, {
@@ -500,7 +504,16 @@ Reminder Date: ${item.reminder_date}
     }
   >
     View
-  </button>
+  </button> */}
+  <button
+    className="btn btn-outline-primary btn-sm"
+    onClick={() => {
+        setSelectedRmaNo(item.rma_no);
+        setShowRMADetails(true);
+    }}
+>
+    View
+</button>
                                 </td>
                                 {role === "admin" && (
                                     <>                             <td>
@@ -565,6 +578,29 @@ Reminder Date: ${item.reminder_date}
                     })}
                 </tbody>
             </table>
+            {showRMADetails && (
+    <div
+        className="rma-modal-overlay"
+        onClick={() => setShowRMADetails(false)}
+    >
+        <div
+            className="rma-modal"
+            onClick={(e) => e.stopPropagation()}
+        >
+            <button
+                className="rma-modal-close"
+                onClick={() => setShowRMADetails(false)}
+            >
+                ×
+            </button>
+
+            <RMADetails
+                rma_no={selectedRmaNo}
+                onClose={() => setShowRMADetails(false)}
+            />
+        </div>
+    </div>
+)}
         </div >
     );
 

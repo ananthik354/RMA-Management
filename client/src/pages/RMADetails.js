@@ -3,13 +3,17 @@ import axios from "axios";
 import { useParams,Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function RMADetails() {
-  
-const navigate = useNavigate();
-const location = useLocation();
-  const { rma_no } = useParams();
+function RMADetails({ rma_no: popupRmaNo, onClose }) {
+    const navigate = useNavigate();
+    const location = useLocation();
 
-  console.log("rma_no =", rma_no);
+    const { rma_no: routeRmaNo } = useParams();
+
+    // Use popup RMA number when opened as popup,
+    // otherwise use the URL parameter.
+    const rma_no = popupRmaNo || routeRmaNo;
+
+    console.log("rma_no =", rma_no);
 
   const [data, setData] = useState([]);
 
@@ -160,13 +164,26 @@ const updateStatus = async () => {
         </tbody>
 
       </table>
-      <button
-    onClick={() => navigate(location.state?.from || "/dashboard")}
->
-    Back
-</button>
+      {onClose ? (
+        <button
+          className="btn btn-secondary"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      ) : (
+        <button
+          onClick={() =>
+            navigate(location.state?.from || "/dashboard")
+          }
+        >
+          Back
+        </button>
+      )}
+
     </div>
   );
 }
+
 
 export default RMADetails;
