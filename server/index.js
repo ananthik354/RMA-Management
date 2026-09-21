@@ -39,30 +39,54 @@ app.get("/test-neon", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
 function generateReminders_l(item_id) {
 
-    const reminderDays = [3, 5, 7, 10, 13, 15, 17, 20, 23, 25, 27, 30, 33, 35, 37, 40];
+    const reminderDays = [];
+
+    for (let day = 3; day <= 365; day += 5) {
+        reminderDays.push(day);
+    }
 
     reminderDays.forEach(day => {
 
         db.query(
             `INSERT INTO rma_reminders
             (rma_item_id, reminder_day)
-            VALUES ($1,$2)`,
+            VALUES ($1, $2)`,
             [item_id, day],
             (err) => {
-
                 if (err) {
                     console.log(err);
                 }
-
             }
         );
 
     });
-
 }
+
+// function generateReminders_l(item_id) {
+
+//     const reminderDays = [3, 5, 7, 10, 13, 15, 17, 20, 23, 25, 27, 30, 33, 35, 37, 40];
+
+//     reminderDays.forEach(day => {
+
+//         db.query(
+//             `INSERT INTO rma_reminders
+//             (rma_item_id, reminder_day)
+//             VALUES ($1,$2)`,
+//             [item_id, day],
+//             (err) => {
+
+//                 if (err) {
+//                     console.log(err);
+//                 }
+
+//             }
+//         );
+
+//     });
+
+// }
 
 function generateReminders(item_id) {
 

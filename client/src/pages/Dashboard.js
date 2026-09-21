@@ -33,10 +33,8 @@ const [search, setSearch] = useState("");
   const [rmaReminders, setRmaReminders] = useState([]);
 const [outReminders, setOutReminders] = useState([]);
 
-const [reminders, setReminders] =
-    useState([]);
-    const [inreminders, setInreminders] =
-    useState([]);
+const [reminders, setReminders] =useState([]);
+    const [inreminders, setInreminders] =useState([]);
 
 const loadReminders = async () => {
 
