@@ -384,27 +384,27 @@ const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     };
 
 
-    const shareWhatsApp = (item) => {
+//     const shareWhatsApp = (item) => {
 
-        const message = `
-RMA Details
+//         const message = `
+// RMA Details
 
-RMA No: ${item.id}
-Product Name: ${item.product_name}
-Model Number: ${item.model_number}
-Quantity: ${item.quantity_no}
-Serial No: ${item.serial_no}
-Accessory: ${item.accessory}
+// RMA No: ${item.id}
+// Product Name: ${item.product_name}
+// Model Number: ${item.model_number}
+// Quantity: ${item.quantity_no}
+// Serial No: ${item.serial_no}
+// Accessory: ${item.accessory}
 
-Reminder Date: ${item.reminder_date}
-`;
+// Reminder Date: ${item.reminder_date}
+// `;
 
-        const whatsappUrl =
-            `http://wa.me/?text=${encodeURIComponent(message)}`;
+//         const whatsappUrl =
+//             `http://wa.me/?text=${encodeURIComponent(message)}`;
 
-        window.open(whatsappUrl, "_blank");
+//         window.open(whatsappUrl, "_blank");
 
-    };
+//     };
 
     return (
         <div className="top-btns">
@@ -459,7 +459,7 @@ Reminder Date: ${item.reminder_date}
                             </>)}
 
                         <th>View</th>
-                        <th>Share</th>
+                        {/* <th>Share</th> */}
 
                     </tr>
                 </thead>
@@ -562,14 +562,14 @@ Reminder Date: ${item.reminder_date}
                                         PDF
                                     </button>
                                 </td>
-                                <td>
+                                {/* <td>
                                     <button
                                         className="share-btn"
                                         onClick={() => shareWhatsApp(item)}
                                     >
                                         WhatsApp
                                     </button>
-                                </td>
+                                </td> */}
                             </tr>
 
 
