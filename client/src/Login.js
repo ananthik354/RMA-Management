@@ -42,34 +42,20 @@ function Login() {
             )
             .then((res) => {
 
-                if (
-                    res.data
-                        .message ===
-                    "Login Successfully"
-                ) {
+    if (res.data.message === "Login Successfully") {
 
-                    localStorage.setItem(
-                        "role",
-                        res.data.role
-                    );
-                    localStorage.setItem("username", res.data.username);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", res.data.role);
+        localStorage.setItem("username", res.data.username);
+        localStorage.setItem("id", res.data.id);
 
-                    localStorage.setItem(
-                        "id",
-                        res.data.id
-                    );
+        navigate("/dashboard");
 
-                    navigate(
-                        "/dashboard"
-                    );
+    } else {
 
-                } else {
-
-                    alert(
-                        "Invalid Username or Password"
-                    );
-                }
-            })
+        alert("Invalid Username or Password");
+    }
+})
             .catch((err) => {
                 console.log(err);
             });

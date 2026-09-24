@@ -6,8 +6,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const { Pool } = require("pg");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
+const authenticateToken = require("./middleware/authMiddleware");
 // middleware FIRST
 // app.use(cors({
 //     origin: "http://localhost:3000"
@@ -120,12 +121,13 @@ app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
     const sql =
-        "SELECT id,username,role FROM login_user WHERE username=$1 AND password=$2";
+        "SELECT id, username, role FROM login_user WHERE username=$1 AND password=$2";
 
     db.query(sql, [username, password], (err, data) => {
 
         if (err) {
             console.error("LOGIN ERROR:", err);
+
             return res.status(500).json({
                 error: err.message
             });
@@ -133,16 +135,34 @@ app.post("/login", (req, res) => {
 
         console.log("LOGIN RESULT:", data.rows);
 
-        if (data.rows.length > 0) {
-            return res.json({
-                message: "Login Successfully",
-                role: data.rows[0].role,
-                id: data.rows[0].id,
-                username: data.rows[0].username,
+        if (data.rows.length === 0) {
+            return res.status(401).json({
+                message: "Invalid Username or Password"
             });
-        } else {
-            return res.json("No Record");
         }
+
+        const user = data.rows[0];
+
+        // Create JWT token
+        const token = jwt.sign(
+            {
+                id: user.id,
+                username: user.username,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "1d"
+            }
+        );
+
+        return res.json({
+            message: "Login Successfully",
+            token: token,
+            role: user.role,
+            id: user.id,
+            username: user.username
+        });
     });
 });
 
@@ -425,6 +445,7 @@ app.post("/api/addstaff", (req, res) => {
 
 app.get(
     "/api/password/:id",
+    authenticateToken,
     (req, res) => {
 
         const { id } =
@@ -455,6 +476,7 @@ app.get(
 );
 app.put(
     "/api/password/:id",
+    authenticateToken,
     (req, res) => {
 
         const { id } =

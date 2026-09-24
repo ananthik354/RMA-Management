@@ -318,6 +318,7 @@ useEffect(() => {
   item.serial_no.toLowerCase().includes(search.toLowerCase())
 );
 const handleLogout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
     localStorage.removeItem("id");

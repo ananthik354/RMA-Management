@@ -2,12 +2,14 @@ import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
 
-    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
 
-    console.log("ProtectedRoute username:", username);
+    if (!token) {
 
-    if (!username) {
-        console.log("Redirecting to login...");
+        localStorage.removeItem("username");
+        localStorage.removeItem("role");
+        localStorage.removeItem("id");
+
         return <Navigate to="/" replace />;
     }
 
