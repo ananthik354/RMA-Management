@@ -1,21 +1,41 @@
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Main page */
 .top-btns {
   padding: 20px;
   background: #f4f6f9;
   min-height: 100vh;
+  width: 100%;
 }
 
+/* Keep content from becoming extremely wide */
+.top-btns > * {
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Top buttons */
 .top-buttons {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
+/* Search input */
+.top-buttons input {
+  width: 300px;
+  max-width: 100%;
+}
+
+/* Common buttons */
 .add-btn,
 .back-btn,
 .edit-btn,
@@ -24,15 +44,26 @@
 .share-btn,
 .btn-view {
   border: none;
-  padding: 8px 15px;
+  padding: 7px 13px;
   border-radius: 6px;
   cursor: pointer;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   margin: 2px;
-  transition: 0.3s;
+  transition: 0.2s ease;
 }
 
+/* Back */
+.back-btn {
+  background: #6c757d;
+}
+
+.back-btn:hover {
+  background: #545b62;
+  transform: translateY(-1px);
+}
+
+/* Add */
 .add-btn {
   background: #28a745;
 }
@@ -41,14 +72,7 @@
   background: #218838;
 }
 
-.back-btn {
-  background: #6c757d;
-}
-
-.back-btn:hover {
-  background: #545b62;
-}
-
+/* Edit */
 .edit-btn {
   background: #007bff;
 }
@@ -57,6 +81,7 @@
   background: #0069d9;
 }
 
+/* Delete */
 .delete-btn {
   background: #dc3545;
 }
@@ -65,6 +90,7 @@
   background: #c82333;
 }
 
+/* View */
 .view-btn {
   background: #17a2b8;
 }
@@ -73,6 +99,7 @@
   background: #138496;
 }
 
+/* WhatsApp */
 .share-btn {
   background: #25d366;
 }
@@ -81,33 +108,50 @@
   background: #1ebe5d;
 }
 
+/* PDF / View button */
 .btn-view {
-  background: #fd7e14;
+  background: #ce4589;
+  font-weight: 600;
 }
 
 .btn-view:hover {
-  background: #e96b00;
+  background: #b93778;
+  transform: translateY(-1px);
 }
 
+/* RMA table wrapper */
 .rma-table {
   width: 100%;
   border-collapse: collapse;
   background: white;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  table-layout: auto;
 }
 
+/* Table header */
 .rma-table thead {
   background: #343a40;
   color: white;
 }
 
+/* Table cells */
 .rma-table th,
 .rma-table td {
-  padding: 12px;
+  padding: 9px 8px;
   border: 1px solid #dee2e6;
   text-align: center;
+  font-size: 13px;
+  vertical-align: middle;
 }
 
+/* Header text */
+.rma-table th {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Body */
 .rma-table tbody tr:nth-child(even) {
   background: #f8f9fa;
 }
@@ -116,6 +160,20 @@
   background: #e9ecef;
 }
 
+/* Keep long text from making the table huge */
+.rma-table td {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Don't cut buttons */
+.rma-table td:has(button) {
+  max-width: none;
+  white-space: nowrap;
+}
+
+/* Status */
 .status-open {
   color: #28a745;
   font-weight: bold;
@@ -131,76 +189,81 @@
   font-weight: bold;
 }
 
+/* Add RMA button */
+.btn-phone {
+  background: linear-gradient(135deg, #ce4589, #e965a2);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 3px 8px rgba(206, 69, 137, 0.25);
+  white-space: nowrap;
+}
+
+.btn-phone:hover {
+  transform: translateY(-1px);
+}
+
+/* Pagination */
+.pagination-container {
+  max-width: 1500px;
+  margin: 15px auto 0;
+}
+
+/* Tablet */
 @media screen and (max-width: 1200px) {
+
+  .top-btns {
+    padding: 15px;
+  }
+
   .rma-table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
   }
+
+  .rma-table th,
+  .rma-table td {
+    padding: 8px 7px;
+    font-size: 12px;
+  }
 }
 
+/* Mobile */
 @media screen and (max-width: 768px) {
+
+  .top-btns {
+    padding: 10px;
+  }
+
   .top-buttons {
     flex-direction: column;
+    align-items: stretch;
     gap: 10px;
   }
 
-  .add-btn,
+  .top-buttons input {
+    width: 100% !important;
+  }
+
+  .btn-phone,
   .back-btn {
     width: 100%;
   }
-}
-.btn-view {
-    border: none;
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-    color: white;
+
+  .rma-table th,
+  .rma-table td {
+    padding: 7px 6px;
+    font-size: 11px;
+  }
+
+  .rma-table {
+    font-size: 11px;
+  }
 }
 
-/* Edit */
-.btn-edit {
-    background: #0d6efd;
-}
-
-.btn-edit:hover {
-    transform: scale(1.05);
-}
-
-/* Delete */
-.btn-delete {
-    background: #dc3545;
-}
-
-.btn-delete:hover {
-    transform: scale(1.05);
-}
-
-/* View */
-.btn-view {
-    background: #ce4589;
-}
-
-.btn-view:hover {
-    transform: scale(1.05);
-}
-
-.btn-phone {
-    background: linear-gradient(135deg, #ce4589, #e965a2);
-    color: white;
-    border: none;
-    padding: 12px 22px;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 4px 12px rgba(206, 69, 137, 0.3);
-}
-
-.btn-phone:hover {
-    transform: translateY(-2px);
-}
