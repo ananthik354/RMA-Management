@@ -351,3 +351,6 @@ body {
 .logout-btn:hover {
     color: #e965a2;
 }
+.dashboard-content {
+    padding: 20px;
+}

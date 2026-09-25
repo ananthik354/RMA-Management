@@ -387,6 +387,7 @@ const handleLogout = () => {
       {/* Main Content */}
       <div className="main-content">
         <Topbar onLogout={handleLogout} />
+        <div className="dashboard-content">
         <div className="dashboard-row">
           
           {/* Customer Card */}
@@ -735,6 +736,7 @@ const handleLogout = () => {
      </div>
      </div>
     </div>
+</div>
 </div>
   );
 };
