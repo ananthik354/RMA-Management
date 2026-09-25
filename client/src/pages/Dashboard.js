@@ -385,6 +385,31 @@ const handleLogout = () => {
 
       {/* Main Content */}
       <div className="main-content">
+         {/* Top Bar */}
+  <div className="topbar">
+
+    <div className="topbar-left">
+      <h3>Dashboard</h3>
+    </div>
+
+    <div className="topbar-right">
+      <span className="topbar-user">
+        {localStorage.getItem("username") || "User"}
+      </span>
+
+      <button
+        className="topbar-logout"
+        onClick={handleLogout}
+        title="Logout"
+      >
+        <FaSignOutAlt />
+        <span>Logout</span>
+      </button>
+    </div>
+
+  </div>
+   {/* Dashboard Content */}
+  <div className="dashboard-content">
         <div className="dashboard-row">
           
           {/* Customer Card */}
@@ -733,6 +758,7 @@ const handleLogout = () => {
      </div>
      </div>
     </div>
+</div>
 </div>
   );
 };
