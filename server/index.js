@@ -730,7 +730,14 @@ app.get("/api/get_P", (req, res) => {
     MIN(r.product_name) AS product_name,
     MIN(r.model_number) AS model_number,
     COUNT(i.id) AS total_serials,
-    MIN(r.status) AS status,
+    CASE
+        WHEN COUNT(i.id) > 0
+         AND COUNT(i.id) = COUNT(*) FILTER (
+             WHERE LOWER(TRIM(i.status)) = 'completed'
+         )
+        THEN 'Completed'
+        ELSE 'Pending'
+    END AS status,
     MIN(r.entry_date) AS entry_date
 FROM rma_entry1 r
 JOIN customer_details c

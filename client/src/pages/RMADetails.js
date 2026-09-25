@@ -1,20 +1,209 @@
 
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import { useParams,Link } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
+
+// function RMADetails() {
+  
+// const navigate = useNavigate();
+// const location = useLocation();
+//   // const { rma_no } = useParams();
+
+//   // console.log("rma_no =", rma_no);
+//    const { rma_no: routeRmaNo } = useParams();
+
+//     // Popup → use popupRmaNo
+//     // Normal page → use URL rma_no
+//     const rma_no = popupRmaNo || routeRmaNo;
+
+//   const [data, setData] = useState([]);
+
+//   useEffect(() => {
+
+//     axios
+//       .get(`https://rma-management.onrender.com/rma-details_r/${rma_no}`)
+//       .then((res) => {
+//         console.log(res.data);
+//         setData(res.data);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+
+//   }, [rma_no]);
+
+
+
+// const updateStatus = async () => {
+
+//     try {
+
+//         await axios.put(
+//             `https://rma-management.onrender.com/update-rma-status/${rma_no}`,
+//             {
+//                 status: "Completed"
+//             }
+//         );
+
+//         alert("RMA Completed");
+
+//         window.location.reload();
+
+//     } catch (err) {
+
+//         console.log(err);
+
+//         alert("Update Failed");
+
+//     }
+
+// };
+
+//   if (data.length === 0) {
+//     return <h4>No Data Found</h4>;
+//   }
+
+//   return (
+//     <div className="container mt-4">
+
+//       <h3>RMA Details</h3>
+
+//       {/* Header Details */}
+//       <div className="card p-3 mb-3">
+//         <p>
+//           <strong>Customer Name:</strong>{" "}
+//           {data[0].customer_name}
+//         </p>
+
+
+//       </div>
+
+//       {/* <div className="mb-3">
+
+//     <button
+//         className="btn btn-success"
+//         onClick={updateStatus}
+//     >
+//         Complete RMA
+//     </button>
+
+// </div> */}
+
+//       {/* Serial Details */}
+//       <table className="table table-bordered">
+
+//         <thead>
+//           <tr>
+
+//             <th>S.No</th>
+//             <th>product Name</th>
+//             <th>model Number</th>
+//             <th>quantity</th>
+//             <th>Serial No</th>
+//             <th>Accessory</th>
+//             <th>Issues</th>
+//             <th>statusHistory</th>
+//             <th>status update</th>
+//           </tr>
+//         </thead>
+
+//         <tbody>
+//           {data.map((item, index) => (
+//             <tr key={item.serial_no || index}
+//             >
+//               <td>{index + 1}</td>
+//               {/* <td style={{
+//         backgroundColor:
+//             item.status?.trim().toLowerCase() === "completed"
+//                 ? "#99970f"
+//                 : "white"
+//     }}>{item.product_name}</td> */}
+//     <td
+//   style={{
+//     backgroundColor:
+//       item.status?.trim().toLowerCase() === "completed"
+//         ? "#28a745" // Green
+//         : item.sent_to_outward
+//         ? "#ffd700" // Yellow
+//         : "white",  // Not sent to outward
+//     color:
+//       item.status?.trim().toLowerCase() === "completed"
+//         ? "white"
+//         : "black",
+//   }}
+// >
+//   {item.product_name}
+// </td>
+//               <td>{item.model_number}</td>  
+//               <td>
+//   {index === 0 ||
+//   data[index - 1].id !== item.id
+//     ? item.quantity_no
+//     : ""}
+// </td>
+//               <td>{item.serial_no}</td>
+//               <td>{item.accessory}</td>
+//               <td>{item.issues}</td>
+//               <td> <Link
+
+//                 to={`/serial-history/${item.serial_no}`}
+//               >
+//                 View
+//               </Link>
+              
+//               </td>
+//               <td>
+//                 <Link
+
+//                 to={`/statuspage/${item.item_id}`}
+//               >
+//                 status
+//               </Link>
+//               </td>
+//             </tr>
+//           ))}
+//         </tbody>
+
+//       </table>
+//       {/* <button
+//     onClick={() => navigate(location.state?.from || "/dashboard")}
+// >
+//     Back
+// </button> */}
+// {onClose ? (
+//     <button
+//         className="btn btn-secondary"
+//         onClick={onClose}
+//     >
+//         Close
+//     </button>
+// ) : (
+//     <button
+//         onClick={() =>
+//             navigate(location.state?.from || "/dashboard")
+//         }
+//     >
+//         Back
+//     </button>
+// )}
+//     </div>
+//   );
+// }
+
+// export default RMADetails;
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams,Link } from "react-router-dom";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function RMADetails() {
-  
-const navigate = useNavigate();
-const location = useLocation();
-  const { rma_no } = useParams();
-
-  console.log("rma_no =", rma_no);
+function RMADetails({ rma_no }) {
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
+
+    if (!rma_no) return;
 
     axios
       .get(`https://rma-management.onrender.com/rma-details_r/${rma_no}`)
@@ -28,146 +217,133 @@ const location = useLocation();
 
   }, [rma_no]);
 
-
-
-const updateStatus = async () => {
+  const updateStatus = async () => {
 
     try {
 
-        await axios.put(
-            `https://rma-management.onrender.com/update-rma-status/${rma_no}`,
-            {
-                status: "Completed"
-            }
-        );
+      await axios.put(
+        `https://rma-management.onrender.com/update-rma-status/${rma_no}`,
+        {
+          status: "Completed"
+        }
+      );
 
-        alert("RMA Completed");
+      alert("RMA Completed");
 
-        window.location.reload();
+      window.location.reload();
 
     } catch (err) {
 
-        console.log(err);
-
-        alert("Update Failed");
+      console.log(err);
+      alert("Update Failed");
 
     }
-
-};
+  };
 
   if (data.length === 0) {
     return <h4>No Data Found</h4>;
   }
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-3 mb-3">
 
       <h3>RMA Details</h3>
 
       {/* Header Details */}
       <div className="card p-3 mb-3">
+
         <p>
           <strong>Customer Name:</strong>{" "}
           {data[0].customer_name}
         </p>
 
+      </div>
+
+      {/* Serial Details */}
+      <div className="table-responsive">
+
+        <table className="table table-bordered">
+
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Product Name</th>
+              <th>Model Number</th>
+              <th>Quantity</th>
+              <th>Serial No</th>
+              <th>Accessory</th>
+              <th>Issues</th>
+              <th>Status History</th>
+              <th>Status Update</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            {data.map((item, index) => (
+
+              <tr key={item.serial_no || index}>
+
+                <td>{index + 1}</td>
+
+                <td
+                  style={{
+                    backgroundColor:
+                      item.status?.trim().toLowerCase() === "completed"
+                        ? "#28a745"
+                        : item.sent_to_outward
+                        ? "#ffd700"
+                        : "white",
+
+                    color:
+                      item.status?.trim().toLowerCase() === "completed"
+                        ? "white"
+                        : "black",
+                  }}
+                >
+                  {item.product_name}
+                </td>
+
+                <td>{item.model_number}</td>
+
+                <td>
+                  {index === 0 ||
+                  data[index - 1].id !== item.id
+                    ? item.quantity_no
+                    : ""}
+                </td>
+
+                <td>{item.serial_no}</td>
+
+                <td>{item.accessory}</td>
+
+                <td>{item.issues}</td>
+
+                <td>
+                  <Link to={`/serial-history/${item.serial_no}`}>
+                    View
+                  </Link>
+                </td>
+
+                <td>
+                  <Link to={`/statuspage/${item.item_id}`}>
+                    Status
+                  </Link>
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
 
       </div>
 
-      {/* <div className="mb-3">
-
-    <button
-        className="btn btn-success"
-        onClick={updateStatus}
-    >
-        Complete RMA
-    </button>
-
-</div> */}
-
-      {/* Serial Details */}
-      <table className="table table-bordered">
-
-        <thead>
-          <tr>
-
-            <th>S.No</th>
-            <th>product Name</th>
-            <th>model Number</th>
-            <th>quantity</th>
-            <th>Serial No</th>
-            <th>Accessory</th>
-            <th>Issues</th>
-            <th>statusHistory</th>
-            <th>status update</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={item.serial_no || index}
-            >
-              <td>{index + 1}</td>
-              {/* <td style={{
-        backgroundColor:
-            item.status?.trim().toLowerCase() === "completed"
-                ? "#99970f"
-                : "white"
-    }}>{item.product_name}</td> */}
-    <td
-  style={{
-    backgroundColor:
-      item.status?.trim().toLowerCase() === "completed"
-        ? "#28a745" // Green
-        : item.sent_to_outward
-        ? "#ffd700" // Yellow
-        : "white",  // Not sent to outward
-    color:
-      item.status?.trim().toLowerCase() === "completed"
-        ? "white"
-        : "black",
-  }}
->
-  {item.product_name}
-</td>
-              <td>{item.model_number}</td>  
-              <td>
-  {index === 0 ||
-  data[index - 1].id !== item.id
-    ? item.quantity_no
-    : ""}
-</td>
-              <td>{item.serial_no}</td>
-              <td>{item.accessory}</td>
-              <td>{item.issues}</td>
-              <td> <Link
-
-                to={`/serial-history/${item.serial_no}`}
-              >
-                View
-              </Link>
-              
-              </td>
-              <td>
-                <Link
-
-                to={`/statuspage/${item.item_id}`}
-              >
-                status
-              </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-
-      </table>
-      <button
-    onClick={() => navigate(location.state?.from || "/dashboard")}
->
-    Back
-</button>
     </div>
   );
 }
 
 export default RMADetails;
+

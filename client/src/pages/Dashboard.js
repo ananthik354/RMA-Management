@@ -4,7 +4,7 @@ import { FaUsers, FaHome, FaUserTie, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "./Dashboard.css";
-
+import RMADetails from "./RMADetails";
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
@@ -66,12 +66,9 @@ const openStatus = (item) => {
     console.log(item);
 };
 
-const [selectedItem, setSelectedItem] =
-    useState(null);
-
-const [statusText, setStatusText] =
-    useState("");
-
+const [selectedItem, setSelectedItem] =useState(null);
+const [statusText, setStatusText] =useState("");
+const [selectedRmaNo, setSelectedRmaNo] = useState(null);
 useEffect(() => {
     loadReminders();
 }, []);
@@ -605,8 +602,81 @@ const handleLogout = () => {
   </thead>
 
   <tbody>
+{filteredReminders.map((item) => (
 
-    {filteredReminders.map((item) => (
+    <React.Fragment key={item.reminder_id}>
+
+        <tr>
+
+            <td>{item.rma_no}</td>
+
+            <td>{item.product_name}</td>
+
+            <td>{item.model_number}</td>
+
+            <td>{item.serial_no}</td>
+
+            <td>
+                Day-{item.reminder_day}
+            </td>
+
+            <td>
+
+                <button
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={() =>
+                        setSelectedRmaNo(
+                            selectedRmaNo === item.rma_no
+                                ? null
+                                : item.rma_no
+                        )
+                    }
+                >
+                    {selectedRmaNo === item.rma_no
+                        ? "Hide"
+                        : "View"}
+                </button>
+
+                <button
+                    className="btn btn-outline-primary btn-sm"
+                    onClick={() =>
+                        nav(
+                            `/statuspage/${item.item_id}/${item.reminder_id}`
+                        )
+                    }
+                >
+                    Update
+                </button>
+
+            </td>
+
+        </tr>
+
+        {/* RMA DETAILS BELOW REMINDER */}
+        {selectedRmaNo === item.rma_no && (
+            <tr>
+
+                <td
+                    colSpan="6"
+                    style={{
+                        backgroundColor: "#f8f9fa",
+                        padding: "15px"
+                    }}
+                >
+
+                    <RMADetails
+                        rma_no={item.rma_no}
+                    />
+
+                </td>
+
+            </tr>
+        )}
+
+    </React.Fragment>
+
+))}
+    {/* {filteredReminders.map((item) => (
 
       <tr key={item.reminder_id}>
 
@@ -641,24 +711,11 @@ const handleLogout = () => {
   
 </td>
 
-        {/* <td>{item.item_status}</td>
-
-        <td>
-
-          <button
-            className="btn btn-warning btn-sm"
-            onClick={() =>
-              openStatus(item)
-            }
-          >
-            Update
-          </button>
-
-        </td> */}
+       
 
       </tr>
 
-    ))}
+    ))} */}
 
   </tbody>
 

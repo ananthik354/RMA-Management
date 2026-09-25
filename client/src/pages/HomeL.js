@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./Home_l.css";
+import RMADetails from "./RMADetails";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ const HomeL = () => {
 const location = useLocation();
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
+    const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     const filteredData = data.filter((item) => {
         const value = search.toLowerCase();
 
@@ -463,106 +465,231 @@ Reminder Date: ${item.reminder_date}
 
                 <tbody>
                     {filteredData.map((item, index) => {
-                        return (
-                            <tr key={item.id}>
-                                <td style={{
-                                    backgroundColor:
-                                        item.status?.trim().toLowerCase() === "completed"
-                                            ? "#99970f"
-                                            : "white"
-                                }}>
-                                    {item.rma_no}</td>
-                                <td>{item.customer_name}</td>
-                                <td>{item.company_name}</td>
-                                <td>{item.product_name}</td>
-                                <td>{item.model_number}</td>
-                                <td>{item.total_serials}</td>
-                                {/* <td>{item.serial_no}</td>
-                                <td>{item.accessory}</td> */}
+//                         return (
+//                             <tr key={item.id}>
+//                                 <td style={{
+//                                     backgroundColor:
+//                                         item.status?.trim().toLowerCase() === "completed"
+//                                             ? "#99970f"
+//                                             : "white"
+//                                 }}>
+//                                     {item.rma_no}</td>
+//                                 <td>{item.customer_name}</td>
+//                                 <td>{item.company_name}</td>
+//                                 <td>{item.product_name}</td>
+//                                 <td>{item.model_number}</td>
+//                                 <td>{item.total_serials}</td>
+//                                 {/* <td>{item.serial_no}</td>
+//                                 <td>{item.accessory}</td> */}
                               
 
-                                <td>
-                                    {item.entry_date
-                                        ? new Date(item.entry_date).toLocaleDateString("en-GB")
-                                        : "-"}
-                                </td>
+//                                 <td>
+//                                     {item.entry_date
+//                                         ? new Date(item.entry_date).toLocaleDateString("en-GB")
+//                                         : "-"}
+//                                 </td>
 
-                                <td>{item.status}</td>
-                                <td>
+//                                 <td>{item.status}</td>
+//                                 <td>
                                    
-                                    <button
-    className="btn btn-outline-primary btn-sm"
-    onClick={() =>
-      nav(`/rma-details_r/${item.rma_no}`, {
-    state: {
-        from: "/home/home_l"
-    }
-})
-    }
-  >
-    View
-  </button>
-                                </td>
-                                {role === "admin" && (
-                                    <>                             <td>
-                                        <Link to={`/update-rma_in/${item.rma_no}`}>
-                                            <button className="edit-btn">
-                                                Edit
-                                            </button>
-                                        </Link>
+//                                     <button
+//     className="btn btn-outline-primary btn-sm"
+//     onClick={() =>
+//       nav(`/rma-details_r/${item.rma_no}`, {
+//     state: {
+//         from: "/home/home_l"
+//     }
+// })
+//     }
+//   >
+//     View
+//   </button>
+//                                 </td>
+//                                 {role === "admin" && (
+//                                     <>                             <td>
+//                                         <Link to={`/update-rma_in/${item.rma_no}`}>
+//                                             <button className="edit-btn">
+//                                                 Edit
+//                                             </button>
+//                                         </Link>
 
-                                        <button
-                                            className="delete-btn"
-                                            onClick={() =>
-                                                deleteRMA(item.rma_no)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
-
-
-
-
-                                    </td>
-                                    </>
-                                )}                             {/* <td>
-                                    <Link to={`/status-history_lsr/${item.id}`}>
-                                        <button className="btn btn-view">
-                                            View History
-                                        </button>
-                                    </Link>
+//                                         <button
+//                                             className="delete-btn"
+//                                             onClick={() =>
+//                                                 deleteRMA(item.rma_no)
+//                                             }
+//                                         >
+//                                             Delete
+//                                         </button>
 
 
 
-                                </td> */}
-                                {/* <td>
-                                    <Link to={`/search-model/${item.model_number}`}>
-                                        <button className="edit-btn">
-                                            search
-                                        </button>
-                                    </Link>
-                                </td> */}
-                                <td>
-                                    <button
-                                        className="btn-view"
-                                        onClick={() => generatePDF(item)}
-                                    >
-                                        PDF
-                                    </button>
-                                </td>
-                                <td>
-                                    <button
-                                        className="share-btn"
-                                        onClick={() => shareWhatsApp(item)}
-                                    >
-                                        WhatsApp
-                                    </button>
-                                </td>
-                            </tr>
+
+//                                     </td>
+//                                     </>
+//                                 )}                             {/* <td>
+//                                     <Link to={`/status-history_lsr/${item.id}`}>
+//                                         <button className="btn btn-view">
+//                                             View History
+//                                         </button>
+//                                     </Link>
 
 
 
-                        );
+//                                 </td> */}
+//                                 {/* <td>
+//                                     <Link to={`/search-model/${item.model_number}`}>
+//                                         <button className="edit-btn">
+//                                             search
+//                                         </button>
+//                                     </Link>
+//                                 </td> */}
+//                                 <td>
+//                                     <button
+//                                         className="btn-view"
+//                                         onClick={() => generatePDF(item)}
+//                                     >
+//                                         PDF
+//                                     </button>
+//                                 </td>
+//                                 <td>
+//                                     <button
+//                                         className="share-btn"
+//                                         onClick={() => shareWhatsApp(item)}
+//                                     >
+//                                         WhatsApp
+//                                     </button>
+//                                 </td>
+//                             </tr>
+
+
+
+//                         );
+return (
+    <React.Fragment key={item.id}>
+
+        <tr>
+
+            <td
+                style={{
+                    backgroundColor:
+                        item.status?.trim().toLowerCase() === "completed"
+                            ? "#99970f"
+                            : "white"
+                }}
+            >
+                {item.rma_no}
+            </td>
+
+            <td>{item.customer_name}</td>
+
+            <td>{item.company_name}</td>
+
+            <td>{item.product_name}</td>
+
+            <td>{item.model_number}</td>
+
+            <td>{item.total_serials}</td>
+
+            <td>
+                {item.entry_date
+                    ? new Date(item.entry_date).toLocaleDateString("en-GB")
+                    : "-"}
+            </td>
+
+            <td>{item.status}</td>
+
+            {/* SUMMARY */}
+            <td>
+
+                <button
+                    className="btn btn-outline-primary btn-sm"
+                    onClick={() =>
+                        setSelectedRmaNo(
+                            selectedRmaNo === item.rma_no
+                                ? null
+                                : item.rma_no
+                        )
+                    }
+                >
+                    {selectedRmaNo === item.rma_no
+                        ? "Hide"
+                        : "View"}
+                </button>
+
+            </td>
+
+            {/* ADMIN ACTION */}
+            {role === "admin" && (
+                <td>
+
+                    <Link to={`/update-rma_in/${item.rma_no}`}>
+                        <button className="edit-btn">
+                            Edit
+                        </button>
+                    </Link>
+
+                    <button
+                        className="delete-btn"
+                        onClick={() =>
+                            deleteRMA(item.rma_no)
+                        }
+                    >
+                        Delete
+                    </button>
+
+                </td>
+            )}
+
+            {/* PDF */}
+            <td>
+
+                <button
+                    className="btn-view"
+                    onClick={() => generatePDF(item)}
+                >
+                    PDF
+                </button>
+
+            </td>
+
+            {/* WHATSAPP */}
+            <td>
+
+                <button
+                    className="share-btn"
+                    onClick={() => shareWhatsApp(item)}
+                >
+                    WhatsApp
+                </button>
+
+            </td>
+
+        </tr>
+
+        {/* RMA DETAILS */}
+        {selectedRmaNo === item.rma_no && (
+            <tr>
+
+                <td
+                    colSpan={role === "admin" ? 12 : 11}
+                    style={{
+                        backgroundColor: "#f8f9fa",
+                        padding: "15px"
+                    }}
+                >
+
+                    <RMADetails
+                        rma_no={item.rma_no}
+                    />
+
+                </td>
+
+            </tr>
+        )}
+
+    </React.Fragment>
+);
                     })}
                 </tbody>
             </table>
