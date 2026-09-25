@@ -37,7 +37,7 @@ import DashPending from "./pages/DashPending";
 import DashPendingo from "./pages/DashPending_o";
 import DashIrma from "./pages/DashIrma";
 import DashOrma from "./pages/DashOrma";
-
+import Topbar from "./pages/Topbar";
 function App() {
   return (
     <BrowserRouter>
@@ -87,6 +87,7 @@ function App() {
           element={<ProtectedRoute><History1 /></ProtectedRoute>}
         />
           <Route path="/dashboard"  element={<ProtectedRoute><Dashboard /></ProtectedRoute> }/>
+          <Route path="/topbar"  element={<ProtectedRoute><Topbar /></ProtectedRoute> }/>
           <Route path="/staff/password/:id" element={<ProtectedRoute><Password /></ProtectedRoute>} />
           <Route path="/statuspage/:item_id" element={<ProtectedRoute><StatusPage /></ProtectedRoute>} />
           <Route path="/statuspage1/:item_id" element={<ProtectedRoute><StatusPage1 /></ProtectedRoute>} />

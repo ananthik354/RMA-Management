@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Topbar from "./Topbar";
 import { FaUsers, FaHome, FaUserTie, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -385,31 +386,7 @@ const handleLogout = () => {
 
       {/* Main Content */}
       <div className="main-content">
-         {/* Top Bar */}
-  <div className="topbar">
-
-    <div className="topbar-left">
-      <h3>Dashboard</h3>
-    </div>
-
-    <div className="topbar-right">
-      <span className="topbar-user">
-        {localStorage.getItem("username") || "User"}
-      </span>
-
-      <button
-        className="topbar-logout"
-        onClick={handleLogout}
-        title="Logout"
-      >
-        <FaSignOutAlt />
-        <span>Logout</span>
-      </button>
-    </div>
-
-  </div>
-   {/* Dashboard Content */}
-  <div className="dashboard-content">
+        <Topbar onLogout={handleLogout} />
         <div className="dashboard-row">
           
           {/* Customer Card */}
@@ -758,7 +735,6 @@ const handleLogout = () => {
      </div>
      </div>
     </div>
-</div>
 </div>
   );
 };
