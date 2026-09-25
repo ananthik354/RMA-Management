@@ -372,7 +372,8 @@ const handleLogout = () => {
           <li>
             <li>
     <button
-        className="btn btn-link text-decoration-none"
+        // className="btn btn-link text-decoration-none"
+        className="logout-btn"
         onClick={handleLogout}
     >
         <FaSignOutAlt /> Logout
