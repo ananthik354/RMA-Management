@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./Home_l.css";
-import RMADetails from "./RMADetails";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,8 +9,6 @@ const HomeL = () => {
     const nav = useNavigate();
 const location = useLocation();
     const [search, setSearch] = useState("");
-    const [showRMADetails, setShowRMADetails] = useState(false);
-const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     const [data, setData] = useState([]);
     const filteredData = data.filter((item) => {
         const value = search.toLowerCase();
@@ -384,27 +381,27 @@ const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     };
 
 
-//     const shareWhatsApp = (item) => {
+    const shareWhatsApp = (item) => {
 
-//         const message = `
-// RMA Details
+        const message = `
+RMA Details
 
-// RMA No: ${item.id}
-// Product Name: ${item.product_name}
-// Model Number: ${item.model_number}
-// Quantity: ${item.quantity_no}
-// Serial No: ${item.serial_no}
-// Accessory: ${item.accessory}
+RMA No: ${item.id}
+Product Name: ${item.product_name}
+Model Number: ${item.model_number}
+Quantity: ${item.quantity_no}
+Serial No: ${item.serial_no}
+Accessory: ${item.accessory}
 
-// Reminder Date: ${item.reminder_date}
-// `;
+Reminder Date: ${item.reminder_date}
+`;
 
-//         const whatsappUrl =
-//             `http://wa.me/?text=${encodeURIComponent(message)}`;
+        const whatsappUrl =
+            `http://wa.me/?text=${encodeURIComponent(message)}`;
 
-//         window.open(whatsappUrl, "_blank");
+        window.open(whatsappUrl, "_blank");
 
-//     };
+    };
 
     return (
         <div className="top-btns">
@@ -459,7 +456,7 @@ const [selectedRmaNo, setSelectedRmaNo] = useState(null);
                             </>)}
 
                         <th>View</th>
-                        {/* <th>Share</th> */}
+                        <th>Share</th>
 
                     </tr>
                 </thead>
@@ -493,7 +490,7 @@ const [selectedRmaNo, setSelectedRmaNo] = useState(null);
                                 <td>{item.status}</td>
                                 <td>
                                    
-                                    {/* <button
+                                    <button
     className="btn btn-outline-primary btn-sm"
     onClick={() =>
       nav(`/rma-details_r/${item.rma_no}`, {
@@ -504,16 +501,7 @@ const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     }
   >
     View
-  </button> */}
-  <button
-    className="btn btn-outline-primary btn-sm"
-    onClick={() => {
-        setSelectedRmaNo(item.rma_no);
-        setShowRMADetails(true);
-    }}
->
-    View
-</button>
+  </button>
                                 </td>
                                 {role === "admin" && (
                                     <>                             <td>
@@ -562,14 +550,14 @@ const [selectedRmaNo, setSelectedRmaNo] = useState(null);
                                         PDF
                                     </button>
                                 </td>
-                                {/* <td>
+                                <td>
                                     <button
                                         className="share-btn"
                                         onClick={() => shareWhatsApp(item)}
                                     >
                                         WhatsApp
                                     </button>
-                                </td> */}
+                                </td>
                             </tr>
 
 
@@ -578,29 +566,6 @@ const [selectedRmaNo, setSelectedRmaNo] = useState(null);
                     })}
                 </tbody>
             </table>
-            {showRMADetails && (
-    <div
-        className="rma-modal-overlay"
-        onClick={() => setShowRMADetails(false)}
-    >
-        <div
-            className="rma-modal"
-            onClick={(e) => e.stopPropagation()}
-        >
-            <button
-                className="rma-modal-close"
-                onClick={() => setShowRMADetails(false)}
-            >
-                ×
-            </button>
-
-            <RMADetails
-                rma_no={selectedRmaNo}
-                onClose={() => setShowRMADetails(false)}
-            />
-        </div>
-    </div>
-)}
         </div >
     );
 
