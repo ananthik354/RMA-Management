@@ -604,76 +604,41 @@ const handleLogout = () => {
   <tbody>
 {filteredReminders.map((item) => (
 
-    <React.Fragment key={item.reminder_id}>
+    <tr key={item.reminder_id}>
+                <td>{item.rma_no}</td>
+                <td>{item.product_name}</td>
+                <td>{item.model_number}</td>
+                <td>{item.serial_no}</td>
+                <td>Day-{item.reminder_day}</td>
 
-        <tr>
+                <td>
+                    <button
+                        className="btn btn-outline-secondary btn-sm"
+                        onClick={() =>
+                            setSelectedRmaNo(
+                                selectedRmaNo === item.rma_no
+                                    ? null
+                                    : item.rma_no
+                            )
+                        }
+                    >
+                        {selectedRmaNo === item.rma_no ? "Hide" : "View"}
+                    </button>
 
-            <td>{item.rma_no}</td>
-
-            <td>{item.product_name}</td>
-
-            <td>{item.model_number}</td>
-
-            <td>{item.serial_no}</td>
-
-            <td>
-                Day-{item.reminder_day}
-            </td>
-
-            <td>
-
-                <button
-                    className="btn btn-outline-secondary btn-sm"
-                    onClick={() =>
-                        setSelectedRmaNo(
-                            selectedRmaNo === item.rma_no
-                                ? null
-                                : item.rma_no
-                        )
-                    }
-                >
-                    {selectedRmaNo === item.rma_no
-                        ? "Hide"
-                        : "View"}
-                </button>
-
-                <button
-                    className="btn btn-outline-primary btn-sm"
-                    onClick={() =>
-                        nav(
-                            `/statuspage/${item.item_id}/${item.reminder_id}`
-                        )
-                    }
-                >
-                    Update
-                </button>
-
-            </td>
-
-        </tr>
-
-        {/* RMA DETAILS BELOW REMINDER */}
-        {selectedRmaNo === item.rma_no && (
-            <tr>
-
-                <td
-                    colSpan="6"
-                    style={{
-                        backgroundColor: "#f8f9fa",
-                        padding: "15px"
-                    }}
-                >
-
-                    <RMADetails
-                        rma_no={item.rma_no}
-                    />
-
+                    <button
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() =>
+                            nav(
+                                `/statuspage/${item.item_id}/${item.reminder_id}`
+                            )
+                        }
+                    >
+                        Update
+                    </button>
                 </td>
-
             </tr>
-        )}
 
-    </React.Fragment>
+       
 
 ))}
     {/* {filteredReminders.map((item) => (
@@ -720,8 +685,11 @@ const handleLogout = () => {
   </tbody>
 
 </table>
-
-
+{selectedRmaNo && (
+    <div className="dashboard-rma-details">
+        <RMADetails rma_no={selectedRmaNo} />
+    </div>
+)}
 {/* )} */}
 
     </div>
