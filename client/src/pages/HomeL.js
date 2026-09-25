@@ -8,10 +8,12 @@ import autoTable from "jspdf-autotable";
 import { useLocation, useNavigate } from "react-router-dom";
 const HomeL = () => {
     const nav = useNavigate();
-const location = useLocation();
+    const location = useLocation();
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
     const [selectedRmaNo, setSelectedRmaNo] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
     const filteredData = data.filter((item) => {
         const value = search.toLowerCase();
 
@@ -21,7 +23,21 @@ const location = useLocation();
             item.product_name?.toLowerCase().includes(value) ||
             item.model_number?.toLowerCase().includes(value)
         );
-    });// MUST BE []
+    });
+
+    const totalPages = Math.ceil(
+        filteredData.length / itemsPerPage
+    );
+
+    const startIndex =
+        (currentPage - 1) * itemsPerPage;
+
+    const currentData =
+        filteredData.slice(
+            startIndex,
+            startIndex + itemsPerPage
+        );
+    // MUST BE []
     const role = localStorage.getItem("role")
     useEffect(() => {
         loadData();
@@ -269,9 +285,9 @@ const location = useLocation();
             autoTable(doc, {
                 startY: tableStartY,
                 margin: {
-        top: 25,
-        bottom: 20,   // Reserve space for footer
-    },
+                    top: 25,
+                    bottom: 20,   // Reserve space for footer
+                },
                 theme: "grid",
 
                 head: [[
@@ -323,21 +339,21 @@ const location = useLocation();
                     }
                 },
                 didDrawPage: function (data) {
-    if (data.pageNumber > 1) {
-        drawMiniHeader();
-    }
+                    if (data.pageNumber > 1) {
+                        drawMiniHeader();
+                    }
 
-    const pageSize = doc.internal.pageSize;
+                    const pageSize = doc.internal.pageSize;
 
-    doc.setFontSize(9);
+                    doc.setFontSize(9);
 
-    doc.text(
-        `Page ${data.pageNumber}`,
-        pageSize.getWidth() / 2,
-        pageSize.getHeight() - 8,
-        { align: "center" }
-    );
-},
+                    doc.text(
+                        `Page ${data.pageNumber}`,
+                        pageSize.getWidth() / 2,
+                        pageSize.getHeight() - 8,
+                        { align: "center" }
+                    );
+                },
 
 
 
@@ -370,7 +386,7 @@ const location = useLocation();
                 // finalY+20
             );
 
-            
+
 
             // Save PDF
             doc.save(
@@ -383,27 +399,27 @@ const location = useLocation();
     };
 
 
-    const shareWhatsApp = (item) => {
+    //     const shareWhatsApp = (item) => {
 
-        const message = `
-RMA Details
+    //         const message = `
+    // RMA Details
 
-RMA No: ${item.id}
-Product Name: ${item.product_name}
-Model Number: ${item.model_number}
-Quantity: ${item.quantity_no}
-Serial No: ${item.serial_no}
-Accessory: ${item.accessory}
+    // RMA No: ${item.id}
+    // Product Name: ${item.product_name}
+    // Model Number: ${item.model_number}
+    // Quantity: ${item.quantity_no}
+    // Serial No: ${item.serial_no}
+    // Accessory: ${item.accessory}
 
-Reminder Date: ${item.reminder_date}
-`;
+    // Reminder Date: ${item.reminder_date}
+    // `;
 
-        const whatsappUrl =
-            `http://wa.me/?text=${encodeURIComponent(message)}`;
+    //         const whatsappUrl =
+    //             `http://wa.me/?text=${encodeURIComponent(message)}`;
 
-        window.open(whatsappUrl, "_blank");
+    //         window.open(whatsappUrl, "_blank");
 
-    };
+    //     };
 
     return (
         <div className="top-btns">
@@ -419,7 +435,10 @@ Reminder Date: ${item.reminder_date}
                         type="text"
                         placeholder="Search Customer,Company,Product or Model no."
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1);
+                        }}
                         style={{
                             width: "300px",
                             padding: "10px",
@@ -448,7 +467,7 @@ Reminder Date: ${item.reminder_date}
                         <th>Quantity</th>
                         {/* <th>Serial No</th>
                         <th>Accessory</th> */}
-                        
+
                         <th>Entry Date</th>
                         <th>status</th>
                         <th>Summary</th>
@@ -458,203 +477,203 @@ Reminder Date: ${item.reminder_date}
                             </>)}
 
                         <th>View</th>
-                        <th>Share</th>
+                        {/* <th>Share</th> */}
 
                     </tr>
                 </thead>
 
                 <tbody>
-                    {filteredData.map((item, index) => {
-//                         return (
-//                             <tr key={item.id}>
-//                                 <td style={{
-//                                     backgroundColor:
-//                                         item.status?.trim().toLowerCase() === "completed"
-//                                             ? "#99970f"
-//                                             : "white"
-//                                 }}>
-//                                     {item.rma_no}</td>
-//                                 <td>{item.customer_name}</td>
-//                                 <td>{item.company_name}</td>
-//                                 <td>{item.product_name}</td>
-//                                 <td>{item.model_number}</td>
-//                                 <td>{item.total_serials}</td>
-//                                 {/* <td>{item.serial_no}</td>
-//                                 <td>{item.accessory}</td> */}
-                              
-
-//                                 <td>
-//                                     {item.entry_date
-//                                         ? new Date(item.entry_date).toLocaleDateString("en-GB")
-//                                         : "-"}
-//                                 </td>
-
-//                                 <td>{item.status}</td>
-//                                 <td>
-                                   
-//                                     <button
-//     className="btn btn-outline-primary btn-sm"
-//     onClick={() =>
-//       nav(`/rma-details_r/${item.rma_no}`, {
-//     state: {
-//         from: "/home/home_l"
-//     }
-// })
-//     }
-//   >
-//     View
-//   </button>
-//                                 </td>
-//                                 {role === "admin" && (
-//                                     <>                             <td>
-//                                         <Link to={`/update-rma_in/${item.rma_no}`}>
-//                                             <button className="edit-btn">
-//                                                 Edit
-//                                             </button>
-//                                         </Link>
-
-//                                         <button
-//                                             className="delete-btn"
-//                                             onClick={() =>
-//                                                 deleteRMA(item.rma_no)
-//                                             }
-//                                         >
-//                                             Delete
-//                                         </button>
+                    {currentData.map((item, index) => {
+                        //                         return (
+                        //                             <tr key={item.id}>
+                        //                                 <td style={{
+                        //                                     backgroundColor:
+                        //                                         item.status?.trim().toLowerCase() === "completed"
+                        //                                             ? "#99970f"
+                        //                                             : "white"
+                        //                                 }}>
+                        //                                     {item.rma_no}</td>
+                        //                                 <td>{item.customer_name}</td>
+                        //                                 <td>{item.company_name}</td>
+                        //                                 <td>{item.product_name}</td>
+                        //                                 <td>{item.model_number}</td>
+                        //                                 <td>{item.total_serials}</td>
+                        //                                 {/* <td>{item.serial_no}</td>
+                        //                                 <td>{item.accessory}</td> */}
 
 
+                        //                                 <td>
+                        //                                     {item.entry_date
+                        //                                         ? new Date(item.entry_date).toLocaleDateString("en-GB")
+                        //                                         : "-"}
+                        //                                 </td>
 
+                        //                                 <td>{item.status}</td>
+                        //                                 <td>
 
-//                                     </td>
-//                                     </>
-//                                 )}                             {/* <td>
-//                                     <Link to={`/status-history_lsr/${item.id}`}>
-//                                         <button className="btn btn-view">
-//                                             View History
-//                                         </button>
-//                                     </Link>
+                        //                                     <button
+                        //     className="btn btn-outline-primary btn-sm"
+                        //     onClick={() =>
+                        //       nav(`/rma-details_r/${item.rma_no}`, {
+                        //     state: {
+                        //         from: "/home/home_l"
+                        //     }
+                        // })
+                        //     }
+                        //   >
+                        //     View
+                        //   </button>
+                        //                                 </td>
+                        //                                 {role === "admin" && (
+                        //                                     <>                             <td>
+                        //                                         <Link to={`/update-rma_in/${item.rma_no}`}>
+                        //                                             <button className="edit-btn">
+                        //                                                 Edit
+                        //                                             </button>
+                        //                                         </Link>
+
+                        //                                         <button
+                        //                                             className="delete-btn"
+                        //                                             onClick={() =>
+                        //                                                 deleteRMA(item.rma_no)
+                        //                                             }
+                        //                                         >
+                        //                                             Delete
+                        //                                         </button>
 
 
 
-//                                 </td> */}
-//                                 {/* <td>
-//                                     <Link to={`/search-model/${item.model_number}`}>
-//                                         <button className="edit-btn">
-//                                             search
-//                                         </button>
-//                                     </Link>
-//                                 </td> */}
-//                                 <td>
-//                                     <button
-//                                         className="btn-view"
-//                                         onClick={() => generatePDF(item)}
-//                                     >
-//                                         PDF
-//                                     </button>
-//                                 </td>
-//                                 <td>
-//                                     <button
-//                                         className="share-btn"
-//                                         onClick={() => shareWhatsApp(item)}
-//                                     >
-//                                         WhatsApp
-//                                     </button>
-//                                 </td>
-//                             </tr>
+
+                        //                                     </td>
+                        //                                     </>
+                        //                                 )}                             {/* <td>
+                        //                                     <Link to={`/status-history_lsr/${item.id}`}>
+                        //                                         <button className="btn btn-view">
+                        //                                             View History
+                        //                                         </button>
+                        //                                     </Link>
 
 
 
-//                         );
-return (
-    <React.Fragment key={item.id}>
+                        //                                 </td> */}
+                        //                                 {/* <td>
+                        //                                     <Link to={`/search-model/${item.model_number}`}>
+                        //                                         <button className="edit-btn">
+                        //                                             search
+                        //                                         </button>
+                        //                                     </Link>
+                        //                                 </td> */}
+                        //                                 <td>
+                        //                                     <button
+                        //                                         className="btn-view"
+                        //                                         onClick={() => generatePDF(item)}
+                        //                                     >
+                        //                                         PDF
+                        //                                     </button>
+                        //                                 </td>
+                        //                                 <td>
+                        //                                     <button
+                        //                                         className="share-btn"
+                        //                                         onClick={() => shareWhatsApp(item)}
+                        //                                     >
+                        //                                         WhatsApp
+                        //                                     </button>
+                        //                                 </td>
+                        //                             </tr>
 
-        <tr>
 
-            <td
-                style={{
-                    backgroundColor:
-                        item.status?.trim().toLowerCase() === "completed"
-                            ? "#99970f"
-                            : "white"
-                }}
-            >
-                {item.rma_no}
-            </td>
 
-            <td>{item.customer_name}</td>
+                        //                         );
+                        return (
+                            <React.Fragment key={item.id}>
 
-            <td>{item.company_name}</td>
+                                <tr>
 
-            <td>{item.product_name}</td>
+                                    <td
+                                        style={{
+                                            backgroundColor:
+                                                item.status?.trim().toLowerCase() === "completed"
+                                                    ? "#99970f"
+                                                    : "white"
+                                        }}
+                                    >
+                                        {item.rma_no}
+                                    </td>
 
-            <td>{item.model_number}</td>
+                                    <td>{item.customer_name}</td>
 
-            <td>{item.total_serials}</td>
+                                    <td>{item.company_name}</td>
 
-            <td>
-                {item.entry_date
-                    ? new Date(item.entry_date).toLocaleDateString("en-GB")
-                    : "-"}
-            </td>
+                                    <td>{item.product_name}</td>
 
-            <td>{item.status}</td>
+                                    <td>{item.model_number}</td>
 
-            {/* SUMMARY */}
-            <td>
+                                    <td>{item.total_serials}</td>
 
-                <button
-                    className="btn btn-outline-primary btn-sm"
-                    onClick={() =>
-                        setSelectedRmaNo(
-                            selectedRmaNo === item.rma_no
-                                ? null
-                                : item.rma_no
-                        )
-                    }
-                >
-                    {selectedRmaNo === item.rma_no
-                        ? "Hide"
-                        : "View"}
-                </button>
+                                    <td>
+                                        {item.entry_date
+                                            ? new Date(item.entry_date).toLocaleDateString("en-GB")
+                                            : "-"}
+                                    </td>
 
-            </td>
+                                    <td>{item.status}</td>
 
-            {/* ADMIN ACTION */}
-            {role === "admin" && (
-                <td>
+                                    {/* SUMMARY */}
+                                    <td>
 
-                    <Link to={`/update-rma_in/${item.rma_no}`}>
-                        <button className="edit-btn">
-                            Edit
-                        </button>
-                    </Link>
+                                        <button
+                                            className="btn btn-outline-primary btn-sm"
+                                            onClick={() =>
+                                                setSelectedRmaNo(
+                                                    selectedRmaNo === item.rma_no
+                                                        ? null
+                                                        : item.rma_no
+                                                )
+                                            }
+                                        >
+                                            {selectedRmaNo === item.rma_no
+                                                ? "Hide"
+                                                : "View"}
+                                        </button>
 
-                    <button
-                        className="delete-btn"
-                        onClick={() =>
-                            deleteRMA(item.rma_no)
-                        }
-                    >
-                        Delete
-                    </button>
+                                    </td>
 
-                </td>
-            )}
+                                    {/* ADMIN ACTION */}
+                                    {role === "admin" && (
+                                        <td>
 
-            {/* PDF */}
-            <td>
+                                            <Link to={`/update-rma_in/${item.rma_no}`}>
+                                                <button className="edit-btn">
+                                                    Edit
+                                                </button>
+                                            </Link>
 
-                <button
-                    className="btn-view"
-                    onClick={() => generatePDF(item)}
-                >
-                    PDF
-                </button>
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() =>
+                                                    deleteRMA(item.rma_no)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
 
-            </td>
+                                        </td>
+                                    )}
 
-            {/* WHATSAPP */}
-            <td>
+                                    {/* PDF */}
+                                    <td>
+
+                                        <button
+                                            className="btn-view"
+                                            onClick={() => generatePDF(item)}
+                                        >
+                                            PDF
+                                        </button>
+
+                                    </td>
+
+                                    {/* WHATSAPP */}
+                                    {/* <td>
 
                 <button
                     className="share-btn"
@@ -663,36 +682,89 @@ return (
                     WhatsApp
                 </button>
 
-            </td>
+            </td> */}
 
-        </tr>
+                                </tr>
 
-        {/* RMA DETAILS */}
-        {selectedRmaNo === item.rma_no && (
-            <tr>
+                                {/* RMA DETAILS */}
+                                {selectedRmaNo === item.rma_no && (
+                                    <tr>
 
-                <td
-                    colSpan={role === "admin" ? 12 : 11}
-                    style={{
-                        backgroundColor: "#f8f9fa",
-                        padding: "15px"
-                    }}
-                >
+                                        <td
+                                            colSpan={role === "admin" ? 12 : 11}
+                                            style={{
+                                                backgroundColor: "#f8f9fa",
+                                                padding: "15px"
+                                            }}
+                                        >
 
-                    <RMADetails
-                        rma_no={item.rma_no}
-                    />
+                                            <RMADetails
+                                                rma_no={item.rma_no}
+                                            />
 
-                </td>
+                                        </td>
 
-            </tr>
-        )}
+                                    </tr>
+                                )}
 
-    </React.Fragment>
-);
+                            </React.Fragment>
+                        );
                     })}
                 </tbody>
             </table>
+            <div
+                className="d-flex justify-content-between align-items-center mt-3"
+            >
+                <div>
+                    Showing{" "}
+                    {filteredData.length === 0
+                        ? 0
+                        : startIndex + 1}
+                    {" - "}
+                    {Math.min(
+                        startIndex + itemsPerPage,
+                        filteredData.length
+                    )}{" "}
+                    of {filteredData.length}
+                </div>
+
+                <div className="d-flex gap-2">
+
+                    <button
+                        className="btn btn-secondary btn-sm"
+                        disabled={currentPage === 1}
+                        onClick={() =>
+                            setCurrentPage(currentPage - 1)
+                        }
+                    >
+                        Previous
+                    </button>
+
+                    <span
+                        className="px-2"
+                        style={{
+                            display: "flex",
+                            alignItems: "center"
+                        }}
+                    >
+                        Page {currentPage} of {totalPages || 1}
+                    </span>
+
+                    <button
+                        className="btn btn-secondary btn-sm"
+                        disabled={
+                            currentPage === totalPages ||
+                            totalPages === 0
+                        }
+                        onClick={() =>
+                            setCurrentPage(currentPage + 1)
+                        }
+                    >
+                        Next
+                    </button>
+
+                </div>
+            </div>
         </div >
     );
 
