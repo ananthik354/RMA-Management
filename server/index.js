@@ -2723,46 +2723,10 @@ app.get("/get-services_r", (req, res) => {
 
 });
 
-app.get("/rma-details_r/:rma_no", (req, res) => {
+// app.get("/rma-details_r/:rma_no", (req, res) => {
 
-    const { rma_no } = req.params;
-    const sql=`SELECT
-    r.id,
-    r.rma_no,
-    c.customer_name,
-    r.product_name,
-    r.model_number,
-    r.quantity_no,
-    r.customer_dc_no,
-    r.entry_date,
-
-    i.id AS item_id,
-    i.serial_no,
-    i.accessory,
-    i.issues,
-    i.status,
-
-    CASE
-        WHEN o.id IS NOT NULL THEN true
-        ELSE false
-    END AS sent_to_outward
-
-FROM rma_entry1 r
-
-LEFT JOIN customer_details c
-    ON r.customer_id = c.id
-
-LEFT JOIN rma_items i
-    ON r.id = i.rma_id
-
-LEFT JOIN rma_items1 o
-    ON i.serial_no = o.serial_no
-
-WHERE r.rma_no = $1
-
-ORDER BY r.id;`
-//     const sql = `
-//    SELECT
+//     const { rma_no } = req.params;
+//     const sql=`SELECT
 //     r.id,
 //     r.rma_no,
 //     c.customer_name,
@@ -2776,7 +2740,12 @@ ORDER BY r.id;`
 //     i.serial_no,
 //     i.accessory,
 //     i.issues,
-//     i.status
+//     i.status,
+
+//     CASE
+//         WHEN o.id IS NOT NULL THEN true
+//         ELSE false
+//     END AS sent_to_outward
 
 // FROM rma_entry1 r
 
@@ -2786,19 +2755,139 @@ ORDER BY r.id;`
 // LEFT JOIN rma_items i
 //     ON r.id = i.rma_id
 
+// LEFT JOIN rma_items1 o
+//     ON i.serial_no = o.serial_no
+
 // WHERE r.rma_no = $1
 
-// ORDER BY r.id`;
+// ORDER BY r.id;`
+
+
+//     db.query(sql, [rma_no], (err, result) => {
+
+//         if (err) {
+//             return res.status(500).json(err);
+//         }
+
+//         res.json(result.rows);
+
+//     });
+
+// });
+
+app.get("/rma-details_r/:rma_no", (req, res) => {
+
+    const { rma_no } = req.params;
+
+    const sql = `
+        SELECT
+            r.id,
+            r.rma_no,
+            c.customer_name,
+            r.product_name,
+            r.model_number,
+            r.quantity_no,
+            r.customer_dc_no,
+            r.entry_date,
+
+            i.id AS item_id,
+            i.serial_no,
+            i.accessory,
+            i.issues,
+            i.status,
+            i.notes,
+
+            CASE
+                WHEN o.id IS NOT NULL THEN true
+                ELSE false
+            END AS sent_to_outward
+
+        FROM rma_entry1 r
+
+        LEFT JOIN customer_details c
+            ON r.customer_id = c.id
+
+        LEFT JOIN rma_items i
+            ON r.id = i.rma_id
+
+        LEFT JOIN rma_items1 o
+            ON i.serial_no = o.serial_no
+
+        WHERE r.rma_no = $1
+
+        ORDER BY r.id;
+    `;
 
     db.query(sql, [rma_no], (err, result) => {
 
         if (err) {
+
+            console.error(
+                "Error fetching RMA details:",
+                err
+            );
+
             return res.status(500).json(err);
         }
 
         res.json(result.rows);
 
     });
+
+});
+
+app.put("/update-rma-item-notes/:item_id", (req, res) => {
+
+    const { item_id } = req.params;
+    const { notes } = req.body;
+
+    const cleanedNotes =
+        notes && notes.trim() !== ""
+            ? notes.trim()
+            : null;
+
+    const sql = `
+        UPDATE rma_items
+        SET notes = $1
+        WHERE id = $2
+        RETURNING id, notes;
+    `;
+
+    db.query(
+        sql,
+        [cleanedNotes, item_id],
+        (err, result) => {
+
+            if (err) {
+
+                console.error(
+                    "Error updating RMA item notes:",
+                    err
+                );
+
+                return res.status(500).json({
+                    success: false,
+                    message: "Failed to update notes",
+                    error: err
+                });
+            }
+
+            if (result.rows.length === 0) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: "RMA item not found"
+                });
+            }
+
+            res.json({
+                success: true,
+                message: "Notes updated successfully",
+                data: result.rows[0]
+            });
+
+        }
+    );
 
 });
 

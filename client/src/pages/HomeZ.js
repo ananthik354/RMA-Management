@@ -451,7 +451,7 @@ const HomeZ = () => {
 
                         <th>status</th>
                         <th>Entry Date</th>
-                        <th>view</th>
+                        <th>Summary</th>
                         {role === "admin" && (
                             <>
                                 <th>Action</th>
