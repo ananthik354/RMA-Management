@@ -12,8 +12,6 @@ const HomeL = () => {
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
     const [selectedRmaNo, setSelectedRmaNo] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 20;
     const filteredData = data.filter((item) => {
         const value = search.toLowerCase();
 
@@ -25,18 +23,7 @@ const HomeL = () => {
         );
     });
 
-    const totalPages = Math.ceil(
-        filteredData.length / itemsPerPage
-    );
 
-    const startIndex =
-        (currentPage - 1) * itemsPerPage;
-
-    const currentData =
-        filteredData.slice(
-            startIndex,
-            startIndex + itemsPerPage
-        );
     // MUST BE []
     const role = localStorage.getItem("role")
     useEffect(() => {
@@ -437,7 +424,6 @@ const HomeL = () => {
                         value={search}
                         onChange={(e) => {
                             setSearch(e.target.value);
-                            setCurrentPage(1);
                         }}
                         style={{
                             width: "300px",
@@ -483,7 +469,7 @@ const HomeL = () => {
                 </thead>
 
                 <tbody>
-                    {currentData.map((item, index) => {
+                    {filteredData.map((item, index) => {
                         //                         return (
                         //                             <tr key={item.id}>
                         //                                 <td style={{
@@ -600,7 +586,15 @@ const HomeL = () => {
                                         {item.rma_no}
                                     </td>
 
-                                    <td>{item.customer_name}</td>
+                                    <td
+                                        style={{
+                                            backgroundColor: item.has_notes
+                                                ? "#f8d7da"
+                                                : "transparent"
+                                        }}
+                                    >
+                                        {item.customer_name}
+                                    </td>
 
                                     <td>{item.company_name}</td>
 
@@ -712,59 +706,7 @@ const HomeL = () => {
                     })}
                 </tbody>
             </table>
-            <div
-                className="d-flex justify-content-between align-items-center mt-3"
-            >
-                <div>
-                    Showing{" "}
-                    {filteredData.length === 0
-                        ? 0
-                        : startIndex + 1}
-                    {" - "}
-                    {Math.min(
-                        startIndex + itemsPerPage,
-                        filteredData.length
-                    )}{" "}
-                    of {filteredData.length}
-                </div>
-
-                <div className="d-flex gap-2">
-
-                    <button
-                        className="btn btn-secondary btn-sm"
-                        disabled={currentPage === 1}
-                        onClick={() =>
-                            setCurrentPage(currentPage - 1)
-                        }
-                    >
-                        Previous
-                    </button>
-
-                    <span
-                        className="px-2"
-                        style={{
-                            display: "flex",
-                            alignItems: "center"
-                        }}
-                    >
-                        Page {currentPage} of {totalPages || 1}
-                    </span>
-
-                    <button
-                        className="btn btn-secondary btn-sm"
-                        disabled={
-                            currentPage === totalPages ||
-                            totalPages === 0
-                        }
-                        onClick={() =>
-                            setCurrentPage(currentPage + 1)
-                        }
-                    >
-                        Next
-                    </button>
-
-                </div>
-            </div>
+            
         </div >
     );
 

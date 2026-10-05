@@ -720,32 +720,32 @@ app.put("/api/update_ser/:id", (req, res) => {
 
 // RMA Entry
 
-app.get("/api/get_P", (req, res) => {
-    const sql = 
-    `SELECT
-    MIN(r.id) AS id,
-    r.rma_no,
-    MAX(c.customer_name) AS customer_name,
-    MAX(c.company_name) AS company_name,
-    MIN(r.product_name) AS product_name,
-    MIN(r.model_number) AS model_number,
-    COUNT(i.id) AS total_serials,
-    CASE
-        WHEN COUNT(i.id) > 0
-         AND COUNT(i.id) = COUNT(*) FILTER (
-             WHERE LOWER(TRIM(i.status)) = 'completed'
-         )
-        THEN 'Completed'
-        ELSE 'Pending'
-    END AS status,
-    MIN(r.entry_date) AS entry_date
-FROM rma_entry1 r
-JOIN customer_details c
-    ON r.customer_id = c.id
-LEFT JOIN rma_items i
-    ON r.id = i.rma_id
-GROUP BY r.rma_no
-ORDER BY r.rma_no DESC`;
+// app.get("/api/get_P", (req, res) => {
+//     const sql = 
+//     `SELECT
+//     MIN(r.id) AS id,
+//     r.rma_no,
+//     MAX(c.customer_name) AS customer_name,
+//     MAX(c.company_name) AS company_name,
+//     MIN(r.product_name) AS product_name,
+//     MIN(r.model_number) AS model_number,
+//     COUNT(i.id) AS total_serials,
+//     CASE
+//         WHEN COUNT(i.id) > 0
+//          AND COUNT(i.id) = COUNT(*) FILTER (
+//              WHERE LOWER(TRIM(i.status)) = 'completed'
+//          )
+//         THEN 'Completed'
+//         ELSE 'Pending'
+//     END AS status,
+//     MIN(r.entry_date) AS entry_date
+// FROM rma_entry1 r
+// JOIN customer_details c
+//     ON r.customer_id = c.id
+// LEFT JOIN rma_items i
+//     ON r.id = i.rma_id
+// GROUP BY r.rma_no
+// ORDER BY r.rma_no DESC`;
 //     `SELECT
 //     MIN(r.id) AS id,
 //     r.rma_no,
@@ -762,15 +762,81 @@ ORDER BY r.rma_no DESC`;
 // GROUP BY r.rma_no
 // ORDER BY r.rma_no DESC`;
 
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             console.log(err);
+//             return res.status(500).json(err);
+//         }
+//         console.log(result.rows);
+//         res.json(result.rows);
+//     });
+// });
+
+app.get("/api/get_P", (req, res) => {
+
+    const sql = `
+        SELECT
+            MIN(r.id) AS id,
+            r.rma_no,
+            MAX(c.customer_name) AS customer_name,
+            MAX(c.company_name) AS company_name,
+            MIN(r.product_name) AS product_name,
+            MIN(r.model_number) AS model_number,
+            COUNT(i.id) AS total_serials,
+
+            CASE
+                WHEN COUNT(i.id) > 0
+                 AND COUNT(i.id) = COUNT(*) FILTER (
+                    WHERE LOWER(TRIM(i.status)) = 'completed'
+                 )
+                THEN 'Completed'
+                ELSE 'Pending'
+            END AS status,
+
+            MIN(r.entry_date) AS entry_date,
+
+            -- Check whether any RMA item has notes
+            CASE
+                WHEN COUNT(i.id) FILTER (
+                    WHERE i.notes IS NOT NULL
+                    AND TRIM(i.notes) <> ''
+                ) > 0
+                THEN true
+                ELSE false
+            END AS has_notes
+
+        FROM rma_entry1 r
+
+        JOIN customer_details c
+            ON r.customer_id = c.id
+
+        LEFT JOIN rma_items i
+            ON r.id = i.rma_id
+
+        GROUP BY r.rma_no
+
+        ORDER BY r.rma_no DESC
+    `;
+
     db.query(sql, (err, result) => {
+
         if (err) {
+
             console.log(err);
+
             return res.status(500).json(err);
+
         }
+
         console.log(result.rows);
+
         res.json(result.rows);
+
     });
+
 });
+
+
 
 // get single data
 app.get("/api/get_P/:id", (req, res) => {
