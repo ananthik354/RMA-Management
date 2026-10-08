@@ -245,30 +245,30 @@ function RMADetails({ rma_no }) {
                   {/* Product Name */}
 
                   <td
-                    style={{
-                      backgroundColor:
-                        item.outward_status
-                          ?.trim()
-                          .toLowerCase() === "completed"
-                          ? "#ADD8E6" // Blue - RMA Out completed
-                          : item.sent_to_outward
-                            ? "#FFD700" // Yellow - Sent to RMA Out, pending
-                            : item.status
-                              ?.trim()
-                              .toLowerCase() === "completed"
-                              ? "#99970f" // Green - RMA Entry completed
-                              : "white", // Pending and not sent
+  style={{
+    backgroundColor:
+      // 1. RMA Entry completed → GREEN
+      item.status?.trim().toLowerCase() === "completed"
+        ? "#99970f"
 
-                      color:
-                        item.outward_status
-                          ?.trim()
-                          .toLowerCase() === "completed"
-                          ? "black"
-                          : "black",
-                    }}
-                  >
-                    {item.product_name}
-                  </td>
+        // 2. Sent to RMA Out + RMA Out completed → BLUE
+        : item.sent_to_outward &&
+          item.outward_status?.trim().toLowerCase() === "completed"
+        ? "#ADD8E6"
+
+        // 3. Sent to RMA Out + RMA Out pending → YELLOW
+        : item.sent_to_outward &&
+          item.outward_status?.trim().toLowerCase() === "pending"
+        ? "#FFD700"
+
+        // 4. RMA Entry pending + not sent → WHITE
+        : "white",
+
+    color: "black",
+  }}
+>
+  {item.product_name}
+</td>
 
 
                   {/* -------------------------------- */}

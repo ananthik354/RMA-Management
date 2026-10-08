@@ -10,6 +10,7 @@ const HomeL = () => {
     const nav = useNavigate();
     const location = useLocation();
     const [search, setSearch] = useState("");
+    const [showAllDetails, setShowAllDetails] = useState(false);
     const [data, setData] = useState([]);
     const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     const filteredData = data.filter((item) => {
@@ -433,6 +434,14 @@ const HomeL = () => {
                         }}
                     />
                 </div>
+                <button
+    className="btn btn-primary"
+    onClick={() => setShowAllDetails((prev) => !prev)}
+>
+    {showAllDetails
+        ? "Hide All RMA Details"
+        : "Show All RMA Details"}
+</button>
 
                 <Link to="/home/add">
                     <button className="btn-phone">
@@ -470,106 +479,7 @@ const HomeL = () => {
 
                 <tbody>
                     {filteredData.map((item, index) => {
-                        //                         return (
-                        //                             <tr key={item.id}>
-                        //                                 <td style={{
-                        //                                     backgroundColor:
-                        //                                         item.status?.trim().toLowerCase() === "completed"
-                        //                                             ? "#99970f"
-                        //                                             : "white"
-                        //                                 }}>
-                        //                                     {item.rma_no}</td>
-                        //                                 <td>{item.customer_name}</td>
-                        //                                 <td>{item.company_name}</td>
-                        //                                 <td>{item.product_name}</td>
-                        //                                 <td>{item.model_number}</td>
-                        //                                 <td>{item.total_serials}</td>
-                        //                                 {/* <td>{item.serial_no}</td>
-                        //                                 <td>{item.accessory}</td> */}
-
-
-                        //                                 <td>
-                        //                                     {item.entry_date
-                        //                                         ? new Date(item.entry_date).toLocaleDateString("en-GB")
-                        //                                         : "-"}
-                        //                                 </td>
-
-                        //                                 <td>{item.status}</td>
-                        //                                 <td>
-
-                        //                                     <button
-                        //     className="btn btn-outline-primary btn-sm"
-                        //     onClick={() =>
-                        //       nav(`/rma-details_r/${item.rma_no}`, {
-                        //     state: {
-                        //         from: "/home/home_l"
-                        //     }
-                        // })
-                        //     }
-                        //   >
-                        //     View
-                        //   </button>
-                        //                                 </td>
-                        //                                 {role === "admin" && (
-                        //                                     <>                             <td>
-                        //                                         <Link to={`/update-rma_in/${item.rma_no}`}>
-                        //                                             <button className="edit-btn">
-                        //                                                 Edit
-                        //                                             </button>
-                        //                                         </Link>
-
-                        //                                         <button
-                        //                                             className="delete-btn"
-                        //                                             onClick={() =>
-                        //                                                 deleteRMA(item.rma_no)
-                        //                                             }
-                        //                                         >
-                        //                                             Delete
-                        //                                         </button>
-
-
-
-
-                        //                                     </td>
-                        //                                     </>
-                        //                                 )}                             {/* <td>
-                        //                                     <Link to={`/status-history_lsr/${item.id}`}>
-                        //                                         <button className="btn btn-view">
-                        //                                             View History
-                        //                                         </button>
-                        //                                     </Link>
-
-
-
-                        //                                 </td> */}
-                        //                                 {/* <td>
-                        //                                     <Link to={`/search-model/${item.model_number}`}>
-                        //                                         <button className="edit-btn">
-                        //                                             search
-                        //                                         </button>
-                        //                                     </Link>
-                        //                                 </td> */}
-                        //                                 <td>
-                        //                                     <button
-                        //                                         className="btn-view"
-                        //                                         onClick={() => generatePDF(item)}
-                        //                                     >
-                        //                                         PDF
-                        //                                     </button>
-                        //                                 </td>
-                        //                                 <td>
-                        //                                     <button
-                        //                                         className="share-btn"
-                        //                                         onClick={() => shareWhatsApp(item)}
-                        //                                     >
-                        //                                         WhatsApp
-                        //                                     </button>
-                        //                                 </td>
-                        //                             </tr>
-
-
-
-                        //                         );
+                       
                         return (
                             <React.Fragment key={item.id}>
 
@@ -681,7 +591,7 @@ const HomeL = () => {
                                 </tr>
 
                                 {/* RMA DETAILS */}
-                                {selectedRmaNo === item.rma_no && (
+                                {(showAllDetails || selectedRmaNo === item.rma_no) && (
                                     <tr>
 
                                         <td
