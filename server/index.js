@@ -3310,41 +3310,68 @@ cron.schedule("* * * * *", () => {
 app.get("/search-serial/:serialNo", (req, res) => {
 
     const { serialNo } = req.params;
+
+    // First check whether this serial is already in RMA OUT
+    // and is still pending/not completed.
     const checkSql = `
         SELECT serial_no
         FROM rma_items1
         WHERE serial_no = $1
         AND status <> 'Completed'
+        LIMIT 1
     `;
 
-    db.query(checkSql, [serialNo], (err, result) => {
+    db.query(checkSql, [serialNo], (err, checkResult) => {
 
-        if (err) return res.status(500).json(err);
+        if (err) {
+            console.log("CHECK SERIAL ERROR:", err);
+            return res.status(500).json(err);
+        }
 
-        if (result.rows.length > 0) {
+        if (checkResult.rows.length > 0) {
             return res.json({
                 exists: true,
                 message: "Serial Number Already Exists"
             });
         }
-        const sql = `
-SELECT
-    e.product_name,
-    e.model_number,
-    e.customer_dc_no,
-    i.serial_no,
-    i.accessory,
-    i.issues,
-    i.status
-FROM rma_entry1 e
-JOIN rma_items i
-    ON e.id = i.rma_id
-WHERE i.serial_no = $1
-`;
 
-        db.query(sql, [serialNo], (err, result) => {
+        // Get all RMA ENTRY records for this serial number.
+        // Latest entry will come first.
+        const sql = `
+            SELECT
+                e.id AS rma_entry_id,
+                e.rma_no,
+                e.customer_dc_no,
+                e.product_name,
+                e.model_number,
+
+                i.id AS rma_item_id,
+                i.serial_no,
+                i.accessory,
+                i.issues,
+                i.status,
+
+                c.customer_name,
+
+                e.entry_date
+
+            FROM rma_entry1 e
+
+            JOIN rma_items i
+                ON e.id = i.rma_id
+
+            LEFT JOIN customer_details c
+                ON e.customer_id = c.id
+
+            WHERE i.serial_no ILIKE $1
+
+            ORDER BY e.entry_date DESC, e.id DESC
+        `;
+
+        db.query(sql, [`%${serialNo}%`], (err, result) => {
 
             if (err) {
+                console.log("SEARCH SERIAL ERROR:", err);
                 return res.status(500).json(err);
             }
 
@@ -3355,19 +3382,9 @@ WHERE i.serial_no = $1
                 });
             }
 
-            // if (
-            //     result.rows[0].status &&
-            //     result.rows[0].status.toLowerCase() !== "pending"
-            // ) {
-            //     return res.json({
-            //         success: false,
-            //         message: `Serial Number status is ${result.rows[0].status}`
-            //     });
-            // }
-
             res.json({
                 success: true,
-                data: result.rows[0]
+                data: result.rows
             });
         });
 
