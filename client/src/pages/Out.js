@@ -8,7 +8,8 @@ import Select from "react-select";
 const Out = () => {
     const today = new Date().toISOString().split("T")[0];
     const [serialNo, setSerialNo] = useState("");
-
+const [searchResults, setSearchResults] = useState([]);
+const [showSearchResults, setShowSearchResults] = useState(false);
 const [items, setItems] = useState([]);
     const [servicesId, setServicesId] = useState("");
     //   const [customerDcNo, setCustomerDcNo] = useState("");
@@ -127,47 +128,85 @@ const removeItem = (index) => {
 
  const searchSerial = async () => {
 
+    if (!serialNo.trim()) {
+        alert("Enter Serial Number");
+        return;
+    }
+
     try {
 
         const res = await axios.get(
-            `https://rma-management.onrender.com/search-serial/${serialNo}`
+            `https://rma-management.onrender.com/search-serial/${encodeURIComponent(serialNo.trim())}`
         );
-        if (!res.data.success) {
-    alert(res.data.message);
-    return;
-}
 
-        // if (res.data.length === 0) {
-        //     alert("Serial Not Found");
-        //     return;
-        // }
+        console.log("SEARCH RESPONSE:", res.data);
+
+        if (!res.data.success) {
+            alert(res.data.message);
+            setSearchResults([]);
+            setShowSearchResults(false);
+            return;
+        }
+
+        // Serial already exists in RMA OUT
         if (res.data.exists) {
 
             alert(res.data.message);
 
+            setSearchResults([]);
+            setShowSearchResults(false);
+
             setFormData({
-                ...formData,
-                serial_no: ""
+                product_name: "",
+                model_number: "",
+                serial_no: "",
+                accessory: "",
+                issues: ""
             });
 
             return;
         }
-console.log("API RESPONSE:", res.data);
-        const row = res.data.data;
 
-        setFormData({
-            product_name: row.product_name,
-            model_number: row.model_number,
-        
-            serial_no: row.serial_no,
-            accessory: row.accessory,
-            issues: row.issues
-        });
+        // Multiple RMA Entry records
+        setSearchResults(res.data.data);
+
+        // Show dropdown
+        setShowSearchResults(true);
 
     } catch (err) {
-        console.log(err);
-    }
 
+        console.log("SEARCH ERROR:", err);
+
+        alert(
+            err.response?.data?.message ||
+            "Serial Search Failed"
+        );
+    }
+};
+const selectSearchResult = (row) => {
+
+    console.log("SELECTED RMA ENTRY:", row);
+
+    setFormData({
+        product_name: row.product_name || "",
+        model_number: row.model_number || "",
+
+        // IMPORTANT:
+        // Only the serial number will finally be saved
+        serial_no: row.serial_no,
+
+        accessory: row.accessory || "",
+        issues: row.issues || ""
+    });
+
+    // Put selected serial in search box
+    setSerialNo(row.serial_no);
+
+    // Hide dropdown
+    setShowSearchResults(false);
+
+    // Clear results
+    setSearchResults([]);
 };
 
         // Prepare for save
@@ -347,18 +386,64 @@ console.log("USER ID FROM STORAGE:", userId);
 </div></div>
     
 <div className="search-row">
-    {/* SERIAL SEARCH */}
-    <input
-        className="out-input"
-        placeholder="Serial No"
-        value={serialNo}
-        onChange={(e) => setSerialNo(e.target.value)}
-    />
 
-    <button className="search-btn" onClick={searchSerial}>Search</button>
-    <button className="add-btn" onClick={addSerial}>Add</button>
+    <div className="serial-search-wrapper">
+
+        <input
+            className="out-input"
+            placeholder="Serial No"
+            value={serialNo}
+            onChange={(e) => {
+                setSerialNo(e.target.value);
+                setShowSearchResults(false);
+            }}
+        />
+
+        <button
+            className="search-btn"
+            onClick={searchSerial}
+        >
+            Search
+        </button>
+
+        {showSearchResults && searchResults.length > 0 && (
+
+            <div className="serial-dropdown">
+
+                {searchResults.map((row) => (
+
+                    <div
+                        key={row.rma_item_id}
+                        className="serial-dropdown-item"
+                        onClick={() => selectSearchResult(row)}
+                    >
+
+                        <div className="serial-main">
+                            {row.customer_name} - {row.serial_no}
+                        </div>
+
+                        <div className="serial-date">
+                            {new Date(row.entry_date).toLocaleDateString("en-GB")}
+                        </div>
+
+                    </div>
+
+                ))}
+
+            </div>
+
+        )}
 
     </div>
+
+    <button
+        className="add-btn"
+        onClick={addSerial}
+    >
+        Add
+    </button>
+
+</div>
 <div className="form-row">
 
         <div className="field">

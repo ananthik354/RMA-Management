@@ -3311,8 +3311,9 @@ app.get("/search-serial/:serialNo", (req, res) => {
 
     const { serialNo } = req.params;
 
-    // First check whether this serial is already in RMA OUT
-    // and is still pending/not completed.
+    console.log("SEARCH SERIAL:", serialNo);
+
+    // Check whether this serial is currently already in RMA OUT
     const checkSql = `
         SELECT serial_no
         FROM rma_items1
@@ -3328,22 +3329,27 @@ app.get("/search-serial/:serialNo", (req, res) => {
             return res.status(500).json(err);
         }
 
+        // Already sent to RMA OUT and not completed
         if (checkResult.rows.length > 0) {
             return res.json({
+                success: true,
                 exists: true,
-                message: "Serial Number Already Exists"
+                message: "Serial Number Already Exists in RMA OUT"
             });
         }
 
-        // Get all RMA ENTRY records for this serial number.
-        // Latest entry will come first.
+        /*
+         * Get ALL RMA ENTRY records for this serial.
+         *
+         * Latest RMA entry comes first.
+         */
         const sql = `
             SELECT
                 e.id AS rma_entry_id,
                 e.rma_no,
-                e.customer_dc_no,
-                e.product_name,
-                e.model_number,
+                e.entry_date,
+
+                c.customer_name,
 
                 i.id AS rma_item_id,
                 i.serial_no,
@@ -3351,13 +3357,12 @@ app.get("/search-serial/:serialNo", (req, res) => {
                 i.issues,
                 i.status,
 
-                c.customer_name,
-
-                e.entry_date
+                e.product_name,
+                e.model_number
 
             FROM rma_entry1 e
 
-            JOIN rma_items i
+            INNER JOIN rma_items i
                 ON e.id = i.rma_id
 
             LEFT JOIN customer_details c
@@ -3365,7 +3370,9 @@ app.get("/search-serial/:serialNo", (req, res) => {
 
             WHERE i.serial_no ILIKE $1
 
-            ORDER BY e.entry_date DESC, e.id DESC
+            ORDER BY
+                e.entry_date DESC,
+                e.id DESC
         `;
 
         db.query(sql, [`%${serialNo}%`], (err, result) => {
@@ -3382,12 +3389,12 @@ app.get("/search-serial/:serialNo", (req, res) => {
                 });
             }
 
-            res.json({
+            return res.json({
                 success: true,
+                exists: false,
                 data: result.rows
             });
         });
-
     });
 });
 
