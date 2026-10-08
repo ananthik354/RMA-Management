@@ -149,23 +149,23 @@ const removeItem = (index) => {
         }
 
         // Serial already exists in RMA OUT
-        if (res.data.exists) {
+        // if (res.data.exists) {
 
-            alert(res.data.message);
+        //     alert(res.data.message);
 
-            setSearchResults([]);
-            setShowSearchResults(false);
+        //     setSearchResults([]);
+        //     setShowSearchResults(false);
 
-            setFormData({
-                product_name: "",
-                model_number: "",
-                serial_no: "",
-                accessory: "",
-                issues: ""
-            });
+        //     setFormData({
+        //         product_name: "",
+        //         model_number: "",
+        //         serial_no: "",
+        //         accessory: "",
+        //         issues: ""
+        //     });
 
-            return;
-        }
+        //     return;
+        // }
 
         // Multiple RMA Entry records
         setSearchResults(res.data.data);
@@ -185,28 +185,23 @@ const removeItem = (index) => {
 };
 const selectSearchResult = (row) => {
 
-    console.log("SELECTED RMA ENTRY:", row);
-
     setFormData({
+        ...formData,
+
+        serial_no: row.serial_no,
         product_name: row.product_name || "",
         model_number: row.model_number || "",
-
-        // IMPORTANT:
-        // Only the serial number will finally be saved
-        serial_no: row.serial_no,
-
         accessory: row.accessory || "",
-        issues: row.issues || ""
+        issues: row.issues || "",
+
+        // IMPORTANT
+        rma_item_id: row.rma_item_id
     });
 
-    // Put selected serial in search box
     setSerialNo(row.serial_no);
 
-    // Hide dropdown
-    setShowSearchResults(false);
-
-    // Clear results
     setSearchResults([]);
+    setShowSearchResults(false);
 };
 
         // Prepare for save
@@ -215,6 +210,11 @@ const selectSearchResult = (row) => {
         alert("Search Serial First");
         return;
     }
+    if (!formData.rma_item_id) {
+        alert("Please select the RMA entry from the search results");
+        return;
+    }
+
     const alreadyExists = items.some(
         item => item.serial_no === formData.serial_no
     );
@@ -224,27 +224,29 @@ const selectSearchResult = (row) => {
         return;
     }
 
-    setItems(prev => [
-        ...prev,
-        {
-            serial_no: formData.serial_no,
-            product_name: formData.product_name,
-            model_number: formData.model_number,
-            accessory: formData.accessory,
-            issues: formData.issues
-        
-        }
-    ]);
-       // Clear previous searched data
+    
+    const newItem = {
+        serial_no: formData.serial_no,
+        product_name: formData.product_name,
+        model_number: formData.model_number,
+        accessory: formData.accessory,
+        issues: formData.issues,
+
+        // IMPORTANT
+        rma_item_id: formData.rma_item_id
+    };
+
+    setItems(prev => [...prev, newItem]);
+
     setFormData({
+        serial_no: "",
         product_name: "",
         model_number: "",
-        customer_dc_no: "",
-        serial_no: "",
         accessory: "",
-        issues: ""
+        issues: "",
+        rma_item_id: null
     });
-    // optional: clear after adding
+
     setSerialNo("");
 };
 

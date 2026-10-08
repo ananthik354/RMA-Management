@@ -40,7 +40,7 @@ function RMADetails({ rma_no }) {
 
   }, [rma_no]);
 
-
+  
   // --------------------------------
   // Open Notes Popup
   // --------------------------------
@@ -247,25 +247,27 @@ function RMADetails({ rma_no }) {
                   <td
                     style={{
                       backgroundColor:
-                        item.status
+                        item.outward_status
                           ?.trim()
                           .toLowerCase() === "completed"
-                          ? "#99970f"
+                          ? "#ADD8E6" // Blue - RMA Out completed
                           : item.sent_to_outward
-                          ? "#ffd700"
-                          : "white",
+                            ? "#FFD700" // Yellow - Sent to RMA Out, pending
+                            : item.status
+                              ?.trim()
+                              .toLowerCase() === "completed"
+                              ? "#99970f" // Green - RMA Entry completed
+                              : "white", // Pending and not sent
 
                       color:
-                        item.status
+                        item.outward_status
                           ?.trim()
                           .toLowerCase() === "completed"
-                          ? "white"
+                          ? "black"
                           : "black",
                     }}
                   >
-
                     {item.product_name}
-
                   </td>
 
 
@@ -298,7 +300,7 @@ function RMADetails({ rma_no }) {
                   <td>
 
                     {index === 0 ||
-                    data[index - 1].id !== item.id
+                      data[index - 1].id !== item.id
                       ? item.quantity_no
                       : ""}
 
