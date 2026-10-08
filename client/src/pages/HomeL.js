@@ -435,13 +435,13 @@ const HomeL = () => {
                     />
                 </div>
                 <button
-    className="btn btn-primary"
-    onClick={() => setShowAllDetails((prev) => !prev)}
->
-    {showAllDetails
-        ? "Hide All RMA Details"
-        : "Show All RMA Details"}
-</button>
+                    className="btn btn-primary"
+                    onClick={() => setShowAllDetails((prev) => !prev)}
+                >
+                    {showAllDetails
+                        ? "Hide All RMA Details"
+                        : "Show All RMA Details"}
+                </button>
 
                 <Link to="/home/add">
                     <button className="btn-phone">
@@ -479,7 +479,7 @@ const HomeL = () => {
 
                 <tbody>
                     {filteredData.map((item, index) => {
-                       
+
                         return (
                             <React.Fragment key={item.id}>
 
@@ -488,9 +488,18 @@ const HomeL = () => {
                                     <td
                                         style={{
                                             backgroundColor:
+                                                // 1. GREEN has highest priority
                                                 item.status?.trim().toLowerCase() === "completed"
                                                     ? "#99970f"
-                                                    : "white"
+
+                                                    // 2. If not green, check BLUE
+                                                    : item.outward_completed
+                                                        ? "#ADD8E6"
+
+                                                        // 3. Otherwise WHITE
+                                                        : "white",
+
+                                            color: "black"
                                         }}
                                     >
                                         {item.rma_no}
@@ -616,7 +625,7 @@ const HomeL = () => {
                     })}
                 </tbody>
             </table>
-            
+
         </div >
     );
 

@@ -772,6 +772,69 @@ app.put("/api/update_ser/:id", (req, res) => {
 //     });
 // });
 
+// app.get("/api/get_P", (req, res) => {
+
+//     const sql = `
+//         SELECT
+//             MIN(r.id) AS id,
+//             r.rma_no,
+//             MAX(c.customer_name) AS customer_name,
+//             MAX(c.company_name) AS company_name,
+//             MIN(r.product_name) AS product_name,
+//             MIN(r.model_number) AS model_number,
+//             COUNT(i.id) AS total_serials,
+
+//             CASE
+//                 WHEN COUNT(i.id) > 0
+//                  AND COUNT(i.id) = COUNT(*) FILTER (
+//                     WHERE LOWER(TRIM(i.status)) = 'completed'
+//                  )
+//                 THEN 'Completed'
+//                 ELSE 'Pending'
+//             END AS status,
+
+//             MIN(r.entry_date) AS entry_date,
+
+//             -- Check whether any RMA item has notes
+//             CASE
+//                 WHEN COUNT(i.id) FILTER (
+//                     WHERE i.notes IS NOT NULL
+//                     AND TRIM(i.notes) <> ''
+//                 ) > 0
+//                 THEN true
+//                 ELSE false
+//             END AS has_notes
+
+//         FROM rma_entry1 r
+
+//         JOIN customer_details c
+//             ON r.customer_id = c.id
+
+//         LEFT JOIN rma_items i
+//             ON r.id = i.rma_id
+
+//         GROUP BY r.rma_no
+
+//         ORDER BY r.rma_no DESC
+//     `;
+
+//     db.query(sql, (err, result) => {
+
+//         if (err) {
+
+//             console.log(err);
+
+//             return res.status(500).json(err);
+
+//         }
+
+//         console.log(result.rows);
+
+//         res.json(result.rows);
+
+//     });
+
+// });
 app.get("/api/get_P", (req, res) => {
 
     const sql = `
@@ -784,6 +847,11 @@ app.get("/api/get_P", (req, res) => {
             MIN(r.model_number) AS model_number,
             COUNT(i.id) AS total_serials,
 
+            /*
+             * EXISTING GREEN CONDITION
+             * -------------------------
+             * Green when ALL rma_items for this RMA are completed.
+             */
             CASE
                 WHEN COUNT(i.id) > 0
                  AND COUNT(i.id) = COUNT(*) FILTER (
@@ -795,7 +863,9 @@ app.get("/api/get_P", (req, res) => {
 
             MIN(r.entry_date) AS entry_date,
 
-            -- Check whether any RMA item has notes
+            /*
+             * EXISTING NOTES CONDITION
+             */
             CASE
                 WHEN COUNT(i.id) FILTER (
                     WHERE i.notes IS NOT NULL
@@ -803,7 +873,23 @@ app.get("/api/get_P", (req, res) => {
                 ) > 0
                 THEN true
                 ELSE false
-            END AS has_notes
+            END AS has_notes,
+
+            /*
+             * BLUE CONDITION
+             * ----------------
+             * Blue only when ALL serial numbers belonging to
+             * this RMA have an outward record whose status
+             * is completed.
+             */
+            CASE
+                WHEN COUNT(i.id) > 0
+                 AND COUNT(i.id) = COUNT(o.id) FILTER (
+                    WHERE LOWER(TRIM(o.status)) = 'completed'
+                 )
+                THEN true
+                ELSE false
+            END AS outward_completed
 
         FROM rma_entry1 r
 
@@ -812,6 +898,15 @@ app.get("/api/get_P", (req, res) => {
 
         LEFT JOIN rma_items i
             ON r.id = i.rma_id
+
+        LEFT JOIN rma_items1 o
+            ON (
+                o.rma_item_id = i.id
+                OR (
+                    o.rma_item_id IS NULL
+                    AND o.serial_no = i.serial_no
+                )
+            )
 
         GROUP BY r.rma_no
 
@@ -835,7 +930,6 @@ app.get("/api/get_P", (req, res) => {
     });
 
 });
-
 
 
 // get single data
