@@ -14,15 +14,17 @@ const HomeL = () => {
     const [data, setData] = useState([]);
     const [selectedRmaNo, setSelectedRmaNo] = useState(null);
     const filteredData = data.filter((item) => {
-        const value = search.toLowerCase();
+    // Convert search text to lowercase and remove all whitespace
+    const value = search.toLowerCase().replace(/\s+/g, "");
 
-        return (
-            item.customer_name?.toLowerCase().includes(value) ||
-            item.company_name?.toLowerCase().includes(value) ||
-            item.product_name?.toLowerCase().includes(value) ||
-            item.model_number?.toLowerCase().includes(value)
-        );
-    });
+    return (
+        item.customer_name?.toLowerCase().replace(/\s+/g, "").includes(value) ||
+        item.company_name?.toLowerCase().replace(/\s+/g, "").includes(value) ||
+        item.product_name?.toLowerCase().replace(/\s+/g, "").includes(value) ||
+        item.model_number?.toLowerCase().replace(/\s+/g, "").includes(value) ||
+        item.status?.toLowerCase().replace(/\s+/g, "").includes(value)
+    );
+});
 
 
     // MUST BE []
