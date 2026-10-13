@@ -15,7 +15,8 @@ const HomeZ = () => {
         return (
             item.center_name?.toLowerCase().replace(/\s+/g, "").includes(value) ||
             item.product_name?.toLowerCase().replace(/\s+/g, "").includes(value) ||
-            item.model_number?.toLowerCase().replace(/\s+/g, "").includes(value)
+            item.model_number?.toLowerCase().replace(/\s+/g, "").includes(value)||
+            item.status?.toLowerCase().replace(/\s+/g, "").includes(value)
         );
     });// MUST BE []
     const role = localStorage.getItem("role")
