@@ -10,12 +10,12 @@ const HomeZ = () => {
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
     const filteredData = data.filter((item) => {
-        const value = search.toLowerCase();
+        const value = search.toLowerCase().replace(/\s+/g, "");
 
         return (
-            item.center_name?.toLowerCase().includes(value) ||
-            item.product_name?.toLowerCase().includes(value) ||
-            item.model_number?.toLowerCase().includes(value)
+            item.center_name?.toLowerCase().replace(/\s+/g, "").includes(value) ||
+            item.product_name?.toLowerCase().replace(/\s+/g, "").includes(value) ||
+            item.model_number?.toLowerCase().replace(/\s+/g, "").includes(value)
         );
     });// MUST BE []
     const role = localStorage.getItem("role")
