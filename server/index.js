@@ -449,19 +449,48 @@ app.post("/api/addstaff", (req, res) => {
 });
 
 
+
+/* GET ONE STAFF MEMBER BY ID */
+app.get("/api/get_staff/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query(
+            `SELECT id, username, role
+             FROM login_user
+             WHERE id = $1`,
+            [id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                message: "Staff not found"
+            });
+        }
+
+        res.status(200).json(result.rows[0]);
+    } catch (error) {
+        console.error("Error fetching staff:", error);
+
+        res.status(500).json({
+            message: "Failed to fetch staff"
+        });
+    }
+});
+
+
+/* UPDATE STAFF USERNAME AND ROLE ONLY */
 app.put("/api/editstaff/:id", async (req, res) => {
     const { id } = req.params;
     const { username, role } = req.body;
 
-    if (!username || !username.trim() || !role) {
+    if (
+        typeof username !== "string" ||
+        !username.trim() ||
+        !["admin", "user"].includes(role)
+    ) {
         return res.status(400).json({
-            message: "Username and role are required"
-        });
-    }
-
-    if (!["admin", "user"].includes(role)) {
-        return res.status(400).json({
-            message: "Invalid role"
+            message: "Valid username and role are required"
         });
     }
 
@@ -474,13 +503,13 @@ app.put("/api/editstaff/:id", async (req, res) => {
             [username.trim(), role, id]
         );
 
-        if (result.rowCount === 0) {
+        if (result.rows.length === 0) {
             return res.status(404).json({
                 message: "Staff not found"
             });
         }
 
-        return res.status(200).json({
+        res.status(200).json({
             message: "Staff updated successfully",
             staff: result.rows[0]
         });
@@ -493,11 +522,12 @@ app.put("/api/editstaff/:id", async (req, res) => {
             });
         }
 
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to update staff"
         });
     }
 });
+
 
 app.get(
     "/api/password/:id",
