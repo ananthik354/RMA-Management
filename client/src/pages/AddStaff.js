@@ -16,9 +16,42 @@ const AddStaff = () => {
     const [state, setState] = useState(initialState);
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`https://rma-management.onrender.com/api/get_staff/${id}`)
-            .then((resp) => setState({ ...resp.data[0] }))
-    }, [id]);
+    if (!id) {
+        setState(initialState);
+        return;
+    }
+
+    const fetchStaff = async () => {
+        try {
+            const response = await axios.get(
+                `https://rma-management.onrender.com/api/get_staff/${id}`
+            );
+
+            console.log("Staff API response:", response.data);
+
+            // Support either an array or a single object
+            const staff = Array.isArray(response.data)
+                ? response.data[0]
+                : response.data.staff || response.data;
+
+            if (!staff) {
+                toast.error("Staff record not found");
+                return;
+            }
+
+            setState({
+                username: staff.username || "",
+                role: staff.role || "",
+                password: ""
+            });
+        } catch (error) {
+            console.error("Error loading staff:", error);
+            toast.error("Failed to load staff details");
+        }
+    };
+
+    fetchStaff();
+}, [id]);
     const handleInputChange = (e) => {
         const { name, value } = e.target;
 
@@ -125,17 +158,11 @@ const handleSubmit = async (e) => {
                             onChange={handleInputChange}
                             className="role-select"
                         >
-                            <option value="">
-                                Select Role
-                            </option>
+                            <option value="">Select Role</option>
 
-                            <option value="admin">
-                                Admin
-                            </option>
+                            <option value="admin">Admin</option>
 
-                            <option value="user">
-                                User
-                            </option>
+                            <option value="user">User</option>
                         </select>
                     </div>
 
