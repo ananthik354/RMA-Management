@@ -53,6 +53,7 @@ function App() {
           <Route path="/home/addCustomer" element={<ProtectedRoute><AddEdit /></ProtectedRoute>} />
           <Route path="/home/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
           <Route path="/home/addstaff" element={<ProtectedRoute><AddStaff /></ProtectedRoute>} />
+          <Route path="/home/editstaff" element={<ProtectedRoute><AddStaff /></ProtectedRoute>} />
           {/* <Route path="/home/get/:id" element={<AddStaff />} /> */}
           <Route path="/home/update/:id" element={<ProtectedRoute><AddEdit /></ProtectedRoute>} />
           <Route path="/home/View/:id" element={<ProtectedRoute><View /></ProtectedRoute>} />

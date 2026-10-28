@@ -28,60 +28,52 @@ const AddStaff = () => {
         });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        const {
-            username, password, role
-        } = state;
+    const { username, password, role } = state;
 
-        // Required validation
-        if (
-            !username ||
-            !password ||
-            !role
+    if (!username.trim() || !role) {
+        toast.error("Username and role are required");
+        return;
+    }
 
-        ) {
-            toast.error(
-                "username,password and role are required"
+    if (!id && !password) {
+        toast.error("Password is required");
+        return;
+    }
+
+    try {
+        if (!id) {
+            // Add new staff
+            await axios.post(
+                "https://rma-management.onrender.com/api/addstaff",
+                { username, password, role }
             );
-            return;
+
+            toast.success("Staff added");
+            setState(initialState);
+        } else {
+            // Edit staff: update ONLY username and role
+            await axios.put(
+                `https://rma-management.onrender.com/api/editstaff/${id}`,
+                { username, role }
+            );
+
+            toast.success("Staff updated");
+
+            window.location.href = "/home/staff";
         }
-        else {
-            if (!id) {
+    } catch (error) {
+        console.error("Staff save error:", error);
 
-                try {
-                    await axios.post(
-                        "https://rma-management.onrender.com/api/addstaff",
-                        state
-                    );
-
-                    toast.success("Staff Added");
-
-                    setState(initialState);
-
-                } catch (error) {
-                    toast.error("Error adding Staff");
-                }
-            } else {
-
-                try {
-                    await axios.put(
-                        `https://rma-management.onrender.com/api/update/${id}`,
-                        state
-                    );
-
-                    toast.success("Staff updated");
-
-                    setState(initialState);
-
-                } catch (error) {
-                    toast.error("Error updating Staff");
-                }
-            }
-        }
-
-    };
+        toast.error(
+            error.response?.data?.message ||
+            (id ? "Error updating staff" : "Error adding staff")
+        );
+    }
+};
 
 
     return (
@@ -108,15 +100,21 @@ const AddStaff = () => {
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={state.password || ""}
-                            onChange={handleInputChange}
-                        />
-                    </div>
+                    
+{!id && (
+    <div className="form-group">
+        <label>Password</label>
+        <input
+            type="password"
+            name="password"
+            value={state.password}
+            onChange={handleInputChange}
+            required
+            autoComplete="new-password"
+        />
+    </div>
+)}
+
 
                     <div className="form-group role-center">
                         <label>Role</label>

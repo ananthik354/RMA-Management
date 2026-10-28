@@ -449,6 +449,56 @@ app.post("/api/addstaff", (req, res) => {
 });
 
 
+app.put("/api/editstaff/:id", async (req, res) => {
+    const { id } = req.params;
+    const { username, role } = req.body;
+
+    if (!username || !username.trim() || !role) {
+        return res.status(400).json({
+            message: "Username and role are required"
+        });
+    }
+
+    if (!["admin", "user"].includes(role)) {
+        return res.status(400).json({
+            message: "Invalid role"
+        });
+    }
+
+    try {
+        const result = await pool.query(
+            `UPDATE login_user
+             SET username = $1, role = $2
+             WHERE id = $3
+             RETURNING id, username, role`,
+            [username.trim(), role, id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                message: "Staff not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Staff updated successfully",
+            staff: result.rows[0]
+        });
+    } catch (error) {
+        console.error("Error updating staff:", error);
+
+        if (error.code === "23505") {
+            return res.status(409).json({
+                message: "Username already exists"
+            });
+        }
+
+        return res.status(500).json({
+            message: "Failed to update staff"
+        });
+    }
+});
+
 app.get(
     "/api/password/:id",
     authenticateToken,
