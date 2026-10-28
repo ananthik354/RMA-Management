@@ -451,16 +451,25 @@ app.post("/api/addstaff", (req, res) => {
 
 
 /* GET ONE STAFF MEMBER BY ID */
-app.get("/api/get_staff/:id", async (req, res) => {
+
+/* GET ONE STAFF MEMBER BY ID */
+app.get("/api/get_staff/:id", (req, res) => {
     const { id } = req.params;
 
-    try {
-        const result = await pool.query(
-            `SELECT id, username, role
-             FROM login_user
-             WHERE id = $1`,
-            [id]
-        );
+    const sql = `
+        SELECT id, username, role
+        FROM login_user
+        WHERE id = $1
+    `;
+
+    db.query(sql, [id], (error, result) => {
+        if (error) {
+            console.error("Error fetching staff:", error);
+
+            return res.status(500).json({
+                message: "Failed to fetch staff"
+            });
+        }
 
         if (result.rows.length === 0) {
             return res.status(404).json({
@@ -469,18 +478,12 @@ app.get("/api/get_staff/:id", async (req, res) => {
         }
 
         res.status(200).json(result.rows[0]);
-    } catch (error) {
-        console.error("Error fetching staff:", error);
-
-        res.status(500).json({
-            message: "Failed to fetch staff"
-        });
-    }
+    });
 });
 
 
 /* UPDATE STAFF USERNAME AND ROLE ONLY */
-app.put("/api/editstaff/:id", async (req, res) => {
+app.put("/api/editstaff/:id", (req, res) => {
     const { id } = req.params;
     const { username, role } = req.body;
 
@@ -494,39 +497,45 @@ app.put("/api/editstaff/:id", async (req, res) => {
         });
     }
 
-    try {
-        const result = await pool.query(
-            `UPDATE login_user
-             SET username = $1, role = $2
-             WHERE id = $3
-             RETURNING id, username, role`,
-            [username.trim(), role, id]
-        );
+    const sql = `
+        UPDATE login_user
+        SET username = $1, role = $2
+        WHERE id = $3
+        RETURNING id, username, role
+    `;
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({
-                message: "Staff not found"
+    db.query(
+        sql,
+        [username.trim(), role, id],
+        (error, result) => {
+            if (error) {
+                console.error("Error updating staff:", error);
+
+                if (error.code === "23505") {
+                    return res.status(409).json({
+                        message: "Username already exists"
+                    });
+                }
+
+                return res.status(500).json({
+                    message: "Failed to update staff"
+                });
+            }
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({
+                    message: "Staff not found"
+                });
+            }
+
+            res.status(200).json({
+                message: "Staff updated successfully",
+                staff: result.rows[0]
             });
         }
-
-        res.status(200).json({
-            message: "Staff updated successfully",
-            staff: result.rows[0]
-        });
-    } catch (error) {
-        console.error("Error updating staff:", error);
-
-        if (error.code === "23505") {
-            return res.status(409).json({
-                message: "Username already exists"
-            });
-        }
-
-        res.status(500).json({
-            message: "Failed to update staff"
-        });
-    }
+    );
 });
+
 
 
 app.get(
