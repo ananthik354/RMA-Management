@@ -17,11 +17,9 @@ import {
 
 const Password = () => {
 
-    const navigate =
-        useNavigate();
+    const navigate =useNavigate();
 
-    const { id } =
-        useParams();
+    const { id } =useParams();
 
     const [state,
         setState] =
@@ -32,33 +30,43 @@ const Password = () => {
         });
 
     // Get username by id
-    useEffect(() => {
+    
+useEffect(() => {
+    const token = localStorage.getItem("token");
 
-    axios
-        .get(
-            `https://rma-management.onrender.com/api/password/${id}`
-        )
-        .then((resp) => {
+    if (!id) {
+        toast.error("User ID is missing");
+        return;
+    }
 
-            console.log(
-                resp.data
-            );
+    axios.get(
+        `https://rma-management.onrender.com/api/password/${id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    )
+    .then((resp) => {
+        console.log("Username:", resp.data);
 
-            setState({
-                username:
-                    resp.data
-                        .username,
-                password: "",
-                confirmPassword:
-                    ""
-            });
+        setState(prev => ({
+            ...prev,
+            username: resp.data.username
+        }));
+    })
+    .catch((err) => {
+        console.error(
+            "Username fetch error:",
+            err.response?.status,
+            err.response?.data
+        );
 
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+        toast.error("Unable to load username");
+    });
 
 }, [id]);
+
     // Input change
     const handleInputChange =
         (e) => {
@@ -103,13 +111,19 @@ const Password = () => {
 
         try {
 
-            await axios.put(
-                `https://rma-management.onrender.com/api/password/${id}`,
-                {
-                    password:
-                        state.password
-                }
-            );
+            const token = localStorage.getItem("token");
+
+await axios.put(
+    `https://rma-management.onrender.com/api/password/${id}`,
+    {
+        password: state.password
+    },
+    {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+);
 
             toast.success(
                 "Password Updated Successfully"
